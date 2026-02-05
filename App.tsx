@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { flushSync } from 'react-dom'; // Required for View Transitions with React
 import { PROJECTS, ABOUT_TEXT, SKILLS } from './constants';
 import { ViewState } from './types';
 import { ProjectCard } from './components/ProjectCard';
 import { ProjectDetail } from './components/ProjectDetail';
 import { Button } from './components/Button';
+import { useSound } from './hooks/useSound';
 import { X, Mail, Github, Linkedin, Phone, Copy, Check, ArrowRight } from 'lucide-react';
 
 export const App: React.FC = () => {
@@ -12,24 +14,52 @@ export const App: React.FC = () => {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [copiedType, setCopiedType] = useState<'email' | 'phone' | null>(null);
 
+  // Initialize Sonic System
+  const { initAudio, playClick, playHover } = useSound();
+
   const CONTACT_INFO = {
     email: 'hello@ramanadesign.tech',
     phone: '+1 (555) 123-4567'
   };
 
+  // Helper to handle cinematic state transitions
+  const transitionView = (update: () => void) => {
+    // Lazy init audio on first interaction
+    initAudio();
+    playClick();
+
+    if (!(document as any).startViewTransition) {
+      update();
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    (document as any).startViewTransition(() => {
+      flushSync(() => {
+        update();
+        window.scrollTo(0, 0);
+      });
+    });
+  };
+
   const handleProjectClick = (id: string) => {
-    setSelectedProjectId(id);
-    setView('PROJECT_DETAIL');
-    window.scrollTo(0, 0);
+    transitionView(() => {
+      setSelectedProjectId(id);
+      setView('PROJECT_DETAIL');
+    });
   };
 
   const handleNavClick = (newView: ViewState) => {
-    setView(newView);
-    setSelectedProjectId(null);
-    window.scrollTo(0, 0);
+    if (view === newView && !selectedProjectId) return;
+    
+    transitionView(() => {
+      setView(newView);
+      setSelectedProjectId(null);
+    });
   };
 
   const copyToClipboard = (text: string, type: 'email' | 'phone') => {
+    playClick();
     navigator.clipboard.writeText(text);
     setCopiedType(type);
     setTimeout(() => setCopiedType(null), 2000);
@@ -44,13 +74,20 @@ export const App: React.FC = () => {
         {/* Backdrop: Clean Fade */}
         <div 
           className="absolute inset-0 bg-white/95 backdrop-blur-md animate-in fade-in duration-300"
-          onClick={() => setIsContactModalOpen(false)}
+          onClick={() => {
+            playClick();
+            setIsContactModalOpen(false);
+          }}
         />
         
         {/* Modal: Sharp, Floating, Luminous Shadow */}
         <div className="relative bg-white w-full max-w-lg rounded-2xl p-10 animate-in zoom-in-95 fade-in duration-200 shadow-ethereal-lg border border-slate-200">
           <button 
-            onClick={() => setIsContactModalOpen(false)}
+            onClick={() => {
+              playClick();
+              setIsContactModalOpen(false);
+            }}
+            onMouseEnter={playHover}
             className="absolute top-6 right-6 p-3 text-slate-500 hover:text-black transition-colors rounded-full hover:bg-slate-100"
             aria-label="Close Contact Modal"
           >
@@ -71,6 +108,7 @@ export const App: React.FC = () => {
               </div>
               <button 
                 onClick={() => copyToClipboard(CONTACT_INFO.email, 'email')}
+                onMouseEnter={playHover}
                 className="text-slate-400 hover:text-slate-900 transition-colors p-2 rounded-md focus:bg-slate-200"
                 aria-label="Copy email to clipboard"
               >
@@ -88,6 +126,7 @@ export const App: React.FC = () => {
               </div>
               <button 
                 onClick={() => copyToClipboard(CONTACT_INFO.phone, 'phone')}
+                onMouseEnter={playHover}
                 className="text-slate-400 hover:text-slate-900 transition-colors p-2 rounded-md focus:bg-slate-200"
                 aria-label="Copy phone number to clipboard"
               >
@@ -107,7 +146,9 @@ export const App: React.FC = () => {
           return (
             <ProjectDetail 
               project={currentProject} 
-              onBack={() => handleNavClick('HOME')} 
+              onBack={() => handleNavClick('HOME')}
+              playHover={playHover}
+              playClick={playClick}
             />
           );
         }
@@ -164,7 +205,14 @@ export const App: React.FC = () => {
                    Senior Product Designer & Technologist building <span className="text-slate-900 font-medium">calm interactive systems</span>.
                  </p>
                  <div className="flex gap-6">
-                    <button onClick={() => setIsContactModalOpen(true)} className="group flex items-center font-bold text-slate-900 hover:text-[#2B6B7C] transition-colors text-lg focus:outline-none focus:ring-4 focus:ring-[#2B6B7C]/20 rounded-lg px-1">
+                    <button 
+                      onClick={() => {
+                        playClick();
+                        setIsContactModalOpen(true);
+                      }} 
+                      onMouseEnter={playHover}
+                      className="group flex items-center font-bold text-slate-900 hover:text-[#2B6B7C] transition-colors text-lg focus:outline-none focus:ring-4 focus:ring-[#2B6B7C]/20 rounded-lg px-1"
+                    >
                       Get in touch <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
                     </button>
                  </div>
@@ -186,7 +234,8 @@ export const App: React.FC = () => {
                   <ProjectCard 
                     key={project.id} 
                     project={project} 
-                    onClick={handleProjectClick} 
+                    onClick={handleProjectClick}
+                    onHover={playHover}
                   />
                 ))}
               </div>
@@ -197,7 +246,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] text-slate-900 font-sans selection:bg-[#2B6B7C] selection:text-white">
+    <div className="min-h-screen bg-[#FAFAFA] text-slate-900 font-sans selection:bg-[#2B6B7C] selection:text-white" onMouseDown={initAudio} onKeyDown={initAudio}>
       
       {/* Contact Reveal Modal */}
       {renderContactModal()}
@@ -211,6 +260,7 @@ export const App: React.FC = () => {
             <button 
               className="font-bold text-xl tracking-tight cursor-pointer font-heading hover:opacity-70 transition-opacity focus:outline-none focus:ring-2 focus:ring-[#2B6B7C] rounded-lg p-1"
               onClick={() => handleNavClick('HOME')}
+              onMouseEnter={playHover}
             >
               ramanadesign<span className="text-slate-400">.tech</span>
             </button>
@@ -219,6 +269,7 @@ export const App: React.FC = () => {
             <div className="flex items-center gap-12">
               <button 
                 onClick={() => handleNavClick('HOME')} 
+                onMouseEnter={playHover}
                 className={`relative text-sm font-bold tracking-wide uppercase transition-colors rounded-md py-1 px-2 focus:outline-none focus:ring-2 focus:ring-[#2B6B7C] ${view === 'HOME' && !selectedProjectId ? 'text-slate-900' : 'text-slate-500 hover:text-slate-900'}`}
               >
                 Work
@@ -228,6 +279,7 @@ export const App: React.FC = () => {
               </button>
               <button 
                 onClick={() => handleNavClick('ABOUT')} 
+                onMouseEnter={playHover}
                 className={`relative text-sm font-bold tracking-wide uppercase transition-colors rounded-md py-1 px-2 focus:outline-none focus:ring-2 focus:ring-[#2B6B7C] ${view === 'ABOUT' ? 'text-slate-900' : 'text-slate-500 hover:text-slate-900'}`}
               >
                 About
@@ -238,7 +290,11 @@ export const App: React.FC = () => {
               <Button 
                 variant="primary" 
                 className="!py-2 !px-6 !min-h-[44px] text-sm"
-                onClick={() => setIsContactModalOpen(true)}
+                onClick={() => {
+                  playClick();
+                  setIsContactModalOpen(true);
+                }}
+                onMouseEnter={playHover}
               >
                 Contact
               </Button>
