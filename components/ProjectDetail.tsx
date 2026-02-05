@@ -1,194 +1,189 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Project } from '../types';
-import { ArrowLeft, ArrowUpRight, Maximize2 } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 
 interface ProjectDetailProps {
   project: Project;
   onBack: () => void;
 }
 
-type TabState = 'CONTEXT' | 'PROCESS' | 'LOGIC';
-
 export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
-  const [activeTab, setActiveTab] = useState<TabState>('CONTEXT');
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [project.id]);
 
-  const tabs: { id: TabState; label: string }[] = [
-    { id: 'CONTEXT', label: '01. Context' },
-    { id: 'PROCESS', label: '02. Process' },
-    { id: 'LOGIC', label: '03. Interaction' },
-  ];
-
   return (
     <div className="min-h-screen flex flex-col bg-[var(--color-paper)]">
-      {/* Top Bar Navigation */}
-      <div className="sticky top-0 z-50 bg-[var(--color-paper)]/80 backdrop-blur-md border-b border-[var(--color-paper-dark)] flex justify-between items-center px-4 md:px-8 h-16">
+      {/* Top Bar Navigation - DARK MODE for seamless integration with Left Column */}
+      <div className="sticky top-0 z-50 bg-[var(--color-ink)] border-b border-[var(--color-paper)]/10 flex justify-between items-center px-4 md:px-8 h-16 text-[var(--color-paper)]">
         <button 
           onClick={onBack}
-          className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider hover:text-[var(--color-accent)] transition-colors text-[var(--color-ink)]"
+          className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider hover:text-[var(--color-accent-light)] transition-colors opacity-80 hover:opacity-100"
         >
           <ArrowLeft className="w-3 h-3" />
           Index
         </button>
-        <span className="font-mono text-xs uppercase tracking-wider hidden md:block opacity-50 text-[var(--color-ink)]">
-          {project.title} — {project.duration}
+        <span className="font-mono text-xs uppercase tracking-wider hidden md:block opacity-40">
+          Ref: {project.id.toUpperCase()}
         </span>
-        <div className="w-16"></div> {/* Spacer for alignment */}
+        <div className="w-16"></div> {/* Spacer */}
       </div>
 
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 min-h-[calc(100vh-64px)]">
+      <div className="flex-1 lg:grid lg:grid-cols-12 min-h-[calc(100vh-64px)]">
         
-        {/* LEFT COLUMN: Switchboard & Meta (Sticky) - DARK MASS */}
-        <div className="lg:col-span-4 bg-[var(--color-ink)] text-[var(--color-paper)] flex flex-col justify-between p-6 md:p-12 lg:sticky lg:top-16 lg:h-[calc(100vh-64px)] overflow-y-auto">
-          <div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight mb-6 leading-[1] text-[var(--color-paper)]">
+        {/* LEFT COLUMN: The Simulator / Control Panel (Sticky) - DARK MASS */}
+        <div className="lg:col-span-5 bg-[var(--color-ink)] text-[var(--color-paper)] p-6 md:p-12 lg:sticky lg:top-16 lg:h-[calc(100vh-64px)] flex flex-col border-r border-[var(--color-paper)]/10 overflow-hidden">
+          
+          {/* Header Info */}
+          <div className="mb-6 relative z-10">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium tracking-tight mb-2 leading-[1.1]">
               {project.title}
             </h1>
-            <p className="text-lg text-[var(--color-paper-dim)] leading-relaxed mb-12 max-w-sm">
+            <p className="text-[var(--color-paper-dim)] text-sm md:text-base font-light opacity-70 max-w-xs leading-relaxed">
               {project.tagline}
             </p>
-
-            {/* Switchboard Navigation (Inverted) */}
-            <nav className="flex flex-col gap-2 mb-12">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`
-                    flex items-center justify-between py-3 px-4 text-left font-mono text-xs uppercase tracking-widest rounded-[var(--radius-sm)]
-                    transition-all duration-300 ease-soft
-                    ${activeTab === tab.id 
-                      ? 'bg-[var(--color-paper)] text-[var(--color-ink)] font-medium shadow-sm' 
-                      : 'text-[var(--color-paper-dark)] hover:bg-[var(--color-paper-dark)]/20 hover:text-[var(--color-paper)]'}
-                  `}
-                >
-                  {tab.label}
-                  <span className={`w-1.5 h-1.5 rounded-full transition-colors ${activeTab === tab.id ? 'bg-[var(--color-ink)]' : 'bg-transparent'}`} />
-                </button>
-              ))}
-            </nav>
-
-            <div className="grid grid-cols-2 gap-y-6 font-mono text-[11px] uppercase tracking-wider text-[var(--color-paper-dark)]">
-              <div>
-                <span className="block opacity-40 mb-1">Role</span>
-                <span className="text-[var(--color-paper)]">{project.role}</span>
-              </div>
-              <div>
-                <span className="block opacity-40 mb-1">Focus</span>
-                <span className="text-[var(--color-paper)]">{project.tags[0]}</span>
-              </div>
-              <div>
-                 <span className="block opacity-40 mb-1">Live</span>
-                 {project.liveUrl ? (
-                   <a href={project.liveUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1 hover:text-[var(--color-paper)] text-[var(--color-paper-dim)] transition-colors">
-                     View <ArrowUpRight className="w-3 h-3" />
-                   </a>
-                 ) : (
-                   <span>N/A</span>
-                 )}
-              </div>
-            </div>
           </div>
 
-          <div className="mt-12 lg:mt-0 pt-6 lg:pt-0">
-             <div className="font-mono text-[10px] opacity-30 uppercase text-[var(--color-paper)] flex justify-between items-center border-t border-[var(--color-paper-dark)]/20 pt-4">
-                <span>ID: {project.id.toUpperCase()}</span>
-                <span>DATA_SHEET_V1</span>
+          {/* THE SIMULATOR: Video in Mobile Frame */}
+          <div className="flex-1 relative flex flex-col justify-center items-center w-full min-h-[400px]">
+             {/* Device Bezel */}
+             <div className="relative w-[260px] md:w-[280px] aspect-[9/19] bg-black rounded-[3rem] border-[6px] border-[var(--color-ink-subtle)]/30 shadow-2xl overflow-hidden ring-1 ring-white/5 transform transition-transform duration-700 hover:scale-[1.02]">
+                {/* Screen Content */}
+                {project.videoUrl ? (
+                   <video 
+                     src={project.videoUrl} 
+                     autoPlay 
+                     muted 
+                     loop 
+                     playsInline 
+                     className="w-full h-full object-cover opacity-90" 
+                   />
+                ) : (
+                   <img 
+                     src={project.heroUrl} 
+                     alt="Prototype Preview" 
+                     className="w-full h-full object-cover opacity-90" 
+                   />
+                )}
+                
+                {/* Glare/Reflection Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-transparent pointer-events-none z-20" />
+                {/* Scanlines */}
+                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNCIgaGVpZ2h0PSI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0wIDFoNHYxSDB6IiBmaWxsPSJyZ2JhKDI1NSwgMjU1LDI1NSwgMC4wNSkiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvc3ZnPg==')] opacity-20 pointer-events-none z-10" />
+             </div>
+             
+             <div className="mt-4 font-mono text-[9px] uppercase tracking-widest opacity-30">
+                Fig. 01 — Device Simulation
+             </div>
+          </div>
+
+          {/* Action Module */}
+          <div className="mt-6 relative z-10">
+             {project.liveUrl ? (
+                <a 
+                  href={project.liveUrl} 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  className="group flex items-center justify-center gap-3 w-full py-4 bg-[var(--color-paper)] text-[var(--color-ink)] font-mono text-xs uppercase tracking-wider rounded-[var(--radius-sm)] hover:bg-[var(--color-accent-light)] transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                >
+                   <span>Launch Live Prototype</span>
+                   <ArrowUpRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </a>
+             ) : (
+                <div className="w-full py-4 border border-[var(--color-paper)]/20 text-[var(--color-paper)] font-mono text-xs uppercase tracking-wider rounded-[var(--radius-sm)] text-center opacity-50 cursor-not-allowed">
+                   Prototype Offline
+                </div>
+             )}
+
+             {/* Meta Data Grid */}
+             <div className="grid grid-cols-2 gap-4 mt-6 pt-6 border-t border-[var(--color-paper)]/10 font-mono text-[10px] uppercase tracking-wider text-[var(--color-paper-dim)]">
+                <div>
+                   <span className="block opacity-40 mb-1">Role</span>
+                   <span>{project.role}</span>
+                </div>
+                <div>
+                   <span className="block opacity-40 mb-1">Duration</span>
+                   <span>{project.duration}</span>
+                </div>
              </div>
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Content (Swappable) - LIGHT SURFACE */}
-        <div className="lg:col-span-8 bg-[var(--color-paper)] p-6 md:p-12 lg:p-24 overflow-y-auto">
-          
-          <div className="max-w-3xl mx-auto animate-in fade-in duration-500 ease-soft">
-            
-            {/* CONTENT: CONTEXT */}
-            {activeTab === 'CONTEXT' && (
-              <div className="space-y-16">
-                 {/* Hero Visual */}
-                 <div>
-                    <div className="w-full aspect-video bg-[var(--color-paper-dim)] rounded-[var(--radius-md)] overflow-hidden relative border border-[var(--color-paper-dark)] shadow-sm group">
-                        {project.videoUrl ? (
-                            <video src={project.videoUrl} autoPlay muted loop className="w-full h-full object-cover image-technical" />
-                        ) : (
-                            <img src={project.heroUrl} alt="" className="w-full h-full object-cover image-technical" />
-                        )}
-                        {/* Technical Overlay */}
-                        <div className="absolute inset-0 bg-noise mix-blend-multiply opacity-50 pointer-events-none" />
+        {/* RIGHT COLUMN: The Manual / Spec Sheet (Scrollable) - LIGHT SURFACE */}
+        <div className="lg:col-span-7 bg-[var(--color-paper)] p-6 md:p-12 lg:p-24 overflow-y-auto">
+           <div className="max-w-2xl mx-auto space-y-24 animate-in slide-in-from-bottom-4 duration-700 ease-soft">
+              
+              {/* SECTION: CONTEXT */}
+              <section>
+                 <div className="flex items-baseline gap-4 mb-8 border-b border-[var(--color-paper-dark)] pb-4">
+                    <span className="font-mono text-xs text-[var(--color-accent)] font-bold">01</span>
+                    <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--color-ink)] opacity-40">System Context</h3>
+                 </div>
+                 <p className="text-xl md:text-2xl leading-relaxed font-light text-[var(--color-ink)] text-balance">
+                    {project.description}
+                 </p>
+              </section>
+
+              {/* SECTION: ARCHITECTURE (Challenge/Solution) */}
+              <section className="grid gap-12">
+                 <div className="flex items-baseline gap-4 mb-2 border-b border-[var(--color-paper-dark)] pb-4">
+                    <span className="font-mono text-xs text-[var(--color-accent)] font-bold">02</span>
+                    <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--color-ink)] opacity-40">Architecture</h3>
+                 </div>
+                 
+                 <div className="grid md:grid-cols-2 gap-12">
+                    <div className="space-y-4">
+                       <span className="font-mono text-[10px] uppercase tracking-wider bg-[var(--color-paper-dark)]/20 px-2 py-1 rounded-sm text-[var(--color-ink-subtle)]">Problem Space</span>
+                       <p className="text-lg leading-relaxed text-[var(--color-ink-subtle)]">
+                          {project.challenge}
+                       </p>
                     </div>
-                    <div className="flex justify-between mt-2 font-mono text-[9px] uppercase tracking-wider opacity-40">
-                        <span>Fig. 01 — Hero Visual</span>
-                        <span>Scale: 1:1</span>
+                    <div className="space-y-4">
+                       <span className="font-mono text-[10px] uppercase tracking-wider bg-[var(--color-paper-dark)]/20 px-2 py-1 rounded-sm text-[var(--color-ink-subtle)]">Resolution</span>
+                       <p className="text-lg leading-relaxed text-[var(--color-ink-subtle)]">
+                          {project.solution}
+                       </p>
                     </div>
                  </div>
+              </section>
 
-                 <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-                    <div className="md:col-span-12">
-                        <h3 className="font-mono text-xs uppercase tracking-widest mb-6 opacity-40">The Brief</h3>
-                        <p className="text-2xl md:text-3xl leading-snug font-light text-balance text-[var(--color-ink)]">
-                          {project.description}
-                        </p>
-                    </div>
+              {/* SECTION: LOGIC (Interaction) */}
+              <section>
+                 <div className="flex items-baseline gap-4 mb-8 border-b border-[var(--color-paper-dark)] pb-4">
+                    <span className="font-mono text-xs text-[var(--color-accent)] font-bold">03</span>
+                    <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--color-ink)] opacity-40">Interaction Logic</h3>
                  </div>
-              </div>
-            )}
-
-            {/* CONTENT: PROCESS */}
-            {activeTab === 'PROCESS' && (
-               <div className="space-y-24">
-                  <section className="grid grid-cols-1 md:grid-cols-2 gap-12 border-b border-[var(--color-paper-dark)] pb-12">
-                     <div>
-                        <h3 className="font-mono text-xs uppercase tracking-widest mb-4 opacity-40">[01] Challenge</h3>
-                        <p className="text-lg leading-relaxed text-[var(--color-ink-subtle)]">{project.challenge}</p>
-                     </div>
-                     <div>
-                        <h3 className="font-mono text-xs uppercase tracking-widest mb-4 opacity-40">[02] Solution</h3>
-                        <p className="text-lg leading-relaxed text-[var(--color-ink-subtle)]">{project.solution}</p>
-                     </div>
-                  </section>
-                  
-                  <section>
-                    <div className="bg-[var(--color-paper-dim)] p-8 rounded-[var(--radius-md)] border border-[var(--color-paper-dark)] mb-2">
-                       <span className="font-mono text-xs uppercase tracking-widest opacity-40 mb-4 block border-b border-[var(--color-paper-dark)] pb-2 w-fit">Process Artifact</span>
-                       <div className="aspect-[4/3] bg-[var(--color-paper)] rounded-[var(--radius-sm)] flex items-center justify-center border border-[var(--color-paper-dark)] relative overflow-hidden">
-                          <div className="absolute inset-0 bg-noise opacity-30" />
-                          <span className="font-mono text-xs opacity-30 z-10">Wireframe / Sketch Placeholder</span>
-                       </div>
-                    </div>
-                    <div className="font-mono text-[9px] uppercase tracking-wider opacity-40 text-right">
-                        Fig. 02 — Schematic Layout
-                    </div>
-                  </section>
-               </div>
-            )}
-
-            {/* CONTENT: LOGIC */}
-            {activeTab === 'LOGIC' && (
-              <div className="space-y-16">
-                 <div className="flex items-start gap-6">
-                    <Maximize2 className="w-6 h-6 mt-1 flex-shrink-0 opacity-50" />
-                    <p className="text-xl md:text-2xl leading-relaxed text-[var(--color-ink)]">
-                      {project.interactionNotes}
+                 
+                 <div className="bg-[var(--color-paper-dim)]/30 border-l-2 border-[var(--color-ink)] pl-8 py-2 pr-4 relative">
+                    <p className="text-lg md:text-xl leading-relaxed text-[var(--color-ink)]">
+                       {project.interactionNotes}
                     </p>
+                    {/* Decorative quote marks */}
+                    <span className="absolute -left-3 top-0 text-4xl text-[var(--color-ink)] leading-none opacity-20 font-serif">“</span>
                  </div>
+                 
+                 <div className="mt-8 pt-8 border-t border-dashed border-[var(--color-paper-dark)] flex justify-between items-end">
+                    <div className="font-mono text-[10px] uppercase opacity-40 max-w-[200px]">
+                       *Note: Logic defined for v1.0 release. Subject to user testing iteration.
+                    </div>
+                    <div className="font-mono text-[10px] uppercase tracking-wider opacity-40 text-right">
+                       Fig. 02 — Behavioral Spec
+                    </div>
+                 </div>
+              </section>
 
-                 <div className="p-8 bg-[var(--color-ink)] text-[var(--color-paper)] rounded-[var(--radius-md)] shadow-lg relative overflow-hidden">
-                    {/* Dark texture overlay */}
-                    <div className="absolute inset-0 bg-noise opacity-10 mix-blend-overlay pointer-events-none" />
-                    
-                    <h3 className="font-mono text-xs uppercase tracking-widest mb-6 opacity-60 text-[var(--color-paper)] relative z-10">System Outcome</h3>
-                    <p className="text-lg md:text-xl font-light relative z-10">
-                      "{project.outcome}"
-                    </p>
-                 </div>
+              {/* FOOTER: Sign-off */}
+              <div 
+                 className="pt-24 mt-12 opacity-40 hover:opacity-100 transition-opacity cursor-pointer flex justify-between items-center group"
+                 onClick={onBack}
+              >
+                 <div className="h-px bg-[var(--color-ink)] flex-1 mr-6 opacity-30 group-hover:opacity-100 transition-all origin-left scale-x-50 group-hover:scale-x-100"></div>
+                 <span className="font-mono text-xs uppercase tracking-widest flex items-center gap-2 group-hover:text-[var(--color-accent)]">
+                    Return to Index <ArrowLeft className="w-3 h-3 rotate-180 transition-transform group-hover:translate-x-1" />
+                 </span>
               </div>
-            )}
 
-          </div>
+           </div>
         </div>
       </div>
     </div>
