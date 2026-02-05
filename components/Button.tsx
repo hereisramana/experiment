@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'inverse';
   icon?: React.ReactNode;
   fullWidth?: boolean;
 }
@@ -29,13 +29,13 @@ export const Button: React.FC<ButtonProps> = ({
 
   // Variants: Low Eyestrain / Calm
   const variants = {
-    // Primary: Dark Green -> Slightly lighter
+    // Primary: Ink Fill -> Accent Hover
     primary: `
       bg-[var(--color-ink)] text-[var(--color-paper)] border-[var(--color-ink)]
       hover:bg-[var(--color-accent)] hover:border-[var(--color-accent)]
       shadow-sm
     `,
-    // Secondary: Transparent -> Soft Sage Fill
+    // Secondary: Transparent -> Soft Grey Fill
     secondary: `
       bg-transparent text-[var(--color-ink)] border-[var(--color-paper-dark)]
       hover:bg-[var(--color-paper-dim)] hover:border-[var(--color-paper-dark)]
@@ -44,6 +44,12 @@ export const Button: React.FC<ButtonProps> = ({
     ghost: `
       bg-transparent text-[var(--color-ink)] border-transparent
       hover:bg-[var(--color-paper-dim)]
+    `,
+    // Inverse: Paper Fill -> Grey Fill (For use on Dark Backgrounds)
+    inverse: `
+      bg-[var(--color-paper)] text-[var(--color-ink)] border-[var(--color-paper)]
+      hover:bg-[var(--color-paper-dark)] hover:border-[var(--color-paper-dark)]
+      shadow-sm
     `
   };
 

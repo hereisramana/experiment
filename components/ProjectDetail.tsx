@@ -28,12 +28,12 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
       <div className="sticky top-0 z-50 bg-[var(--color-paper)]/80 backdrop-blur-md border-b border-[var(--color-paper-dark)] flex justify-between items-center px-4 md:px-8 h-16">
         <button 
           onClick={onBack}
-          className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider hover:text-[var(--color-accent)] transition-colors"
+          className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider hover:text-[var(--color-accent)] transition-colors text-[var(--color-ink)]"
         >
           <ArrowLeft className="w-3 h-3" />
           Index
         </button>
-        <span className="font-mono text-xs uppercase tracking-wider hidden md:block opacity-50">
+        <span className="font-mono text-xs uppercase tracking-wider hidden md:block opacity-50 text-[var(--color-ink)]">
           {project.title} — {project.duration}
         </span>
         <div className="w-16"></div> {/* Spacer for alignment */}
@@ -41,17 +41,17 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
 
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 min-h-[calc(100vh-64px)]">
         
-        {/* LEFT COLUMN: Switchboard & Meta (Sticky) */}
-        <div className="lg:col-span-4 border-r border-[var(--color-paper-dark)] bg-[var(--color-paper)] flex flex-col justify-between p-6 md:p-12 lg:sticky lg:top-16 lg:h-[calc(100vh-64px)] overflow-y-auto">
+        {/* LEFT COLUMN: Switchboard & Meta (Sticky) - DARK MASS */}
+        <div className="lg:col-span-4 bg-[var(--color-ink)] text-[var(--color-paper)] flex flex-col justify-between p-6 md:p-12 lg:sticky lg:top-16 lg:h-[calc(100vh-64px)] overflow-y-auto">
           <div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight mb-6 leading-[1] text-[var(--color-ink)]">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight mb-6 leading-[1] text-[var(--color-paper)]">
               {project.title}
             </h1>
-            <p className="text-lg text-[var(--color-ink-subtle)] leading-relaxed mb-12 max-w-sm">
+            <p className="text-lg text-[var(--color-paper-dim)] leading-relaxed mb-12 max-w-sm">
               {project.tagline}
             </p>
 
-            {/* Switchboard Navigation */}
+            {/* Switchboard Navigation (Inverted) */}
             <nav className="flex flex-col gap-2 mb-12">
               {tabs.map((tab) => (
                 <button
@@ -61,29 +61,29 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                     flex items-center justify-between py-3 px-4 text-left font-mono text-xs uppercase tracking-widest rounded-[var(--radius-sm)]
                     transition-all duration-300 ease-soft
                     ${activeTab === tab.id 
-                      ? 'bg-[var(--color-paper-dim)] text-[var(--color-ink)] font-medium shadow-sm' 
-                      : 'text-[var(--color-ink-subtle)] hover:bg-[var(--color-paper-dim)]/50 hover:text-[var(--color-ink)]'}
+                      ? 'bg-[var(--color-paper)] text-[var(--color-ink)] font-medium shadow-sm' 
+                      : 'text-[var(--color-paper-dark)] hover:bg-[var(--color-paper-dark)]/20 hover:text-[var(--color-paper)]'}
                   `}
                 >
                   {tab.label}
-                  <span className={`w-1.5 h-1.5 rounded-full transition-colors ${activeTab === tab.id ? 'bg-[var(--color-accent)]' : 'bg-transparent'}`} />
+                  <span className={`w-1.5 h-1.5 rounded-full transition-colors ${activeTab === tab.id ? 'bg-[var(--color-ink)]' : 'bg-transparent'}`} />
                 </button>
               ))}
             </nav>
 
-            <div className="grid grid-cols-2 gap-y-6 font-mono text-[11px] uppercase tracking-wider text-[var(--color-ink-subtle)]">
+            <div className="grid grid-cols-2 gap-y-6 font-mono text-[11px] uppercase tracking-wider text-[var(--color-paper-dark)]">
               <div>
                 <span className="block opacity-40 mb-1">Role</span>
-                <span className="text-[var(--color-ink)]">{project.role}</span>
+                <span className="text-[var(--color-paper)]">{project.role}</span>
               </div>
               <div>
                 <span className="block opacity-40 mb-1">Focus</span>
-                <span className="text-[var(--color-ink)]">{project.tags[0]}</span>
+                <span className="text-[var(--color-paper)]">{project.tags[0]}</span>
               </div>
               <div>
                  <span className="block opacity-40 mb-1">Live</span>
                  {project.liveUrl ? (
-                   <a href={project.liveUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1 hover:text-[var(--color-accent)] text-[var(--color-ink)] transition-colors">
+                   <a href={project.liveUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1 hover:text-[var(--color-paper)] text-[var(--color-paper-dim)] transition-colors">
                      View <ArrowUpRight className="w-3 h-3" />
                    </a>
                  ) : (
@@ -94,13 +94,13 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
           </div>
 
           <div className="mt-12 lg:mt-0 pt-6 lg:pt-0">
-             <div className="font-mono text-[10px] opacity-30 uppercase">
+             <div className="font-mono text-[10px] opacity-30 uppercase text-[var(--color-paper)]">
                 ID: {project.id.toUpperCase()}
              </div>
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Content (Swappable) */}
+        {/* RIGHT COLUMN: Content (Swappable) - LIGHT SURFACE */}
         <div className="lg:col-span-8 bg-[var(--color-paper)] p-6 md:p-12 lg:p-24 overflow-y-auto">
           
           <div className="max-w-3xl mx-auto animate-in fade-in duration-500 ease-soft">
@@ -164,7 +164,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                  </div>
 
                  <div className="p-8 bg-[var(--color-ink)] text-[var(--color-paper)] rounded-[var(--radius-md)] shadow-lg">
-                    <h3 className="font-mono text-xs uppercase tracking-widest mb-6 opacity-60">System Outcome</h3>
+                    <h3 className="font-mono text-xs uppercase tracking-widest mb-6 opacity-60 text-[var(--color-paper)]">System Outcome</h3>
                     <p className="text-lg md:text-xl font-light">
                       "{project.outcome}"
                     </p>

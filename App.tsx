@@ -84,24 +84,24 @@ export const App: React.FC = () => {
           </div>
         </div>
 
-        {/* RIGHT: Preview / Info Panel (Floating Sheet) */}
-        <div className="hidden lg:flex lg:w-5/12 bg-[var(--color-paper-dim)] rounded-[var(--radius-lg)] relative overflow-hidden flex-col justify-between shadow-sm">
+        {/* RIGHT: Preview / Info Panel (Floating Sheet) - DARK MASS */}
+        <div className="hidden lg:flex lg:w-5/12 bg-[var(--color-ink)] text-[var(--color-paper)] rounded-[var(--radius-lg)] relative overflow-hidden flex-col justify-between shadow-sm">
            
            {/* Contextual Preview */}
            {hoveredProject ? (
               <div className="absolute inset-0 z-10 p-12 flex flex-col justify-end animate-in fade-in duration-500 ease-soft">
-                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-paper-dim)] via-transparent to-transparent z-10 opacity-80" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-ink)] via-[var(--color-ink)]/50 to-transparent z-10 opacity-90" />
                   <img 
                     src={hoveredProject.heroUrl} 
-                    className="absolute inset-0 w-full h-full object-cover opacity-25 mix-blend-multiply grayscale contrast-125"
+                    className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay grayscale contrast-125"
                     alt="" 
                   />
                   <div className="relative z-20">
-                     <h2 className="text-5xl font-medium tracking-tight mb-4 text-[var(--color-ink)]">{hoveredProject.title}</h2>
-                     <p className="text-xl font-light opacity-70 text-balance">{hoveredProject.tagline}</p>
+                     <h2 className="text-5xl font-medium tracking-tight mb-4 text-[var(--color-paper)]">{hoveredProject.title}</h2>
+                     <p className="text-xl font-light opacity-80 text-balance text-[var(--color-paper-dim)]">{hoveredProject.tagline}</p>
                      <div className="mt-8 flex gap-2">
                         {hoveredProject.tags.map(tag => (
-                          <span key={tag} className="px-3 py-1 bg-[var(--color-paper)] border border-[var(--color-paper-dark)] rounded-[var(--radius-sm)] font-mono text-[10px] uppercase opacity-70">
+                          <span key={tag} className="px-3 py-1 bg-[var(--color-paper)] text-[var(--color-ink)] rounded-[var(--radius-sm)] font-mono text-[10px] uppercase">
                             {tag}
                           </span>
                         ))}
@@ -114,19 +114,19 @@ export const App: React.FC = () => {
                  <div className="space-y-12 max-w-sm">
                     {SKILLS.slice(0, 2).map((group) => (
                        <div key={group.category}>
-                          <h3 className="font-mono text-xs uppercase tracking-widest mb-4 opacity-40 border-b border-[var(--color-paper-dark)] pb-2">{group.category}</h3>
+                          <h3 className="font-mono text-xs uppercase tracking-widest mb-4 opacity-50 border-b border-[var(--color-paper-dim)]/20 pb-2 text-[var(--color-paper-dark)]">{group.category}</h3>
                           <ul className="grid grid-cols-2 gap-x-4 gap-y-2">
                              {group.items.map(item => (
-                               <li key={item} className="text-sm font-medium opacity-70">{item}</li>
+                               <li key={item} className="text-sm font-medium opacity-80 hover:text-[var(--color-paper)] hover:opacity-100 transition-opacity">{item}</li>
                              ))}
                           </ul>
                        </div>
                     ))}
                  </div>
                  
-                 <div className="border-t border-[var(--color-paper-dark)] pt-8">
-                    <p className="font-mono text-xs uppercase tracking-widest opacity-40 mb-4">Philosophy</p>
-                    <p className="text-lg leading-relaxed font-light text-balance text-[var(--color-ink-subtle)]">
+                 <div className="border-t border-[var(--color-paper-dim)]/20 pt-8">
+                    <p className="font-mono text-xs uppercase tracking-widest opacity-50 mb-4 text-[var(--color-paper-dark)]">Philosophy</p>
+                    <p className="text-lg leading-relaxed font-light text-balance text-[var(--color-paper-dim)]">
                       "The interface should be a silent partner, not a noisy decoration."
                     </p>
                  </div>
@@ -135,15 +135,15 @@ export const App: React.FC = () => {
         </div>
       </main>
 
-      {/* FOOTER */}
-      <footer className="border-t border-[var(--color-paper-dark)] px-4 md:px-12 py-8 flex justify-between items-center bg-[var(--color-paper)]">
+      {/* FOOTER - DARK MASS */}
+      <footer className="border-t border-[var(--color-paper-dark)] px-4 md:px-12 py-8 flex justify-between items-center bg-[var(--color-ink)] text-[var(--color-paper)]">
          <span className="font-mono text-[10px] uppercase opacity-40">
            © {new Date().getFullYear()} / Loc: San Francisco
          </span>
-         <div className="flex gap-6 font-mono text-[10px] uppercase text-[var(--color-ink-subtle)]">
-            <a href="#" className="hover:text-[var(--color-accent)] transition-colors">Github</a>
-            <a href="#" className="hover:text-[var(--color-accent)] transition-colors">LinkedIn</a>
-            <a href="#" className="hover:text-[var(--color-accent)] transition-colors">Read.CV</a>
+         <div className="flex gap-6 font-mono text-[10px] uppercase text-[var(--color-paper-dark)]">
+            <a href="#" className="hover:text-[var(--color-paper)] transition-colors">Github</a>
+            <a href="#" className="hover:text-[var(--color-paper)] transition-colors">LinkedIn</a>
+            <a href="#" className="hover:text-[var(--color-paper)] transition-colors">Read.CV</a>
          </div>
       </footer>
 
