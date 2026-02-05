@@ -94,8 +94,9 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
           </div>
 
           <div className="mt-12 lg:mt-0 pt-6 lg:pt-0">
-             <div className="font-mono text-[10px] opacity-30 uppercase text-[var(--color-paper)]">
-                ID: {project.id.toUpperCase()}
+             <div className="font-mono text-[10px] opacity-30 uppercase text-[var(--color-paper)] flex justify-between items-center border-t border-[var(--color-paper-dark)]/20 pt-4">
+                <span>ID: {project.id.toUpperCase()}</span>
+                <span>DATA_SHEET_V1</span>
              </div>
           </div>
         </div>
@@ -109,12 +110,20 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
             {activeTab === 'CONTEXT' && (
               <div className="space-y-16">
                  {/* Hero Visual */}
-                 <div className="w-full aspect-video bg-[var(--color-paper-dim)] rounded-[var(--radius-md)] overflow-hidden relative border border-[var(--color-paper-dark)] shadow-sm">
-                    {project.videoUrl ? (
-                        <video src={project.videoUrl} autoPlay muted loop className="w-full h-full object-cover opacity-90" />
-                    ) : (
-                        <img src={project.heroUrl} alt="" className="w-full h-full object-cover grayscale opacity-80 mix-blend-multiply" />
-                    )}
+                 <div>
+                    <div className="w-full aspect-video bg-[var(--color-paper-dim)] rounded-[var(--radius-md)] overflow-hidden relative border border-[var(--color-paper-dark)] shadow-sm group">
+                        {project.videoUrl ? (
+                            <video src={project.videoUrl} autoPlay muted loop className="w-full h-full object-cover image-technical" />
+                        ) : (
+                            <img src={project.heroUrl} alt="" className="w-full h-full object-cover image-technical" />
+                        )}
+                        {/* Technical Overlay */}
+                        <div className="absolute inset-0 bg-noise mix-blend-multiply opacity-50 pointer-events-none" />
+                    </div>
+                    <div className="flex justify-between mt-2 font-mono text-[9px] uppercase tracking-wider opacity-40">
+                        <span>Fig. 01 — Hero Visual</span>
+                        <span>Scale: 1:1</span>
+                    </div>
                  </div>
 
                  <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
@@ -143,11 +152,15 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                   </section>
                   
                   <section>
-                    <div className="bg-[var(--color-paper-dim)] p-8 rounded-[var(--radius-md)] border border-[var(--color-paper-dark)] mb-8">
-                       <span className="font-mono text-xs uppercase tracking-widest opacity-40 mb-4 block">Process Artifact</span>
-                       <div className="aspect-[4/3] bg-[var(--color-paper)] rounded-[var(--radius-sm)] flex items-center justify-center border border-[var(--color-paper-dark)]">
-                          <span className="font-mono text-xs opacity-30">Wireframe / Sketch Placeholder</span>
+                    <div className="bg-[var(--color-paper-dim)] p-8 rounded-[var(--radius-md)] border border-[var(--color-paper-dark)] mb-2">
+                       <span className="font-mono text-xs uppercase tracking-widest opacity-40 mb-4 block border-b border-[var(--color-paper-dark)] pb-2 w-fit">Process Artifact</span>
+                       <div className="aspect-[4/3] bg-[var(--color-paper)] rounded-[var(--radius-sm)] flex items-center justify-center border border-[var(--color-paper-dark)] relative overflow-hidden">
+                          <div className="absolute inset-0 bg-noise opacity-30" />
+                          <span className="font-mono text-xs opacity-30 z-10">Wireframe / Sketch Placeholder</span>
                        </div>
+                    </div>
+                    <div className="font-mono text-[9px] uppercase tracking-wider opacity-40 text-right">
+                        Fig. 02 — Schematic Layout
                     </div>
                   </section>
                </div>
@@ -163,9 +176,12 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                     </p>
                  </div>
 
-                 <div className="p-8 bg-[var(--color-ink)] text-[var(--color-paper)] rounded-[var(--radius-md)] shadow-lg">
-                    <h3 className="font-mono text-xs uppercase tracking-widest mb-6 opacity-60 text-[var(--color-paper)]">System Outcome</h3>
-                    <p className="text-lg md:text-xl font-light">
+                 <div className="p-8 bg-[var(--color-ink)] text-[var(--color-paper)] rounded-[var(--radius-md)] shadow-lg relative overflow-hidden">
+                    {/* Dark texture overlay */}
+                    <div className="absolute inset-0 bg-noise opacity-10 mix-blend-overlay pointer-events-none" />
+                    
+                    <h3 className="font-mono text-xs uppercase tracking-widest mb-6 opacity-60 text-[var(--color-paper)] relative z-10">System Outcome</h3>
+                    <p className="text-lg md:text-xl font-light relative z-10">
                       "{project.outcome}"
                     </p>
                  </div>

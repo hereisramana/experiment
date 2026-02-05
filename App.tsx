@@ -3,7 +3,7 @@ import { PROJECTS, SKILLS } from './constants';
 import { ViewState } from './types';
 import { ProjectCard } from './components/ProjectCard';
 import { ProjectDetail } from './components/ProjectDetail';
-import { X } from 'lucide-react';
+import { X, Globe } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [view, setView] = useState<ViewState>('HOME');
@@ -19,31 +19,51 @@ export const App: React.FC = () => {
   const currentProject = PROJECTS.find(p => p.id === selectedProjectId);
   const hoveredProject = PROJECTS.find(p => p.id === hoveredProjectId);
 
+  // Helper for Registration Marks (The "Lens" Look)
+  const RegistrationMarks = () => (
+    <>
+      <div className="bg-noise" />
+      <div className="fixed top-4 left-4 w-2 h-2 border-l border-t border-[var(--color-ink)] opacity-30 pointer-events-none z-50" />
+      <div className="fixed top-4 right-4 w-2 h-2 border-r border-t border-[var(--color-ink)] opacity-30 pointer-events-none z-50" />
+      <div className="fixed bottom-4 left-4 w-2 h-2 border-l border-b border-[var(--color-ink)] opacity-30 pointer-events-none z-50" />
+      <div className="fixed bottom-4 right-4 w-2 h-2 border-r border-b border-[var(--color-ink)] opacity-30 pointer-events-none z-50" />
+    </>
+  );
+
   // Render Detailed View
   if (view === 'PROJECT_DETAIL' && currentProject) {
     return (
-      <ProjectDetail 
-        project={currentProject} 
-        onBack={() => {
-          setView('HOME');
-          setSelectedProjectId(null);
-        }} 
-      />
+      <>
+        <RegistrationMarks />
+        <ProjectDetail 
+          project={currentProject} 
+          onBack={() => {
+            setView('HOME');
+            setSelectedProjectId(null);
+          }} 
+        />
+      </>
     );
   }
 
   // Render Index/Home View
   return (
-    <div className="min-h-screen bg-[var(--color-paper)] text-[var(--color-ink)] selection:bg-[var(--color-accent-light)] flex flex-col">
+    <div className="min-h-screen bg-[var(--color-paper)] text-[var(--color-ink)] selection:bg-[var(--color-accent-light)] flex flex-col relative">
+      <RegistrationMarks />
       
       {/* HEADER */}
-      <header className="px-4 md:px-12 py-8 flex justify-between items-baseline">
-        <h1 className="font-mono text-sm uppercase tracking-widest font-bold text-[var(--color-ink)]">
-          Ramana Design<span className="opacity-40">.Tech</span>
-        </h1>
+      <header className="px-4 md:px-12 py-8 flex justify-between items-baseline border-b border-transparent">
+        <div className="flex flex-col gap-1">
+          <h1 className="font-mono text-sm uppercase tracking-widest font-bold text-[var(--color-ink)]">
+            Ramana Design<span className="opacity-40">.Tech</span>
+          </h1>
+          <span className="font-mono text-[9px] uppercase tracking-widest opacity-40">
+            SYS: ONLINE / V.2.4
+          </span>
+        </div>
         <div className="flex gap-6">
-           <div className="hidden md:flex gap-1 items-center">
-             <div className="w-2 h-2 bg-[var(--color-accent)] rounded-full animate-pulse opacity-50"></div>
+           <div className="hidden md:flex gap-2 items-center">
+             <div className="w-1.5 h-1.5 bg-[var(--color-accent)] rounded-full animate-pulse opacity-50"></div>
              <span className="font-mono text-xs uppercase tracking-wide opacity-50">Available for 2024</span>
            </div>
            <button onClick={() => setIsContactOpen(true)} className="font-mono text-xs uppercase opacity-60 hover:opacity-100 underline decoration-[var(--color-paper-dark)] underline-offset-4 hover:decoration-[var(--color-accent)] transition-all">
@@ -52,11 +72,15 @@ export const App: React.FC = () => {
         </div>
       </header>
 
-      <main className="flex-1 flex flex-col lg:flex-row gap-4 px-4 md:px-8 pb-8">
+      <main className="flex-1 flex flex-col lg:flex-row gap-4 px-4 md:px-8 pb-8 relative z-10">
         
         {/* LEFT: Project Index - "The List" */}
         <div className="w-full lg:w-7/12 py-4 md:py-8 lg:pr-12 flex flex-col">
-          <div className="mb-12 md:mb-24 mt-4">
+          <div className="mb-12 md:mb-24 mt-4 relative">
+             {/* Decorative tracking number */}
+             <div className="absolute -left-6 top-1 font-mono text-[9px] text-[var(--color-ink)] opacity-20 hidden lg:block -rotate-90 origin-top-right">
+                REF-01-HDR
+             </div>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight leading-[1.05] mb-6 text-[var(--color-ink)]">
               Senior Product Designer & Technologist.
             </h2>
@@ -85,7 +109,7 @@ export const App: React.FC = () => {
         </div>
 
         {/* RIGHT: Preview / Info Panel (Floating Sheet) - DARK MASS */}
-        <div className="hidden lg:flex lg:w-5/12 bg-[var(--color-ink)] text-[var(--color-paper)] rounded-[var(--radius-lg)] relative overflow-hidden flex-col justify-between shadow-sm">
+        <div className="hidden lg:flex lg:w-5/12 bg-[var(--color-ink)] text-[var(--color-paper)] rounded-[var(--radius-lg)] relative overflow-hidden flex-col justify-between shadow-sm group">
            
            {/* Contextual Preview */}
            {hoveredProject ? (
@@ -93,11 +117,19 @@ export const App: React.FC = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-ink)] via-[var(--color-ink)]/50 to-transparent z-10 opacity-90" />
                   <img 
                     src={hoveredProject.heroUrl} 
-                    className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay grayscale contrast-125"
+                    className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay grayscale contrast-125 transition-all duration-700 group-hover:scale-105"
                     alt="" 
                   />
+                  {/* Technical Overlay Grain on Dark Background */}
+                  <div className="absolute inset-0 opacity-20 bg-noise mix-blend-overlay z-10 pointer-events-none"></div>
+
                   <div className="relative z-20">
-                     <h2 className="text-5xl font-medium tracking-tight mb-4 text-[var(--color-paper)]">{hoveredProject.title}</h2>
+                     <div className="flex justify-between items-baseline mb-2">
+                       <h2 className="text-5xl font-medium tracking-tight text-[var(--color-paper)]">{hoveredProject.title}</h2>
+                       <span className="font-mono text-[9px] uppercase opacity-40 border border-[var(--color-paper-dark)] px-1 py-0.5 rounded-[2px]">
+                          IMG_PREV_0{PROJECTS.findIndex(p => p.id === hoveredProject.id) + 1}
+                       </span>
+                     </div>
                      <p className="text-xl font-light opacity-80 text-balance text-[var(--color-paper-dim)]">{hoveredProject.tagline}</p>
                      <div className="mt-8 flex gap-2">
                         {hoveredProject.tags.map(tag => (
@@ -124,7 +156,8 @@ export const App: React.FC = () => {
                     ))}
                  </div>
                  
-                 <div className="border-t border-[var(--color-paper-dim)]/20 pt-8">
+                 <div className="border-t border-[var(--color-paper-dim)]/20 pt-8 relative">
+                    <Globe className="absolute top-8 right-0 w-12 h-12 text-[var(--color-paper-dark)] opacity-10" />
                     <p className="font-mono text-xs uppercase tracking-widest opacity-50 mb-4 text-[var(--color-paper-dark)]">Philosophy</p>
                     <p className="text-lg leading-relaxed font-light text-balance text-[var(--color-paper-dim)]">
                       "The interface should be a silent partner, not a noisy decoration."
@@ -136,9 +169,9 @@ export const App: React.FC = () => {
       </main>
 
       {/* FOOTER - DARK MASS */}
-      <footer className="border-t border-[var(--color-paper-dark)] px-4 md:px-12 py-8 flex justify-between items-center bg-[var(--color-ink)] text-[var(--color-paper)]">
+      <footer className="border-t border-[var(--color-paper-dark)] px-4 md:px-12 py-8 flex justify-between items-center bg-[var(--color-ink)] text-[var(--color-paper)] relative z-10">
          <span className="font-mono text-[10px] uppercase opacity-40">
-           © {new Date().getFullYear()} / Loc: San Francisco
+           © {new Date().getFullYear()} / Loc: San Francisco / Lat: 37.77
          </span>
          <div className="flex gap-6 font-mono text-[10px] uppercase text-[var(--color-paper-dark)]">
             <a href="#" className="hover:text-[var(--color-paper)] transition-colors">Github</a>
@@ -147,10 +180,11 @@ export const App: React.FC = () => {
          </div>
       </footer>
 
-      {/* CONTACT MODAL (Softened Overlay) */}
+      {/* CONTACT MODAL */}
       {isContactOpen && (
          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[var(--color-ink)]/10 backdrop-blur-md" onClick={() => setIsContactOpen(false)}>
             <div className="bg-[var(--color-paper)] p-8 md:p-12 w-full max-w-md rounded-[var(--radius-lg)] shadow-2xl relative border border-[var(--color-paper-dark)]" onClick={e => e.stopPropagation()}>
+               <div className="absolute top-0 left-0 w-full h-1 bg-[var(--color-ink)]" />
                <button onClick={() => setIsContactOpen(false)} className="absolute top-6 right-6 p-2 hover:bg-[var(--color-paper-dim)] rounded-full transition-colors opacity-50 hover:opacity-100">
                   <X className="w-5 h-5" />
                </button>
