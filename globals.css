@@ -9,14 +9,19 @@
   --color-surface: #FFFFFF;
   --color-background: #FAFAFA;
   
-  --color-text-body: #111111; /* High contrast */
-  --color-text-subtle: #666666;
+  /* Digital Comfort: Contrast Hardening */
+  --color-text-body: #111111; 
+  --color-text-subtle: #4A4A4A; /* Darkened from #666 for WCAG AA */
+  
+  /* Phantom Structure: Imperceptible but Present */
+  --color-phantom-border: rgba(0, 0, 0, 0.04);
+  --color-phantom-bg: rgba(0, 0, 0, 0.02);
 
   /* Fonts */
   --font-heading: 'Montserrat', sans-serif;
   --font-sans: 'IBM Plex Sans', sans-serif;
 
-  /* Ambient Occlusion Shadows (Soft, Deep, Colorless) */
+  /* Ambient Occlusion Shadows */
   --shadow-ethereal-sm: 0 2px 8px -2px rgba(0, 0, 0, 0.05);
   --shadow-ethereal: 0 20px 40px -12px rgba(0, 0, 0, 0.08);
   --shadow-ethereal-lg: 0 30px 60px -15px rgba(0, 0, 0, 0.12);
@@ -26,7 +31,7 @@
   --shadow-glow-lg: 0 0 30px var(--color-primary-glow);
 
   /* Animation: Snap & Instant */
-  --ease-snap: cubic-bezier(0.16, 1, 0.3, 1); /* Fast, decisive */
+  --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Reset & Base */
@@ -41,27 +46,28 @@ body {
 
 h1, h2, h3, h4, h5, h6, .font-heading {
   font-family: var(--font-heading);
-  letter-spacing: -0.02em; /* Tighter tracking for structure */
+  letter-spacing: -0.02em;
 }
 
 /* 
- * ETHEREAL UTILITY UTILITIES 
+ * ACCESSIBILITY & UTILITIES 
  */
 
-/* The Vanishing Container: Visible only on hover */
+/* The Phantom Container: Replaces "Vanishing" logic with "Subtle" logic */
 .ethereal-container {
-  background: transparent;
-  border: 1px solid transparent;
+  background: var(--color-phantom-bg);
+  border: 1px solid var(--color-phantom-border);
   transition: all 0.2s var(--ease-snap);
 }
 
 .ethereal-container:hover {
   background: var(--color-surface);
+  border-color: transparent;
   box-shadow: var(--shadow-ethereal);
   transform: translateY(-2px);
 }
 
-/* Luminous Text: Glows on hover instead of color shift only */
+/* Luminous Text: Glows on hover */
 .text-luminous {
   transition: text-shadow 0.2s ease-out, color 0.15s ease-out;
 }
@@ -70,10 +76,22 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   color: var(--color-primary);
 }
 
-/* Utility: Focus Rings (Luminous) */
+/* Utility: High Contrast Focus Rings (Luminous) */
 *:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-primary);
+  border-radius: 4px; /* Ensure rings have shape */
+  z-index: 10; /* Ensure focus ring sits on top */
+}
+
+/* Motion with Consent */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Scrollbar: Minimalist */

@@ -22,6 +22,7 @@ export const Button: React.FC<ButtonProps> = ({
     rounded-lg transition-all duration-200 ease-snap
     min-h-[44px] px-6 py-3
     disabled:opacity-40 disabled:cursor-not-allowed
+    focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#2B6B7C] focus:outline-none
   `;
 
   // Variants: Luminous Feedback
@@ -40,7 +41,7 @@ export const Button: React.FC<ButtonProps> = ({
     `,
     // Text: Pure Typography -> Glows
     text: `
-      bg-transparent text-[#666] 
+      bg-transparent text-[#4A4A4A] 
       hover:text-[#111] hover:bg-black/5
     `
   };

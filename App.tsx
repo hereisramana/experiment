@@ -43,50 +43,53 @@ export const App: React.FC = () => {
       <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
         {/* Backdrop: Clean Fade */}
         <div 
-          className="absolute inset-0 bg-white/90 backdrop-blur-sm animate-in fade-in duration-300"
+          className="absolute inset-0 bg-white/95 backdrop-blur-md animate-in fade-in duration-300"
           onClick={() => setIsContactModalOpen(false)}
         />
         
         {/* Modal: Sharp, Floating, Luminous Shadow */}
-        <div className="relative bg-white w-full max-w-lg rounded-2xl p-10 animate-in zoom-in-95 fade-in duration-200 shadow-ethereal-lg border border-slate-100">
+        <div className="relative bg-white w-full max-w-lg rounded-2xl p-10 animate-in zoom-in-95 fade-in duration-200 shadow-ethereal-lg border border-slate-200">
           <button 
             onClick={() => setIsContactModalOpen(false)}
-            className="absolute top-6 right-6 p-2 text-slate-400 hover:text-black transition-colors"
+            className="absolute top-6 right-6 p-3 text-slate-500 hover:text-black transition-colors rounded-full hover:bg-slate-100"
+            aria-label="Close Contact Modal"
           >
             <X className="w-6 h-6" />
           </button>
 
           <h2 className="text-4xl font-bold text-slate-900 mb-2 font-heading tracking-tight">Contact</h2>
-          <p className="text-slate-500 mb-10 text-lg">Signal, not noise. Let's talk.</p>
+          <p className="text-slate-600 mb-10 text-lg">Signal, not noise. Let's talk.</p>
 
           <div className="space-y-6">
             {/* Email Field - Clean */}
-            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg group hover:bg-slate-100 transition-colors">
+            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg group hover:bg-slate-100 border border-transparent hover:border-slate-200 transition-all">
               <div className="flex items-center gap-4">
-                <Mail className="w-5 h-5 text-slate-400" />
-                <a href={`mailto:${CONTACT_INFO.email}`} className="text-lg font-medium text-slate-900">
+                <Mail className="w-5 h-5 text-slate-500" />
+                <a href={`mailto:${CONTACT_INFO.email}`} className="text-lg font-medium text-slate-900 focus:outline-none focus:underline">
                   {CONTACT_INFO.email}
                 </a>
               </div>
               <button 
                 onClick={() => copyToClipboard(CONTACT_INFO.email, 'email')}
-                className="text-slate-300 hover:text-slate-900 transition-colors"
+                className="text-slate-400 hover:text-slate-900 transition-colors p-2 rounded-md focus:bg-slate-200"
+                aria-label="Copy email to clipboard"
               >
                 {copiedType === 'email' ? <Check className="w-5 h-5 text-green-600" /> : <Copy className="w-5 h-5" />}
               </button>
             </div>
 
             {/* Phone Field - Clean */}
-            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg group hover:bg-slate-100 transition-colors">
+            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg group hover:bg-slate-100 border border-transparent hover:border-slate-200 transition-all">
               <div className="flex items-center gap-4">
-                <Phone className="w-5 h-5 text-slate-400" />
-                <a href={`tel:${CONTACT_INFO.phone.replace(/\D/g,'')}`} className="text-lg font-medium text-slate-900">
+                <Phone className="w-5 h-5 text-slate-500" />
+                <a href={`tel:${CONTACT_INFO.phone.replace(/\D/g,'')}`} className="text-lg font-medium text-slate-900 focus:outline-none focus:underline">
                   {CONTACT_INFO.phone}
                 </a>
               </div>
               <button 
                 onClick={() => copyToClipboard(CONTACT_INFO.phone, 'phone')}
-                className="text-slate-300 hover:text-slate-900 transition-colors"
+                className="text-slate-400 hover:text-slate-900 transition-colors p-2 rounded-md focus:bg-slate-200"
+                aria-label="Copy phone number to clipboard"
               >
                 {copiedType === 'phone' ? <Check className="w-5 h-5 text-green-600" /> : <Copy className="w-5 h-5" />}
               </button>
@@ -108,7 +111,7 @@ export const App: React.FC = () => {
             />
           );
         }
-        return <div className="p-12 text-center text-slate-500">Project not found</div>;
+        return <div className="p-12 text-center text-slate-600">Project not found</div>;
       
       case 'ABOUT':
         return (
@@ -134,7 +137,7 @@ export const App: React.FC = () => {
                       </h3>
                       <ul className="space-y-2">
                         {skillGroup.items.map((skill) => (
-                          <li key={skill} className="text-slate-500 font-medium text-sm">
+                          <li key={skill} className="text-slate-600 font-medium text-sm">
                             {skill}
                           </li>
                         ))}
@@ -156,24 +159,24 @@ export const App: React.FC = () => {
                 Ramana.
               </h1>
               <div className="max-w-2xl">
-                 <p className="text-3xl text-slate-500 leading-tight font-light mb-12">
+                 <p className="text-3xl text-slate-600 leading-tight font-light mb-12">
                    Senior Product Designer & Technologist building <span className="text-slate-900 font-medium">calm interactive systems</span>.
                  </p>
                  <div className="flex gap-6">
-                    <button onClick={() => setIsContactModalOpen(true)} className="group flex items-center font-bold text-slate-900 hover:text-[#2B6B7C] transition-colors text-lg">
+                    <button onClick={() => setIsContactModalOpen(true)} className="group flex items-center font-bold text-slate-900 hover:text-[#2B6B7C] transition-colors text-lg focus:outline-none focus:ring-4 focus:ring-[#2B6B7C]/20 rounded-lg px-1">
                       Get in touch <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
                     </button>
                  </div>
               </div>
             </section>
 
-            {/* Projects Grid: Vanishing Containers */}
+            {/* Projects Grid: Phantom Containers */}
             <section className="animate-in fade-in slide-in-from-bottom-4 delay-100 duration-500">
               <div className="flex items-end justify-between mb-16 border-b border-slate-200 pb-6">
-                <h2 className="text-sm font-bold uppercase tracking-widest text-slate-400">
+                <h2 className="text-sm font-bold uppercase tracking-widest text-slate-500">
                   Selected Works 2024
                 </h2>
-                <span className="text-sm font-bold text-slate-400">0{PROJECTS.length}</span>
+                <span className="text-sm font-bold text-slate-500">0{PROJECTS.length}</span>
               </div>
               
               {/* Forced 2-column grid for Desktop */}
@@ -199,29 +202,29 @@ export const App: React.FC = () => {
       {renderContactModal()}
 
       {/* Navigation: Ethereal & Permanent */}
-      <nav className="sticky top-0 z-50 bg-[#FAFAFA]/90 backdrop-blur-sm border-b border-transparent transition-all duration-300">
+      <nav className="sticky top-0 z-50 bg-[#FAFAFA]/95 backdrop-blur-md border-b border-transparent transition-all duration-300">
         <div className="max-w-7xl mx-auto px-8">
           <div className="flex justify-between h-24 items-center">
             
             {/* Logo */}
-            <div 
-              className="font-bold text-xl tracking-tight cursor-pointer font-heading hover:opacity-70 transition-opacity"
+            <button 
+              className="font-bold text-xl tracking-tight cursor-pointer font-heading hover:opacity-70 transition-opacity focus:outline-none focus:ring-2 focus:ring-[#2B6B7C] rounded-lg p-1"
               onClick={() => handleNavClick('HOME')}
             >
-              ramanadesign<span className="text-slate-300">.tech</span>
-            </div>
+              ramanadesign<span className="text-slate-400">.tech</span>
+            </button>
 
             {/* Desktop Menu: Always Visible */}
             <div className="flex items-center gap-12">
               <button 
                 onClick={() => handleNavClick('HOME')} 
-                className={`text-sm font-bold tracking-wide uppercase transition-colors ${view === 'HOME' && !selectedProjectId ? 'text-slate-900' : 'text-slate-400 hover:text-slate-900'}`}
+                className={`text-sm font-bold tracking-wide uppercase transition-colors rounded-md py-1 px-2 focus:outline-none focus:ring-2 focus:ring-[#2B6B7C] ${view === 'HOME' && !selectedProjectId ? 'text-slate-900' : 'text-slate-500 hover:text-slate-900'}`}
               >
                 Work
               </button>
               <button 
                 onClick={() => handleNavClick('ABOUT')} 
-                className={`text-sm font-bold tracking-wide uppercase transition-colors ${view === 'ABOUT' ? 'text-slate-900' : 'text-slate-400 hover:text-slate-900'}`}
+                className={`text-sm font-bold tracking-wide uppercase transition-colors rounded-md py-1 px-2 focus:outline-none focus:ring-2 focus:ring-[#2B6B7C] ${view === 'ABOUT' ? 'text-slate-900' : 'text-slate-500 hover:text-slate-900'}`}
               >
                 About
               </button>
@@ -243,14 +246,14 @@ export const App: React.FC = () => {
 
       <footer className="bg-white border-t border-slate-100 py-24 mt-32">
         <div className="max-w-7xl mx-auto px-8 flex justify-between items-center gap-6">
-          <div className="text-slate-400 text-sm font-medium">
+          <div className="text-slate-500 text-sm font-medium">
             © {new Date().getFullYear()} Ethereal Utility.
           </div>
           <div className="flex gap-8">
-            <a href="#" className="text-slate-400 hover:text-slate-900 transition-colors" aria-label="Github">
+            <a href="#" className="text-slate-400 hover:text-slate-900 transition-colors focus:outline-none focus:ring-2 focus:ring-[#2B6B7C] rounded-md" aria-label="Github">
               <Github className="w-5 h-5" />
             </a>
-            <a href="#" className="text-slate-400 hover:text-slate-900 transition-colors" aria-label="LinkedIn">
+            <a href="#" className="text-slate-400 hover:text-slate-900 transition-colors focus:outline-none focus:ring-2 focus:ring-[#2B6B7C] rounded-md" aria-label="LinkedIn">
               <Linkedin className="w-5 h-5" />
             </a>
           </div>

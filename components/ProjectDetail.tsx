@@ -21,7 +21,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
       <div className="max-w-7xl mx-auto px-8 py-12">
         <button 
           onClick={onBack}
-          className="group flex items-center gap-3 text-sm font-semibold text-slate-500 hover:text-slate-900 transition-colors"
+          className="group flex items-center gap-3 text-sm font-semibold text-slate-500 hover:text-slate-900 transition-colors p-2 -ml-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2B6B7C]"
+          aria-label="Back to project index"
         >
           <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
           BACK TO INDEX
@@ -35,13 +36,13 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
           <h1 className="text-8xl font-bold text-slate-900 mb-8 tracking-tighter leading-[0.9] font-heading">
             {project.title}
           </h1>
-          <p className="text-3xl text-slate-500 leading-tight max-w-4xl font-light">
+          <p className="text-3xl text-slate-600 leading-tight max-w-4xl font-light">
             {project.tagline}
           </p>
         </header>
 
         {/* Hero: Fixed height for wide screens so content is visible */}
-        <div className="w-full h-[70vh] bg-[#F5F5F5] rounded-xl overflow-hidden mb-24 shadow-ethereal-sm">
+        <div className="w-full h-[70vh] bg-[#F5F5F5] rounded-xl overflow-hidden mb-24 shadow-ethereal-sm border border-slate-100">
           {project.videoUrl ? (
             <video 
               src={project.videoUrl}
@@ -50,29 +51,29 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
               muted
               loop
               playsInline
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover motion-reduce:hidden"
             />
-          ) : (
-            <img 
-              src={project.heroUrl} 
-              alt={project.title}
-              className="w-full h-full object-cover"
-            />
-          )}
+          ) : null}
+          {/* Fallback for reduced motion or no video */}
+          <img 
+            src={project.heroUrl} 
+            alt={project.title}
+            className={`w-full h-full object-cover ${project.videoUrl ? 'hidden motion-reduce:block' : ''}`}
+          />
         </div>
 
         {/* Info Grid: Fixed 4 columns */}
-        <div className="grid grid-cols-4 gap-12 mb-32 border-t border-slate-100 pt-10">
+        <div className="grid grid-cols-4 gap-12 mb-32 border-t border-slate-200 pt-10">
           <div>
-            <span className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Role</span>
+            <span className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-3">Role</span>
             <span className="block font-medium text-slate-900 text-lg">{project.role}</span>
           </div>
           <div>
-            <span className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Timeline</span>
+            <span className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-3">Timeline</span>
             <span className="block font-medium text-slate-900 text-lg">{project.duration}</span>
           </div>
           <div>
-            <span className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Focus</span>
+            <span className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-3">Focus</span>
             <span className="block font-medium text-slate-900 text-lg">{project.tags[0]}</span>
           </div>
           {project.liveUrl && (
@@ -81,7 +82,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                 href={project.liveUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="text-[#2B6B7C] font-semibold hover:underline flex items-center gap-2 text-lg"
+                className="text-[#2B6B7C] font-semibold hover:underline flex items-center gap-2 text-lg focus:outline-none focus:ring-2 focus:ring-[#2B6B7C] rounded-md px-1 -ml-1"
               >
                 Visit Live <ExternalLink className="w-5 h-5" />
               </a>
@@ -100,11 +101,11 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
 
             <section className="grid grid-cols-2 gap-16">
                <div>
-                 <h4 className="text-sm font-bold uppercase tracking-widest text-slate-400 mb-6">Challenge</h4>
+                 <h4 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-6">Challenge</h4>
                  <p className="text-lg text-slate-800 leading-relaxed">{project.challenge}</p>
                </div>
                <div>
-                 <h4 className="text-sm font-bold uppercase tracking-widest text-slate-400 mb-6">Solution</h4>
+                 <h4 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-6">Solution</h4>
                  <p className="text-lg text-slate-800 leading-relaxed">{project.solution}</p>
                </div>
             </section>
@@ -116,8 +117,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
           </div>
 
           <div className="col-span-4 space-y-8">
-             <div className="sticky top-32 p-10 bg-[#F9FAFB] rounded-2xl">
-                <h4 className="text-sm font-bold uppercase tracking-widest text-slate-400 mb-6">Outcome</h4>
+             <div className="sticky top-32 p-10 bg-[#F9FAFB] rounded-2xl border border-slate-100">
+                <h4 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-6">Outcome</h4>
                 <p className="text-slate-700 leading-relaxed font-medium text-lg">
                   "{project.outcome}"
                 </p>
@@ -127,7 +128,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
         </div>
 
         {/* Footer Navigation */}
-        <div className="mt-40 pt-20 border-t border-slate-100 flex justify-between items-center">
+        <div className="mt-40 pt-20 border-t border-slate-200 flex justify-between items-center">
             <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Next Project?</h2>
             <Button onClick={onBack} variant="secondary">
                 Back to Index
