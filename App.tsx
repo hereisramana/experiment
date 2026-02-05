@@ -76,7 +76,7 @@ export const App: React.FC = () => {
         
         {/* LEFT: Project Index - "The List" */}
         <div className="w-full lg:w-7/12 py-4 md:py-8 lg:pr-12 flex flex-col">
-          <div className="mb-12 md:mb-24 mt-4 relative">
+          <div className="mb-12 md:mb-32 mt-4 relative">
              {/* Decorative tracking number */}
              <div className="absolute -left-6 top-1 font-mono text-[9px] text-[var(--color-ink)] opacity-20 hidden lg:block -rotate-90 origin-top-right">
                 REF-01-HDR
@@ -90,7 +90,7 @@ export const App: React.FC = () => {
           </div>
 
           <div className="mt-auto">
-             <div className="flex items-end justify-between border-b border-[var(--color-paper-dark)] pb-3 mb-2 mx-4 md:mx-6">
+             <div className="flex items-end justify-between pb-3 mb-2 mx-4 md:mx-4">
                 <span className="font-mono text-xs uppercase tracking-widest opacity-40">Index</span>
                 <span className="font-mono text-xs uppercase tracking-widest opacity-40">Select Work</span>
              </div>

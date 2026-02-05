@@ -46,8 +46,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
 
           {/* THE SIMULATOR: Video in Mobile Frame */}
           <div className="flex-1 relative flex flex-col justify-center items-center w-full min-h-[400px]">
-             {/* Device Bezel */}
-             <div className="relative w-[260px] md:w-[280px] aspect-[9/19] bg-black rounded-[3rem] border-[6px] border-[var(--color-ink-subtle)]/30 shadow-2xl overflow-hidden ring-1 ring-white/5 transform transition-transform duration-700 hover:scale-[1.02]">
+             {/* Device Bezel - 9:16 Aspect Ratio */}
+             <div className="relative w-[280px] md:w-[320px] aspect-[9/16] bg-black rounded-[2rem] border-[6px] border-[var(--color-ink-subtle)]/30 shadow-2xl overflow-hidden ring-1 ring-white/5 transform transition-transform duration-700 hover:scale-[1.02]">
                 {/* Screen Content */}
                 {project.videoUrl ? (
                    <video 
