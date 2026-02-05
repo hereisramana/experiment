@@ -1,16 +1,19 @@
 @import "tailwindcss";
 
 @theme {
-  /* Organic Modernism / Warm Paper Palette (Eye-Strain Reduction) */
-  --color-ink: #2C2B29; /* Warm Charcoal - No blue undertones */
-  --color-ink-subtle: #66625E; /* Warm Stone Grey */
+  /* Industrial Clay / Technical Stone Palette (Scientific Low-Strain) */
+  /* Backgrounds: Neutral, matter-like, non-emissive */
+  --color-paper: #E6E5E3; /* Stone Grey - 88% Lightness (Photophobia friendly) */
+  --color-paper-dim: #DAD8D5; /* Darker Clay - Distinct differentiation */
+  --color-paper-dark: #C4C2BF; /* Structural Concrete - High structural contrast */
   
-  --color-paper: #F0EFEA; /* Warm Linen - Absorbs light, reduces glare */
-  --color-paper-dim: #E2E0D9; /* Darker warm texture for hover/surfaces */
-  --color-paper-dark: #D1CEC7; /* Structural Stone Grey - Increased contrast for clarity */
+  /* Typography: Matte, non-vibrating */
+  --color-ink: #1F1F1F; /* Matte Carbon - Pure, soft black */
+  --color-ink-subtle: #5E5C59; /* Technical Graphite */
   
-  --color-accent: #5C554B; /* Deep Warm Olive/Clay - Earthy, calm accent */
-  --color-accent-light: #E0DCD3; /* Soft warm selection highlight */
+  /* Accents: Engineered Nature */
+  --color-accent: #464C47; /* Deep Industrial Moss */
+  --color-accent-light: #CFCFCF; /* Silver/Aluminum selection */
 
   /* Fonts */
   --font-sans: 'IBM Plex Sans', sans-serif;
@@ -80,7 +83,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-ink);
 }
 
-/* Custom Scrollbar - Updated for Warm Theme */
+/* Custom Scrollbar - Updated for Technical Theme */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -89,14 +92,14 @@ h1, h2, h3, h4, h5, h6 {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #D1CEC7; /* Matches paper-dark */
+  background: #B0B0B0; 
   border-radius: 99px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-ink-subtle);
 }
 
-/* Selection - Soft Warmth */
+/* Selection - Industrial Silver */
 ::selection {
   background: var(--color-accent-light);
   color: var(--color-ink);
