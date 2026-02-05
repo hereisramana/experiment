@@ -15,33 +15,35 @@ export const Button: React.FC<ButtonProps> = ({
   ...props 
 }) => {
   
-  // Base styles: Mechanical, rectangular, instant feedback
+  // Base styles: Soft technical feel, small radius
   const baseStyles = `
     inline-flex items-center justify-center 
     font-mono text-xs uppercase tracking-wider
-    border border-transparent
-    transition-colors duration-100 ease-switch
+    border
+    transition-all duration-200 ease-soft
     h-10 px-6
+    rounded-[var(--radius-sm)]
     disabled:opacity-40 disabled:cursor-not-allowed
-    focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black focus:outline-none
+    focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-accent)] focus:outline-none
   `;
 
-  // Variants: High Contrast / Inversion
+  // Variants: Low Eyestrain / Calm
   const variants = {
-    // Primary: Black -> White on hover
+    // Primary: Dark Green -> Slightly lighter
     primary: `
-      bg-[#111] text-[#FDFCF8] border-[#111]
-      hover:bg-[#FDFCF8] hover:text-[#111]
+      bg-[var(--color-ink)] text-[var(--color-paper)] border-[var(--color-ink)]
+      hover:bg-[var(--color-accent)] hover:border-[var(--color-accent)]
+      shadow-sm
     `,
-    // Secondary: White -> Black on hover
+    // Secondary: Transparent -> Soft Sage Fill
     secondary: `
-      bg-transparent text-[#111] border-[#E5E5E5]
-      hover:border-[#111] hover:bg-[#111] hover:text-[#FDFCF8]
+      bg-transparent text-[var(--color-ink)] border-[var(--color-paper-dark)]
+      hover:bg-[var(--color-paper-dim)] hover:border-[var(--color-paper-dark)]
     `,
-    // Ghost: Text only -> Underline effect or block invert
+    // Ghost: Text only -> Soft background
     ghost: `
-      bg-transparent text-[#111]
-      hover:bg-[#F4F2ED]
+      bg-transparent text-[var(--color-ink)] border-transparent
+      hover:bg-[var(--color-paper-dim)]
     `
   };
 

@@ -23,17 +23,17 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
   ];
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[var(--color-paper)]">
       {/* Top Bar Navigation */}
-      <div className="sticky top-0 z-50 bg-[#FDFCF8]/90 backdrop-blur-sm border-b-ink flex justify-between items-center px-4 md:px-8 h-16">
+      <div className="sticky top-0 z-50 bg-[var(--color-paper)]/80 backdrop-blur-md border-b border-[var(--color-paper-dark)] flex justify-between items-center px-4 md:px-8 h-16">
         <button 
           onClick={onBack}
-          className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider hover:underline"
+          className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider hover:text-[var(--color-accent)] transition-colors"
         >
           <ArrowLeft className="w-3 h-3" />
           Index
         </button>
-        <span className="font-mono text-xs uppercase tracking-wider hidden md:block">
+        <span className="font-mono text-xs uppercase tracking-wider hidden md:block opacity-50">
           {project.title} — {project.duration}
         </span>
         <div className="w-16"></div> {/* Spacer for alignment */}
@@ -42,46 +42,48 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 min-h-[calc(100vh-64px)]">
         
         {/* LEFT COLUMN: Switchboard & Meta (Sticky) */}
-        <div className="lg:col-span-4 border-r-ink bg-[#FDFCF8] flex flex-col justify-between p-6 md:p-12 lg:sticky lg:top-16 lg:h-[calc(100vh-64px)] overflow-y-auto">
+        <div className="lg:col-span-4 border-r border-[var(--color-paper-dark)] bg-[var(--color-paper)] flex flex-col justify-between p-6 md:p-12 lg:sticky lg:top-16 lg:h-[calc(100vh-64px)] overflow-y-auto">
           <div>
-            <h1 className="text-5xl md:text-6xl font-medium tracking-tighter mb-4 leading-[0.9]">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight mb-6 leading-[1] text-[var(--color-ink)]">
               {project.title}
             </h1>
-            <p className="text-lg text-black/60 leading-tight mb-12 max-w-sm">
+            <p className="text-lg text-[var(--color-ink-subtle)] leading-relaxed mb-12 max-w-sm">
               {project.tagline}
             </p>
 
             {/* Switchboard Navigation */}
-            <nav className="flex flex-col gap-0 border-t-ink border-b-ink mb-12">
+            <nav className="flex flex-col gap-2 mb-12">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`
-                    flex items-center justify-between py-4 px-2 text-left font-mono text-xs uppercase tracking-widest
-                    transition-all duration-200
-                    ${activeTab === tab.id ? 'bg-black text-white pl-4' : 'text-black/50 hover:text-black hover:pl-4'}
+                    flex items-center justify-between py-3 px-4 text-left font-mono text-xs uppercase tracking-widest rounded-[var(--radius-sm)]
+                    transition-all duration-300 ease-soft
+                    ${activeTab === tab.id 
+                      ? 'bg-[var(--color-paper-dim)] text-[var(--color-ink)] font-medium shadow-sm' 
+                      : 'text-[var(--color-ink-subtle)] hover:bg-[var(--color-paper-dim)]/50 hover:text-[var(--color-ink)]'}
                   `}
                 >
                   {tab.label}
-                  {activeTab === tab.id && <span className="w-1.5 h-1.5 bg-white rounded-full" />}
+                  <span className={`w-1.5 h-1.5 rounded-full transition-colors ${activeTab === tab.id ? 'bg-[var(--color-accent)]' : 'bg-transparent'}`} />
                 </button>
               ))}
             </nav>
 
-            <div className="grid grid-cols-2 gap-y-6 font-mono text-[11px] uppercase tracking-wider text-black/60">
+            <div className="grid grid-cols-2 gap-y-6 font-mono text-[11px] uppercase tracking-wider text-[var(--color-ink-subtle)]">
               <div>
                 <span className="block opacity-40 mb-1">Role</span>
-                <span className="text-black">{project.role}</span>
+                <span className="text-[var(--color-ink)]">{project.role}</span>
               </div>
               <div>
                 <span className="block opacity-40 mb-1">Focus</span>
-                <span className="text-black">{project.tags[0]}</span>
+                <span className="text-[var(--color-ink)]">{project.tags[0]}</span>
               </div>
               <div>
                  <span className="block opacity-40 mb-1">Live</span>
                  {project.liveUrl ? (
-                   <a href={project.liveUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1 hover:underline text-black">
+                   <a href={project.liveUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1 hover:text-[var(--color-accent)] text-[var(--color-ink)] transition-colors">
                      View <ArrowUpRight className="w-3 h-3" />
                    </a>
                  ) : (
@@ -92,33 +94,33 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
           </div>
 
           <div className="mt-12 lg:mt-0 pt-6 lg:pt-0">
-             <div className="font-mono text-[10px] text-black/40 uppercase">
+             <div className="font-mono text-[10px] opacity-30 uppercase">
                 ID: {project.id.toUpperCase()}
              </div>
           </div>
         </div>
 
         {/* RIGHT COLUMN: Content (Swappable) */}
-        <div className="lg:col-span-8 bg-[#FDFCF8] p-6 md:p-12 lg:p-24 overflow-y-auto">
+        <div className="lg:col-span-8 bg-[var(--color-paper)] p-6 md:p-12 lg:p-24 overflow-y-auto">
           
-          <div className="max-w-3xl mx-auto animate-in fade-in duration-300">
+          <div className="max-w-3xl mx-auto animate-in fade-in duration-500 ease-soft">
             
             {/* CONTENT: CONTEXT */}
             {activeTab === 'CONTEXT' && (
               <div className="space-y-16">
                  {/* Hero Visual */}
-                 <div className="w-full aspect-video bg-[#F4F2ED] border border-black/5 overflow-hidden relative">
+                 <div className="w-full aspect-video bg-[var(--color-paper-dim)] rounded-[var(--radius-md)] overflow-hidden relative border border-[var(--color-paper-dark)] shadow-sm">
                     {project.videoUrl ? (
                         <video src={project.videoUrl} autoPlay muted loop className="w-full h-full object-cover opacity-90" />
                     ) : (
-                        <img src={project.heroUrl} alt="" className="w-full h-full object-cover grayscale opacity-90 mix-blend-multiply" />
+                        <img src={project.heroUrl} alt="" className="w-full h-full object-cover grayscale opacity-80 mix-blend-multiply" />
                     )}
                  </div>
 
                  <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
                     <div className="md:col-span-12">
-                        <h3 className="font-mono text-xs uppercase tracking-widest mb-6 text-black/40">The Brief</h3>
-                        <p className="text-2xl md:text-3xl leading-snug font-light text-balance">
+                        <h3 className="font-mono text-xs uppercase tracking-widest mb-6 opacity-40">The Brief</h3>
+                        <p className="text-2xl md:text-3xl leading-snug font-light text-balance text-[var(--color-ink)]">
                           {project.description}
                         </p>
                     </div>
@@ -129,22 +131,22 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
             {/* CONTENT: PROCESS */}
             {activeTab === 'PROCESS' && (
                <div className="space-y-24">
-                  <section className="grid grid-cols-1 md:grid-cols-2 gap-12 border-b-ink pb-12">
+                  <section className="grid grid-cols-1 md:grid-cols-2 gap-12 border-b border-[var(--color-paper-dark)] pb-12">
                      <div>
-                        <h3 className="font-mono text-xs uppercase tracking-widest mb-4 text-black/40">[01] Challenge</h3>
-                        <p className="text-lg leading-relaxed">{project.challenge}</p>
+                        <h3 className="font-mono text-xs uppercase tracking-widest mb-4 opacity-40">[01] Challenge</h3>
+                        <p className="text-lg leading-relaxed text-[var(--color-ink-subtle)]">{project.challenge}</p>
                      </div>
                      <div>
-                        <h3 className="font-mono text-xs uppercase tracking-widest mb-4 text-black/40">[02] Solution</h3>
-                        <p className="text-lg leading-relaxed">{project.solution}</p>
+                        <h3 className="font-mono text-xs uppercase tracking-widest mb-4 opacity-40">[02] Solution</h3>
+                        <p className="text-lg leading-relaxed text-[var(--color-ink-subtle)]">{project.solution}</p>
                      </div>
                   </section>
                   
                   <section>
-                    <div className="bg-[#F4F2ED] p-8 border border-black/5 mb-8">
-                       <span className="font-mono text-xs uppercase tracking-widest text-black/40 mb-4 block">Process Artifact</span>
-                       <div className="aspect-[4/3] bg-white flex items-center justify-center border border-black/5">
-                          <span className="font-mono text-xs text-black/30">Wireframe / Sketch Placeholder</span>
+                    <div className="bg-[var(--color-paper-dim)] p-8 rounded-[var(--radius-md)] border border-[var(--color-paper-dark)] mb-8">
+                       <span className="font-mono text-xs uppercase tracking-widest opacity-40 mb-4 block">Process Artifact</span>
+                       <div className="aspect-[4/3] bg-[var(--color-paper)] rounded-[var(--radius-sm)] flex items-center justify-center border border-[var(--color-paper-dark)]">
+                          <span className="font-mono text-xs opacity-30">Wireframe / Sketch Placeholder</span>
                        </div>
                     </div>
                   </section>
@@ -155,13 +157,13 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
             {activeTab === 'LOGIC' && (
               <div className="space-y-16">
                  <div className="flex items-start gap-6">
-                    <Maximize2 className="w-6 h-6 mt-1 flex-shrink-0" />
-                    <p className="text-xl md:text-2xl leading-relaxed">
+                    <Maximize2 className="w-6 h-6 mt-1 flex-shrink-0 opacity-50" />
+                    <p className="text-xl md:text-2xl leading-relaxed text-[var(--color-ink)]">
                       {project.interactionNotes}
                     </p>
                  </div>
 
-                 <div className="p-8 bg-black text-[#FDFCF8]">
+                 <div className="p-8 bg-[var(--color-ink)] text-[var(--color-paper)] rounded-[var(--radius-md)] shadow-lg">
                     <h3 className="font-mono text-xs uppercase tracking-widest mb-6 opacity-60">System Outcome</h3>
                     <p className="text-lg md:text-xl font-light">
                       "{project.outcome}"

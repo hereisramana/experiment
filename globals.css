@@ -1,21 +1,31 @@
 @import "tailwindcss";
 
 @theme {
-  /* Technical Essentialism Palette */
-  --color-ink: #111111;
-  --color-paper: #FDFCF8; /* Warm, archival white */
-  --color-paper-dim: #F4F2ED;
-  --color-accent: #0044FF; /* International Klein Blue style accent */
+  /* Organic Modernism / Calm Tech Palette */
+  --color-ink: #161A18; /* Softened deep charcoal/green */
+  --color-ink-subtle: #5C6360; /* Muted slate for secondary text */
   
+  --color-paper: #F2F5F3; /* Pale Sage Mist - Low eyestrain */
+  --color-paper-dim: #E6EAE8; /* Slightly deeper sage for contrast */
+  --color-paper-dark: #D8DEDBC0; /* For borders/lines */
+  
+  --color-accent: #3A5A4A; /* Muted Pine Green */
+  --color-accent-light: #CDE0D8; /* Highlight color */
+
   /* Fonts */
   --font-sans: 'IBM Plex Sans', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
 
-  /* Spacing logic */
+  /* Spacing */
   --spacing-grid: 24px;
 
-  /* Animation */
-  --ease-switch: cubic-bezier(0.0, 0.0, 0.2, 1); /* Instant, mechanical */
+  /* Animation - Softer, organic feel */
+  --ease-soft: cubic-bezier(0.25, 0.1, 0.25, 1);
+  
+  /* Shapes */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
 }
 
 /* Reset & Base */
@@ -25,73 +35,74 @@ body {
   color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.4;
+  line-height: 1.5; /* Increased slightly for calmness */
   overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: 500;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
 }
 
 /* Typography Utilities */
 .font-mono-tight {
   font-family: var(--font-mono);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
 .text-balance {
   text-wrap: balance;
 }
 
-/* Utility: Visible Grid / Layout */
+/* Utility: Soft Borders */
 .border-b-ink {
-  border-bottom: 1px solid rgba(17, 17, 17, 0.1);
+  border-bottom: 1px solid var(--color-paper-dark);
 }
 
 .border-t-ink {
-  border-top: 1px solid rgba(17, 17, 17, 0.1);
+  border-top: 1px solid var(--color-paper-dark);
 }
 
 .border-l-ink {
-  border-left: 1px solid rgba(17, 17, 17, 0.1);
+  border-left: 1px solid var(--color-paper-dark);
 }
 
 .border-r-ink {
-  border-right: 1px solid rgba(17, 17, 17, 0.1);
+  border-right: 1px solid var(--color-paper-dark);
 }
 
-/* Interaction: Invert */
-.hover-invert {
-  transition: all 0.1s var(--ease-switch);
+/* Interaction: Soft Glow/Shift instead of Invert */
+.hover-soft {
+  transition: background-color 0.2s var(--ease-soft), color 0.2s var(--ease-soft);
 }
-.hover-invert:hover {
-  background-color: var(--color-ink);
-  color: var(--color-paper);
+.hover-soft:hover {
+  background-color: var(--color-paper-dim);
+  color: var(--color-ink);
 }
 
-/* Custom Scrollbar for "Technical" feel */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #E5E5E5;
+  background: #D1D6D4;
+  border-radius: 99px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-ink);
+  background: var(--color-ink-subtle);
 }
 
-/* Selection */
+/* Selection - Soft Green */
 ::selection {
-  background: var(--color-ink);
-  color: var(--color-paper);
+  background: var(--color-accent-light);
+  color: var(--color-ink);
 }
 
-/* Hide scrollbar but allow scroll */
+/* Hide scrollbar */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
