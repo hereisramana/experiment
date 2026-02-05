@@ -4,12 +4,11 @@ import { ViewState } from './types';
 import { ProjectCard } from './components/ProjectCard';
 import { ProjectDetail } from './components/ProjectDetail';
 import { Button } from './components/Button';
-import { Menu, X, Mail, Github, Linkedin, Phone, Copy, Check, ArrowRight } from 'lucide-react';
+import { X, Mail, Github, Linkedin, Phone, Copy, Check, ArrowRight } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [view, setView] = useState<ViewState>('HOME');
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [copiedType, setCopiedType] = useState<'email' | 'phone' | null>(null);
 
@@ -27,7 +26,6 @@ export const App: React.FC = () => {
   const handleNavClick = (newView: ViewState) => {
     setView(newView);
     setSelectedProjectId(null);
-    setIsMobileMenuOpen(false);
     window.scrollTo(0, 0);
   };
 
@@ -114,13 +112,13 @@ export const App: React.FC = () => {
       
       case 'ABOUT':
         return (
-          <div className="max-w-4xl mx-auto px-4 py-20 animate-in fade-in slide-in-from-bottom-2 duration-500">
-             <h1 className="text-6xl md:text-8xl font-bold text-slate-900 mb-16 tracking-tighter font-heading">
+          <div className="max-w-4xl mx-auto px-4 py-32 animate-in fade-in slide-in-from-bottom-2 duration-500">
+             <h1 className="text-8xl font-bold text-slate-900 mb-16 tracking-tighter font-heading">
                About.
              </h1>
              
-             <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
-               <div className="md:col-span-8">
+             <div className="grid grid-cols-12 gap-12">
+               <div className="col-span-8">
                  <div className="prose prose-xl text-slate-600 leading-relaxed mb-16">
                    {ABOUT_TEXT.split('\n').map((paragraph, idx) => (
                      paragraph.trim() && <p key={idx} className="mb-6">{paragraph}</p>
@@ -128,7 +126,7 @@ export const App: React.FC = () => {
                  </div>
                </div>
                
-               <div className="md:col-span-4 space-y-12">
+               <div className="col-span-4 space-y-12">
                   {SKILLS.map((skillGroup) => (
                     <div key={skillGroup.category}>
                       <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest mb-4 border-b border-slate-200 pb-2">
@@ -151,18 +149,18 @@ export const App: React.FC = () => {
       case 'HOME':
       default:
         return (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="max-w-7xl mx-auto px-8 py-32">
             {/* Hero Section: Typography as Structure */}
-            <section className="mb-32 animate-in fade-in slide-in-from-bottom-2 duration-500">
-              <h1 className="text-6xl md:text-9xl font-bold text-slate-900 leading-[0.9] tracking-tighter mb-8 font-heading">
+            <section className="mb-48 animate-in fade-in slide-in-from-bottom-2 duration-500">
+              <h1 className="text-9xl font-bold text-slate-900 leading-[0.9] tracking-tighter mb-8 font-heading">
                 Ramana.
               </h1>
               <div className="max-w-2xl">
-                 <p className="text-2xl md:text-3xl text-slate-500 leading-tight font-light mb-8">
+                 <p className="text-3xl text-slate-500 leading-tight font-light mb-12">
                    Senior Product Designer & Technologist building <span className="text-slate-900 font-medium">calm interactive systems</span>.
                  </p>
                  <div className="flex gap-6">
-                    <button onClick={() => setIsContactModalOpen(true)} className="group flex items-center font-bold text-slate-900 hover:text-[#2B6B7C] transition-colors">
+                    <button onClick={() => setIsContactModalOpen(true)} className="group flex items-center font-bold text-slate-900 hover:text-[#2B6B7C] transition-colors text-lg">
                       Get in touch <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
                     </button>
                  </div>
@@ -171,14 +169,15 @@ export const App: React.FC = () => {
 
             {/* Projects Grid: Vanishing Containers */}
             <section className="animate-in fade-in slide-in-from-bottom-4 delay-100 duration-500">
-              <div className="flex items-end justify-between mb-12 border-b border-slate-200 pb-4">
+              <div className="flex items-end justify-between mb-16 border-b border-slate-200 pb-6">
                 <h2 className="text-sm font-bold uppercase tracking-widest text-slate-400">
                   Selected Works 2024
                 </h2>
                 <span className="text-sm font-bold text-slate-400">0{PROJECTS.length}</span>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-20">
+              {/* Forced 2-column grid for Desktop */}
+              <div className="grid grid-cols-2 gap-x-16 gap-y-32">
                 {PROJECTS.map(project => (
                   <ProjectCard 
                     key={project.id} 
@@ -199,21 +198,21 @@ export const App: React.FC = () => {
       {/* Contact Reveal Modal */}
       {renderContactModal()}
 
-      {/* Navigation: Ethereal (Invisible until needed) */}
+      {/* Navigation: Ethereal & Permanent */}
       <nav className="sticky top-0 z-50 bg-[#FAFAFA]/90 backdrop-blur-sm border-b border-transparent transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-20 items-center">
+        <div className="max-w-7xl mx-auto px-8">
+          <div className="flex justify-between h-24 items-center">
             
-            {/* Logo: Text only */}
+            {/* Logo */}
             <div 
-              className="font-bold text-lg tracking-tight cursor-pointer font-heading"
+              className="font-bold text-xl tracking-tight cursor-pointer font-heading hover:opacity-70 transition-opacity"
               onClick={() => handleNavClick('HOME')}
             >
               ramanadesign<span className="text-slate-300">.tech</span>
             </div>
 
-            {/* Desktop Menu: Text links */}
-            <div className="hidden md:flex items-center gap-10">
+            {/* Desktop Menu: Always Visible */}
+            <div className="flex items-center gap-12">
               <button 
                 onClick={() => handleNavClick('HOME')} 
                 className={`text-sm font-bold tracking-wide uppercase transition-colors ${view === 'HOME' && !selectedProjectId ? 'text-slate-900' : 'text-slate-400 hover:text-slate-900'}`}
@@ -228,59 +227,22 @@ export const App: React.FC = () => {
               </button>
               <Button 
                 variant="primary" 
-                className="!py-2 !px-5 !min-h-[40px] text-sm"
+                className="!py-2 !px-6 !min-h-[44px] text-sm"
                 onClick={() => setIsContactModalOpen(true)}
               >
                 Contact
               </Button>
             </div>
-
-            {/* Mobile Menu Button */}
-            <div className="md:hidden">
-              <button 
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 text-slate-900"
-                aria-label="Toggle menu"
-              >
-                {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
-            </div>
           </div>
         </div>
-
-        {/* Mobile Menu Overlay: Solid White (High Readability) */}
-        {isMobileMenuOpen && (
-          <div className="fixed inset-0 top-20 z-40 bg-white animate-in slide-in-from-right-2 duration-300">
-            <div className="flex flex-col p-8 gap-8">
-              <button 
-                onClick={() => handleNavClick('HOME')} 
-                className="text-left text-4xl font-bold text-slate-900 tracking-tight"
-              >
-                Work
-              </button>
-              <button 
-                onClick={() => handleNavClick('ABOUT')} 
-                className="text-left text-4xl font-bold text-slate-900 tracking-tight"
-              >
-                About
-              </button>
-               <button 
-                onClick={() => setIsContactModalOpen(true)} 
-                className="text-left text-4xl font-bold text-[#2B6B7C] tracking-tight"
-              >
-                Contact
-              </button>
-            </div>
-          </div>
-        )}
       </nav>
 
-      <main className="min-h-[calc(100vh-80px)]">
+      <main className="min-h-[calc(100vh-96px)]">
         {renderContent()}
       </main>
 
-      <footer className="bg-white border-t border-slate-100 py-16 mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+      <footer className="bg-white border-t border-slate-100 py-24 mt-32">
+        <div className="max-w-7xl mx-auto px-8 flex justify-between items-center gap-6">
           <div className="text-slate-400 text-sm font-medium">
             © {new Date().getFullYear()} Ethereal Utility.
           </div>
