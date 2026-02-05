@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Project } from '../types';
 import { ArrowLeft, ArrowUpRight, Maximize2 } from 'lucide-react';
-import { Button } from './Button';
 
 interface ProjectDetailProps {
   project: Project;

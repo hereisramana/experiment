@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { PROJECTS, SKILLS, ABOUT_TEXT } from './constants';
+import { PROJECTS, SKILLS } from './constants';
 import { ViewState } from './types';
 import { ProjectCard } from './components/ProjectCard';
 import { ProjectDetail } from './components/ProjectDetail';
-import { Button } from './components/Button';
-import { Copy, Check, ArrowRight, X } from 'lucide-react';
+import { X } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [view, setView] = useState<ViewState>('HOME');
