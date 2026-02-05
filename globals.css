@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+@theme {
+  /* Ethereal Utility Palette */
+  --color-primary: #2B6B7C;
+  --color-primary-dark: #1E4D59;
+  --color-primary-glow: rgba(43, 107, 124, 0.4);
+  
+  --color-surface: #FFFFFF;
+  --color-background: #FAFAFA;
+  
+  --color-text-body: #111111; /* High contrast */
+  --color-text-subtle: #666666;
+
+  /* Fonts */
+  --font-heading: 'Montserrat', sans-serif;
+  --font-sans: 'IBM Plex Sans', sans-serif;
+
+  /* Ambient Occlusion Shadows (Soft, Deep, Colorless) */
+  --shadow-ethereal-sm: 0 2px 8px -2px rgba(0, 0, 0, 0.05);
+  --shadow-ethereal: 0 20px 40px -12px rgba(0, 0, 0, 0.08);
+  --shadow-ethereal-lg: 0 30px 60px -15px rgba(0, 0, 0, 0.12);
+  
+  /* Luminous Glows */
+  --shadow-glow: 0 0 15px var(--color-primary-glow);
+  --shadow-glow-lg: 0 0 30px var(--color-primary-glow);
+
+  /* Animation: Snap & Instant */
+  --ease-snap: cubic-bezier(0.16, 1, 0.3, 1); /* Fast, decisive */
+}
+
+/* Reset & Base */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-background);
+  color: var(--color-text-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em; /* Tighter tracking for structure */
+}
+
+/* 
+ * ETHEREAL UTILITY UTILITIES 
+ */
+
+/* The Vanishing Container: Visible only on hover */
+.ethereal-container {
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all 0.2s var(--ease-snap);
+}
+
+.ethereal-container:hover {
+  background: var(--color-surface);
+  box-shadow: var(--shadow-ethereal);
+  transform: translateY(-2px);
+}
+
+/* Luminous Text: Glows on hover instead of color shift only */
+.text-luminous {
+  transition: text-shadow 0.2s ease-out, color 0.15s ease-out;
+}
+.text-luminous:hover {
+  text-shadow: 0 0 12px var(--color-primary-glow);
+  color: var(--color-primary);
+}
+
+/* Utility: Focus Rings (Luminous) */
+*:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-primary);
+}
+
+/* Scrollbar: Minimalist */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #E5E5E5;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #CCCCCC;
+}
