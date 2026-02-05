@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  /* Organic Modernism / Calm Tech Palette */
-  --color-ink: #161A18; /* Softened deep charcoal/green */
-  --color-ink-subtle: #5C6360; /* Muted slate for secondary text */
+  /* Organic Modernism / Warm Paper Palette (Eye-Strain Reduction) */
+  --color-ink: #2C2B29; /* Warm Charcoal - No blue undertones */
+  --color-ink-subtle: #66625E; /* Warm Stone Grey */
   
-  --color-paper: #F2F5F3; /* Pale Sage Mist - Low eyestrain */
-  --color-paper-dim: #E6EAE8; /* Slightly deeper sage for contrast */
-  --color-paper-dark: #D8DEDBC0; /* For borders/lines */
+  --color-paper: #F0EFEA; /* Warm Linen - Absorbs light, reduces glare */
+  --color-paper-dim: #E2E0D9; /* Darker warm texture for hover/surfaces */
+  --color-paper-dark: #D1CEC7; /* Structural Stone Grey - Increased contrast for clarity */
   
-  --color-accent: #3A5A4A; /* Muted Pine Green */
-  --color-accent-light: #CDE0D8; /* Highlight color */
+  --color-accent: #5C554B; /* Deep Warm Olive/Clay - Earthy, calm accent */
+  --color-accent-light: #E0DCD3; /* Soft warm selection highlight */
 
   /* Fonts */
   --font-sans: 'IBM Plex Sans', sans-serif;
@@ -35,7 +35,7 @@ body {
   color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.5; /* Increased slightly for calmness */
+  line-height: 1.5; 
   overflow-x: hidden;
 }
 
@@ -80,7 +80,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-ink);
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar - Updated for Warm Theme */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -89,14 +89,14 @@ h1, h2, h3, h4, h5, h6 {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #D1D6D4;
+  background: #D1CEC7; /* Matches paper-dark */
   border-radius: 99px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-ink-subtle);
 }
 
-/* Selection - Soft Green */
+/* Selection - Soft Warmth */
 ::selection {
   background: var(--color-accent-light);
   color: var(--color-ink);
