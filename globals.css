@@ -1,132 +1,101 @@
 @import "tailwindcss";
 
 @theme {
-  /* Ethereal Utility Palette */
-  --color-primary: #2B6B7C;
-  --color-primary-dark: #1E4D59;
-  --color-primary-glow: rgba(43, 107, 124, 0.4);
+  /* Technical Essentialism Palette */
+  --color-ink: #111111;
+  --color-paper: #FDFCF8; /* Warm, archival white */
+  --color-paper-dim: #F4F2ED;
+  --color-accent: #0044FF; /* International Klein Blue style accent */
   
-  --color-surface: #FFFFFF;
-  --color-background: #FAFAFA;
-  
-  /* Digital Comfort: Contrast Hardening */
-  --color-text-body: #111111; 
-  --color-text-subtle: #4A4A4A; 
-  
-  /* Phantom Structure: Imperceptible but Present */
-  --color-phantom-border: rgba(0, 0, 0, 0.04);
-  --color-phantom-bg: rgba(0, 0, 0, 0.02);
-
   /* Fonts */
-  --font-heading: 'Montserrat', sans-serif;
   --font-sans: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
 
-  /* Ambient Occlusion Shadows */
-  --shadow-ethereal-sm: 0 2px 8px -2px rgba(0, 0, 0, 0.05);
-  --shadow-ethereal: 0 20px 40px -12px rgba(0, 0, 0, 0.08);
-  --shadow-ethereal-lg: 0 30px 60px -15px rgba(0, 0, 0, 0.12);
-  
-  /* Luminous Glows */
-  --shadow-glow: 0 0 15px var(--color-primary-glow);
-  --shadow-glow-lg: 0 0 30px var(--color-primary-glow);
+  /* Spacing logic */
+  --spacing-grid: 24px;
 
-  /* Animation: Snap & Instant */
-  --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Animation */
+  --ease-switch: cubic-bezier(0.0, 0.0, 0.2, 1); /* Instant, mechanical */
 }
 
 /* Reset & Base */
 body {
   font-family: var(--font-sans);
-  background-color: var(--color-background);
-  color: var(--color-text-body);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.5;
+  line-height: 1.4;
+  overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6, .font-heading {
-  font-family: var(--font-heading);
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+/* Typography Utilities */
+.font-mono-tight {
+  font-family: var(--font-mono);
   letter-spacing: -0.02em;
 }
 
-/* 
- * CINEMATIC CONTINUITY (View Transitions)
- */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 0.5s;
-  animation-timing-function: var(--ease-snap);
+.text-balance {
+  text-wrap: balance;
 }
 
-/* Prevent image distortion during morph */
-::view-transition-group(*) {
-  overflow: hidden;
-}
-::view-transition-old(*),
-::view-transition-new(*) {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
+/* Utility: Visible Grid / Layout */
+.border-b-ink {
+  border-bottom: 1px solid rgba(17, 17, 17, 0.1);
 }
 
-
-/* 
- * ACCESSIBILITY & UTILITIES 
- */
-.ethereal-container {
-  background: var(--color-phantom-bg);
-  border: 1px solid var(--color-phantom-border);
-  transition: all 0.2s var(--ease-snap);
+.border-t-ink {
+  border-top: 1px solid rgba(17, 17, 17, 0.1);
 }
 
-.ethereal-container:hover {
-  background: var(--color-surface);
-  border-color: transparent;
-  box-shadow: var(--shadow-ethereal);
-  transform: translateY(-2px);
+.border-l-ink {
+  border-left: 1px solid rgba(17, 17, 17, 0.1);
 }
 
-.text-luminous {
-  transition: text-shadow 0.2s ease-out, color 0.15s ease-out;
-}
-.text-luminous:hover {
-  text-shadow: 0 0 12px var(--color-primary-glow);
-  color: var(--color-primary);
+.border-r-ink {
+  border-right: 1px solid rgba(17, 17, 17, 0.1);
 }
 
-*:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-primary);
-  border-radius: 4px;
-  z-index: 10;
+/* Interaction: Invert */
+.hover-invert {
+  transition: all 0.1s var(--ease-switch);
+}
+.hover-invert:hover {
+  background-color: var(--color-ink);
+  color: var(--color-paper);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *, ::before, ::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-  
-  /* Disable view transitions for reduced motion */
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
-  }
-}
-
+/* Custom Scrollbar for "Technical" feel */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
+  height: 4px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: #E5E5E5;
-  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #CCCCCC;
+  background: var(--color-ink);
+}
+
+/* Selection */
+::selection {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+/* Hide scrollbar but allow scroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

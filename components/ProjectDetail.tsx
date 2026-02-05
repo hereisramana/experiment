@@ -1,150 +1,179 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Project } from '../types';
-import { ArrowLeft, ExternalLink } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Maximize2 } from 'lucide-react';
 import { Button } from './Button';
 
 interface ProjectDetailProps {
   project: Project;
   onBack: () => void;
-  playHover?: () => void;
-  playClick?: () => void;
 }
 
-export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, playHover, playClick }) => {
-  
+type TabState = 'CONTEXT' | 'PROCESS' | 'LOGIC';
+
+export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
+  const [activeTab, setActiveTab] = useState<TabState>('CONTEXT');
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [project.id]);
 
+  const tabs: { id: TabState; label: string }[] = [
+    { id: 'CONTEXT', label: '01. Context' },
+    { id: 'PROCESS', label: '02. Process' },
+    { id: 'LOGIC', label: '03. Interaction' },
+  ];
+
   return (
-    <article className="animate-in fade-in slide-in-from-bottom-2 duration-500 ease-out">
-      
-      <div className="max-w-7xl mx-auto px-8 py-12">
+    <div className="min-h-screen flex flex-col">
+      {/* Top Bar Navigation */}
+      <div className="sticky top-0 z-50 bg-[#FDFCF8]/90 backdrop-blur-sm border-b-ink flex justify-between items-center px-4 md:px-8 h-16">
         <button 
-          onClick={() => {
-            playClick?.();
-            onBack();
-          }}
-          onMouseEnter={playHover}
-          className="group flex items-center gap-3 text-sm font-semibold text-slate-500 hover:text-slate-900 transition-colors p-2 -ml-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2B6B7C]"
-          aria-label="Back to project index"
+          onClick={onBack}
+          className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider hover:underline"
         >
-          <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-          BACK TO INDEX
+          <ArrowLeft className="w-3 h-3" />
+          Index
         </button>
+        <span className="font-mono text-xs uppercase tracking-wider hidden md:block">
+          {project.title} — {project.duration}
+        </span>
+        <div className="w-16"></div> {/* Spacer for alignment */}
       </div>
 
-      <div className="max-w-6xl mx-auto px-8 pb-48">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 min-h-[calc(100vh-64px)]">
         
-        <header className="mb-24">
-          <h1 
-            className="text-7xl md:text-8xl font-bold text-slate-900 mb-8 tracking-tighter leading-[0.9] font-heading"
-            style={{ viewTransitionName: `project-title-${project.id}` } as React.CSSProperties}
-          >
-            {project.title}
-          </h1>
-          <p className="text-2xl md:text-3xl text-slate-600 leading-tight max-w-4xl font-light">
-            {project.tagline}
-          </p>
-        </header>
+        {/* LEFT COLUMN: Switchboard & Meta (Sticky) */}
+        <div className="lg:col-span-4 border-r-ink bg-[#FDFCF8] flex flex-col justify-between p-6 md:p-12 lg:sticky lg:top-16 lg:h-[calc(100vh-64px)] overflow-y-auto">
+          <div>
+            <h1 className="text-5xl md:text-6xl font-medium tracking-tighter mb-4 leading-[0.9]">
+              {project.title}
+            </h1>
+            <p className="text-lg text-black/60 leading-tight mb-12 max-w-sm">
+              {project.tagline}
+            </p>
 
-        {/* Hero: Matches Card Image Transition */}
-        <div className="w-full h-[50vh] md:h-[70vh] bg-[#F5F5F5] rounded-xl overflow-hidden mb-24 shadow-ethereal-sm border border-slate-100">
-          {project.videoUrl ? (
-            <video 
-              src={project.videoUrl}
-              poster={project.heroUrl}
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="w-full h-full object-cover motion-reduce:hidden"
-              style={{ viewTransitionName: `project-image-${project.id}` } as React.CSSProperties}
-            />
-          ) : null}
-          <img 
-            src={project.heroUrl} 
-            alt={project.title}
-            className={`w-full h-full object-cover ${project.videoUrl ? 'hidden motion-reduce:block' : ''}`}
-            style={{ viewTransitionName: `project-image-${project.id}` } as React.CSSProperties}
-          />
-        </div>
+            {/* Switchboard Navigation */}
+            <nav className="flex flex-col gap-0 border-t-ink border-b-ink mb-12">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`
+                    flex items-center justify-between py-4 px-2 text-left font-mono text-xs uppercase tracking-widest
+                    transition-all duration-200
+                    ${activeTab === tab.id ? 'bg-black text-white pl-4' : 'text-black/50 hover:text-black hover:pl-4'}
+                  `}
+                >
+                  {tab.label}
+                  {activeTab === tab.id && <span className="w-1.5 h-1.5 bg-white rounded-full" />}
+                </button>
+              ))}
+            </nav>
 
-        <div className="flex flex-wrap gap-x-16 gap-y-10 mb-32 border-t border-slate-200 pt-10">
-          <div>
-            <span className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-3">Role</span>
-            <span className="block font-medium text-slate-900 text-lg">{project.role}</span>
-          </div>
-          <div>
-            <span className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-3">Timeline</span>
-            <span className="block font-medium text-slate-900 text-lg">{project.duration}</span>
-          </div>
-          <div>
-            <span className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-3">Focus</span>
-            <span className="block font-medium text-slate-900 text-lg">{project.tags[0]}</span>
-          </div>
-          {project.liveUrl && (
-            <div className="flex flex-col justify-between">
-               <span className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-3 opacity-0">Link</span>
-               <a 
-                href={project.liveUrl}
-                target="_blank"
-                rel="noreferrer"
-                onMouseEnter={playHover}
-                onClick={playClick}
-                className="text-[#2B6B7C] font-semibold hover:underline flex items-center gap-2 text-lg focus:outline-none focus:ring-2 focus:ring-[#2B6B7C] rounded-md px-1 -ml-1"
-              >
-                Visit Live <ExternalLink className="w-5 h-5" />
-              </a>
+            <div className="grid grid-cols-2 gap-y-6 font-mono text-[11px] uppercase tracking-wider text-black/60">
+              <div>
+                <span className="block opacity-40 mb-1">Role</span>
+                <span className="text-black">{project.role}</span>
+              </div>
+              <div>
+                <span className="block opacity-40 mb-1">Focus</span>
+                <span className="text-black">{project.tags[0]}</span>
+              </div>
+              <div>
+                 <span className="block opacity-40 mb-1">Live</span>
+                 {project.liveUrl ? (
+                   <a href={project.liveUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1 hover:underline text-black">
+                     View <ArrowUpRight className="w-3 h-3" />
+                   </a>
+                 ) : (
+                   <span>N/A</span>
+                 )}
+              </div>
             </div>
-          )}
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-          <div className="lg:col-span-8 space-y-24">
-            <section>
-              <h3 className="text-4xl font-bold text-slate-900 mb-8 tracking-tight">The Context</h3>
-              <p className="text-xl text-slate-600 leading-relaxed max-w-[65ch]">{project.description}</p>
-            </section>
-            <section className="grid grid-cols-1 md:grid-cols-2 gap-16">
-               <div>
-                 <h4 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-6">Challenge</h4>
-                 <p className="text-lg text-slate-800 leading-relaxed">{project.challenge}</p>
-               </div>
-               <div>
-                 <h4 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-6">Solution</h4>
-                 <p className="text-lg text-slate-800 leading-relaxed">{project.solution}</p>
-               </div>
-            </section>
-            <section>
-              <h3 className="text-4xl font-bold text-slate-900 mb-8 tracking-tight">Interaction Logic</h3>
-              <p className="text-xl text-slate-600 leading-relaxed mb-8 max-w-[65ch]">{project.interactionNotes}</p>
-            </section>
           </div>
-          <div className="lg:col-span-4 space-y-8">
-             <div className="sticky top-32 p-10 bg-[#F9FAFB] rounded-2xl border border-slate-100">
-                <h4 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-6">Outcome</h4>
-                <p className="text-slate-700 leading-relaxed font-medium text-lg">
-                  "{project.outcome}"
-                </p>
+
+          <div className="mt-12 lg:mt-0 pt-6 lg:pt-0">
+             <div className="font-mono text-[10px] text-black/40 uppercase">
+                ID: {project.id.toUpperCase()}
              </div>
           </div>
         </div>
 
-        <div className="mt-40 pt-20 border-t border-slate-200 flex justify-between items-center">
-            <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Next Project?</h2>
-            <Button 
-              onClick={() => {
-                playClick?.();
-                onBack();
-              }} 
-              onMouseEnter={playHover}
-              variant="secondary"
-            >
-                Back to Index
-            </Button>
+        {/* RIGHT COLUMN: Content (Swappable) */}
+        <div className="lg:col-span-8 bg-[#FDFCF8] p-6 md:p-12 lg:p-24 overflow-y-auto">
+          
+          <div className="max-w-3xl mx-auto animate-in fade-in duration-300">
+            
+            {/* CONTENT: CONTEXT */}
+            {activeTab === 'CONTEXT' && (
+              <div className="space-y-16">
+                 {/* Hero Visual */}
+                 <div className="w-full aspect-video bg-[#F4F2ED] border border-black/5 overflow-hidden relative">
+                    {project.videoUrl ? (
+                        <video src={project.videoUrl} autoPlay muted loop className="w-full h-full object-cover opacity-90" />
+                    ) : (
+                        <img src={project.heroUrl} alt="" className="w-full h-full object-cover grayscale opacity-90 mix-blend-multiply" />
+                    )}
+                 </div>
+
+                 <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+                    <div className="md:col-span-12">
+                        <h3 className="font-mono text-xs uppercase tracking-widest mb-6 text-black/40">The Brief</h3>
+                        <p className="text-2xl md:text-3xl leading-snug font-light text-balance">
+                          {project.description}
+                        </p>
+                    </div>
+                 </div>
+              </div>
+            )}
+
+            {/* CONTENT: PROCESS */}
+            {activeTab === 'PROCESS' && (
+               <div className="space-y-24">
+                  <section className="grid grid-cols-1 md:grid-cols-2 gap-12 border-b-ink pb-12">
+                     <div>
+                        <h3 className="font-mono text-xs uppercase tracking-widest mb-4 text-black/40">[01] Challenge</h3>
+                        <p className="text-lg leading-relaxed">{project.challenge}</p>
+                     </div>
+                     <div>
+                        <h3 className="font-mono text-xs uppercase tracking-widest mb-4 text-black/40">[02] Solution</h3>
+                        <p className="text-lg leading-relaxed">{project.solution}</p>
+                     </div>
+                  </section>
+                  
+                  <section>
+                    <div className="bg-[#F4F2ED] p-8 border border-black/5 mb-8">
+                       <span className="font-mono text-xs uppercase tracking-widest text-black/40 mb-4 block">Process Artifact</span>
+                       <div className="aspect-[4/3] bg-white flex items-center justify-center border border-black/5">
+                          <span className="font-mono text-xs text-black/30">Wireframe / Sketch Placeholder</span>
+                       </div>
+                    </div>
+                  </section>
+               </div>
+            )}
+
+            {/* CONTENT: LOGIC */}
+            {activeTab === 'LOGIC' && (
+              <div className="space-y-16">
+                 <div className="flex items-start gap-6">
+                    <Maximize2 className="w-6 h-6 mt-1 flex-shrink-0" />
+                    <p className="text-xl md:text-2xl leading-relaxed">
+                      {project.interactionNotes}
+                    </p>
+                 </div>
+
+                 <div className="p-8 bg-black text-[#FDFCF8]">
+                    <h3 className="font-mono text-xs uppercase tracking-widest mb-6 opacity-60">System Outcome</h3>
+                    <p className="text-lg md:text-xl font-light">
+                      "{project.outcome}"
+                    </p>
+                 </div>
+              </div>
+            )}
+
+          </div>
         </div>
       </div>
-    </article>
+    </div>
   );
 };

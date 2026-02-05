@@ -1,28 +1,22 @@
 import React from 'react';
 import { Project } from '../types';
-import { ArrowUpRight } from 'lucide-react';
 
 interface ProjectCardProps {
   project: Project;
+  index: number;
   onClick: (id: string) => void;
-  onHover?: () => void;
+  onHover: (id: string | null) => void;
 }
 
-export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onHover }) => {
+export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick, onHover }) => {
+  const formattedIndex = (index + 1).toString().padStart(2, '0');
+
   return (
-    <article 
-      className="
-        group relative cursor-pointer flex flex-col gap-6 p-6 rounded-2xl 
-        transition-all duration-200 ease-snap 
-        /* Phantom Structure */
-        bg-slate-50 border border-slate-200/60
-        /* Hover State */
-        hover:bg-white hover:border-transparent hover:shadow-ethereal hover:-translate-y-1
-        /* Focus State */
-        focus-visible:bg-white focus-visible:border-transparent focus-visible:shadow-ethereal focus-visible:translate-y-[-4px]
-      "
+    <div 
+      className="group relative cursor-pointer border-t-ink transition-colors duration-0"
       onClick={() => onClick(project.id)}
-      onMouseEnter={onHover}
+      onMouseEnter={() => onHover(project.id)}
+      onMouseLeave={() => onHover(null)}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
@@ -32,47 +26,36 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onHo
         }
       }}
     >
-      {/* Image Container: Unique View Transition Name */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-[#E5E5E5]">
-        <img 
-          src={project.thumbnailUrl} 
-          alt={`Thumbnail for ${project.title}`}
-          className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transform-none"
-          loading="lazy"
-          style={{ viewTransitionName: `project-image-${project.id}` } as React.CSSProperties}
-        />
-        <div className="absolute inset-0 bg-[#2B6B7C]/0 transition-colors duration-200 group-hover:bg-[#2B6B7C]/10 group-focus-visible:bg-[#2B6B7C]/10" />
-      </div>
-
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-between">
-          <div className="flex gap-2">
-            {project.tags.slice(0, 2).map(tag => (
-              <span 
-                key={tag} 
-                className="text-[11px] font-bold uppercase tracking-widest text-slate-600"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-          <ArrowUpRight className="w-5 h-5 text-slate-400 transition-all duration-200 group-hover:text-[#2B6B7C] group-hover:-translate-y-1 group-hover:translate-x-1" />
+      <div className="flex flex-col md:flex-row items-baseline md:items-center w-full py-6 md:py-8 px-2 group-hover:bg-[#111] group-hover:text-[#FDFCF8] transition-colors duration-100 ease-switch">
+        
+        {/* Col 1: ID */}
+        <div className="w-16 font-mono text-xs opacity-50 mb-2 md:mb-0">
+          ({formattedIndex})
         </div>
 
-        {/* Title: Unique View Transition Name */}
-        <h3 
-          className="text-3xl font-bold text-slate-900 tracking-tight leading-tight group-hover:text-[#2B6B7C] transition-colors duration-200"
-          style={{ viewTransitionName: `project-title-${project.id}` } as React.CSSProperties}
-        >
-          {project.title}
-        </h3>
+        {/* Col 2: Title */}
+        <div className="flex-1">
+          <h3 className="text-2xl md:text-3xl font-medium tracking-tight">
+            {project.title}
+          </h3>
+        </div>
+
+        {/* Col 3: Role (Desktop) */}
+        <div className="hidden md:block w-64 font-mono text-xs uppercase tracking-wide opacity-70">
+          {project.role}
+        </div>
+
+        {/* Col 4: Tags (Desktop) */}
+        <div className="hidden md:block w-64 font-mono text-xs uppercase tracking-wide opacity-70 text-right">
+          {project.tags[0]}
+        </div>
         
-        <p className="text-slate-600 leading-relaxed text-lg max-w-md">
-          {project.tagline}
-        </p>
+        {/* Mobile Meta */}
+        <div className="md:hidden flex justify-between w-full mt-2 font-mono text-[10px] uppercase opacity-60">
+           <span>{project.role}</span>
+           <span>{project.tags[0]}</span>
+        </div>
       </div>
-      
-      <div className="absolute inset-0 z-0 pointer-events-none rounded-2xl" aria-hidden="true" />
-    </article>
+    </div>
   );
 };

@@ -1,327 +1,173 @@
 import React, { useState } from 'react';
-import { flushSync } from 'react-dom'; // Required for View Transitions with React
-import { PROJECTS, ABOUT_TEXT, SKILLS } from './constants';
+import { PROJECTS, SKILLS, ABOUT_TEXT } from './constants';
 import { ViewState } from './types';
 import { ProjectCard } from './components/ProjectCard';
 import { ProjectDetail } from './components/ProjectDetail';
 import { Button } from './components/Button';
-import { useSound } from './hooks/useSound';
-import { X, Mail, Github, Linkedin, Phone, Copy, Check, ArrowRight } from 'lucide-react';
+import { Copy, Check, ArrowRight, X } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [view, setView] = useState<ViewState>('HOME');
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
-  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const [copiedType, setCopiedType] = useState<'email' | 'phone' | null>(null);
-
-  // Initialize Sonic System
-  const { initAudio, playClick, playHover } = useSound();
-
-  const CONTACT_INFO = {
-    email: 'hello@ramanadesign.tech',
-    phone: '+1 (555) 123-4567'
-  };
-
-  // Helper to handle cinematic state transitions
-  const transitionView = (update: () => void) => {
-    // Lazy init audio on first interaction
-    initAudio();
-    playClick();
-
-    if (!(document as any).startViewTransition) {
-      update();
-      window.scrollTo(0, 0);
-      return;
-    }
-
-    (document as any).startViewTransition(() => {
-      flushSync(() => {
-        update();
-        window.scrollTo(0, 0);
-      });
-    });
-  };
+  const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
+  const [isContactOpen, setIsContactOpen] = useState(false);
 
   const handleProjectClick = (id: string) => {
-    transitionView(() => {
-      setSelectedProjectId(id);
-      setView('PROJECT_DETAIL');
-    });
-  };
-
-  const handleNavClick = (newView: ViewState) => {
-    if (view === newView && !selectedProjectId) return;
-    
-    transitionView(() => {
-      setView(newView);
-      setSelectedProjectId(null);
-    });
-  };
-
-  const copyToClipboard = (text: string, type: 'email' | 'phone') => {
-    playClick();
-    navigator.clipboard.writeText(text);
-    setCopiedType(type);
-    setTimeout(() => setCopiedType(null), 2000);
+    setSelectedProjectId(id);
+    setView('PROJECT_DETAIL');
   };
 
   const currentProject = PROJECTS.find(p => p.id === selectedProjectId);
+  const hoveredProject = PROJECTS.find(p => p.id === hoveredProjectId);
 
-  const renderContactModal = () => {
-    if (!isContactModalOpen) return null;
+  // Render Detailed View
+  if (view === 'PROJECT_DETAIL' && currentProject) {
     return (
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-        {/* Backdrop: Clean Fade */}
-        <div 
-          className="absolute inset-0 bg-white/95 backdrop-blur-md animate-in fade-in duration-300"
-          onClick={() => {
-            playClick();
-            setIsContactModalOpen(false);
-          }}
-        />
-        
-        {/* Modal: Sharp, Floating, Luminous Shadow */}
-        <div className="relative bg-white w-full max-w-lg rounded-2xl p-10 animate-in zoom-in-95 fade-in duration-200 shadow-ethereal-lg border border-slate-200">
-          <button 
-            onClick={() => {
-              playClick();
-              setIsContactModalOpen(false);
-            }}
-            onMouseEnter={playHover}
-            className="absolute top-6 right-6 p-3 text-slate-500 hover:text-black transition-colors rounded-full hover:bg-slate-100"
-            aria-label="Close Contact Modal"
-          >
-            <X className="w-6 h-6" />
-          </button>
-
-          <h2 className="text-4xl font-bold text-slate-900 mb-2 font-heading tracking-tight">Contact</h2>
-          <p className="text-slate-600 mb-10 text-lg">Signal, not noise. Let's talk.</p>
-
-          <div className="space-y-6">
-            {/* Email Field - Clean */}
-            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg group hover:bg-slate-100 border border-transparent hover:border-slate-200 transition-all">
-              <div className="flex items-center gap-4">
-                <Mail className="w-5 h-5 text-slate-500" />
-                <a href={`mailto:${CONTACT_INFO.email}`} className="text-lg font-medium text-slate-900 focus:outline-none focus:underline">
-                  {CONTACT_INFO.email}
-                </a>
-              </div>
-              <button 
-                onClick={() => copyToClipboard(CONTACT_INFO.email, 'email')}
-                onMouseEnter={playHover}
-                className="text-slate-400 hover:text-slate-900 transition-colors p-2 rounded-md focus:bg-slate-200"
-                aria-label="Copy email to clipboard"
-              >
-                {copiedType === 'email' ? <Check className="w-5 h-5 text-green-600" /> : <Copy className="w-5 h-5" />}
-              </button>
-            </div>
-
-            {/* Phone Field - Clean */}
-            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg group hover:bg-slate-100 border border-transparent hover:border-slate-200 transition-all">
-              <div className="flex items-center gap-4">
-                <Phone className="w-5 h-5 text-slate-500" />
-                <a href={`tel:${CONTACT_INFO.phone.replace(/\D/g,'')}`} className="text-lg font-medium text-slate-900 focus:outline-none focus:underline">
-                  {CONTACT_INFO.phone}
-                </a>
-              </div>
-              <button 
-                onClick={() => copyToClipboard(CONTACT_INFO.phone, 'phone')}
-                onMouseEnter={playHover}
-                className="text-slate-400 hover:text-slate-900 transition-colors p-2 rounded-md focus:bg-slate-200"
-                aria-label="Copy phone number to clipboard"
-              >
-                {copiedType === 'phone' ? <Check className="w-5 h-5 text-green-600" /> : <Copy className="w-5 h-5" />}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ProjectDetail 
+        project={currentProject} 
+        onBack={() => {
+          setView('HOME');
+          setSelectedProjectId(null);
+        }} 
+      />
     );
-  };
+  }
 
-  const renderContent = () => {
-    switch (view) {
-      case 'PROJECT_DETAIL':
-        if (currentProject) {
-          return (
-            <ProjectDetail 
-              project={currentProject} 
-              onBack={() => handleNavClick('HOME')}
-              playHover={playHover}
-              playClick={playClick}
-            />
-          );
-        }
-        return <div className="p-12 text-center text-slate-600">Project not found</div>;
+  // Render Index/Home View
+  return (
+    <div className="min-h-screen bg-[#FDFCF8] text-[#111] selection:bg-[#111] selection:text-[#FDFCF8] flex flex-col">
       
-      case 'ABOUT':
-        return (
-          <div className="max-w-4xl mx-auto px-4 py-32 animate-in fade-in slide-in-from-bottom-2 duration-500">
-             <h1 className="text-7xl md:text-8xl font-bold text-slate-900 mb-16 tracking-tighter font-heading">
-               About.
-             </h1>
-             
-             <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
-               <div className="col-span-1 md:col-span-8">
-                 <div className="text-slate-600 leading-relaxed mb-16 text-xl">
-                   {/* Explicit Max-Width for Readability (65ch) */}
-                   {ABOUT_TEXT.split('\n').map((paragraph, idx) => (
-                     paragraph.trim() && <p key={idx} className="mb-6 max-w-[65ch]">{paragraph}</p>
-                   ))}
-                 </div>
-               </div>
-               
-               <div className="col-span-1 md:col-span-4 space-y-12">
-                  {SKILLS.map((skillGroup) => (
-                    <div key={skillGroup.category}>
-                      <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest mb-4 border-b border-slate-200 pb-2">
-                        {skillGroup.category}
-                      </h3>
-                      <ul className="space-y-2">
-                        {skillGroup.items.map((skill) => (
-                          <li key={skill} className="text-slate-600 font-medium text-sm">
-                            {skill}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-               </div>
-             </div>
+      {/* HEADER */}
+      <header className="px-4 md:px-8 py-6 flex justify-between items-baseline border-b-ink">
+        <h1 className="font-mono text-sm uppercase tracking-widest font-bold">
+          Ramana Design<span className="opacity-40">.Tech</span>
+        </h1>
+        <div className="flex gap-6">
+           <div className="hidden md:flex gap-1 items-center">
+             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+             <span className="font-mono text-xs uppercase tracking-wide opacity-60">Available for 2024</span>
+           </div>
+           <button onClick={() => setIsContactOpen(true)} className="font-mono text-xs uppercase underline hover:no-underline">
+             Contact
+           </button>
+        </div>
+      </header>
+
+      <main className="flex-1 flex flex-col md:flex-row">
+        
+        {/* LEFT: Project Index */}
+        <div className="w-full md:w-1/2 lg:w-7/12 p-4 md:p-8 lg:p-12 border-r-ink flex flex-col">
+          <div className="mb-12 md:mb-24 mt-12">
+            <h2 className="text-4xl md:text-6xl font-medium tracking-tight leading-[0.9] mb-6">
+              Senior Product Designer & Technologist.
+            </h2>
+            <p className="text-lg md:text-xl text-black/60 max-w-md">
+              Specializing in calm interactive systems and technical clarity.
+            </p>
           </div>
-        );
 
-      case 'HOME':
-      default:
-        return (
-          <div className="max-w-7xl mx-auto px-8 py-32">
-            {/* Hero Section: Vertical Rhythm Adjusted */}
-            <section className="mb-32 lg:mb-48 animate-in fade-in slide-in-from-bottom-2 duration-500">
-              <h1 className="text-7xl lg:text-8xl font-bold text-slate-900 leading-[0.9] tracking-tighter mb-8 font-heading">
-                Ramana.
-              </h1>
-              <div className="max-w-2xl">
-                 <p className="text-2xl lg:text-3xl text-slate-600 leading-tight font-light mb-12">
-                   Senior Product Designer & Technologist building <span className="text-slate-900 font-medium">calm interactive systems</span>.
-                 </p>
-                 <div className="flex gap-6">
-                    <button 
-                      onClick={() => {
-                        playClick();
-                        setIsContactModalOpen(true);
-                      }} 
-                      onMouseEnter={playHover}
-                      className="group flex items-center font-bold text-slate-900 hover:text-[#2B6B7C] transition-colors text-lg focus:outline-none focus:ring-4 focus:ring-[#2B6B7C]/20 rounded-lg px-1"
-                    >
-                      Get in touch <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
-                    </button>
-                 </div>
-              </div>
-            </section>
-
-            {/* Projects Grid: Phantom Containers */}
-            <section className="animate-in fade-in slide-in-from-bottom-4 delay-100 duration-500">
-              <div className="flex items-end justify-between mb-16 border-b border-slate-200 pb-6">
-                <h2 className="text-sm font-bold uppercase tracking-widest text-slate-500">
-                  Selected Works 2024
-                </h2>
-                <span className="text-sm font-bold text-slate-500">0{PROJECTS.length}</span>
-              </div>
-              
-              {/* Responsive Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-16 md:gap-y-32">
-                {PROJECTS.map(project => (
+          <div className="mt-auto">
+             <div className="flex items-end justify-between border-b-ink pb-2 mb-0">
+                <span className="font-mono text-xs uppercase tracking-widest opacity-40">Index</span>
+                <span className="font-mono text-xs uppercase tracking-widest opacity-40">Select Work</span>
+             </div>
+             <div>
+                {PROJECTS.map((project, idx) => (
                   <ProjectCard 
                     key={project.id} 
                     project={project} 
+                    index={idx}
                     onClick={handleProjectClick}
-                    onHover={playHover}
+                    onHover={setHoveredProjectId}
                   />
                 ))}
-              </div>
-            </section>
-          </div>
-        );
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-[#FAFAFA] text-slate-900 font-sans selection:bg-[#2B6B7C] selection:text-white" onMouseDown={initAudio} onKeyDown={initAudio}>
-      
-      {/* Contact Reveal Modal */}
-      {renderContactModal()}
-
-      {/* Navigation: Ethereal & Permanent */}
-      <nav className="sticky top-0 z-50 bg-[#FAFAFA]/95 backdrop-blur-md border-b border-transparent transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-8">
-          <div className="flex justify-between h-24 items-center">
-            
-            {/* Logo */}
-            <button 
-              className="font-bold text-xl tracking-tight cursor-pointer font-heading hover:opacity-70 transition-opacity focus:outline-none focus:ring-2 focus:ring-[#2B6B7C] rounded-lg p-1"
-              onClick={() => handleNavClick('HOME')}
-              onMouseEnter={playHover}
-            >
-              ramanadesign<span className="text-slate-400">.tech</span>
-            </button>
-
-            {/* Desktop Menu: Always Visible */}
-            <div className="flex items-center gap-12">
-              <button 
-                onClick={() => handleNavClick('HOME')} 
-                onMouseEnter={playHover}
-                className={`relative text-sm font-bold tracking-wide uppercase transition-colors rounded-md py-1 px-2 focus:outline-none focus:ring-2 focus:ring-[#2B6B7C] ${view === 'HOME' && !selectedProjectId ? 'text-slate-900' : 'text-slate-500 hover:text-slate-900'}`}
-              >
-                Work
-                {(view === 'HOME' && !selectedProjectId) && (
-                  <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 bg-[#2B6B7C] rounded-full animate-in fade-in duration-300" />
-                )}
-              </button>
-              <button 
-                onClick={() => handleNavClick('ABOUT')} 
-                onMouseEnter={playHover}
-                className={`relative text-sm font-bold tracking-wide uppercase transition-colors rounded-md py-1 px-2 focus:outline-none focus:ring-2 focus:ring-[#2B6B7C] ${view === 'ABOUT' ? 'text-slate-900' : 'text-slate-500 hover:text-slate-900'}`}
-              >
-                About
-                {view === 'ABOUT' && (
-                  <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 bg-[#2B6B7C] rounded-full animate-in fade-in duration-300" />
-                )}
-              </button>
-              <Button 
-                variant="primary" 
-                className="!py-2 !px-6 !min-h-[44px] text-sm"
-                onClick={() => {
-                  playClick();
-                  setIsContactModalOpen(true);
-                }}
-                onMouseEnter={playHover}
-              >
-                Contact
-              </Button>
-            </div>
+             </div>
           </div>
         </div>
-      </nav>
 
-      <main className="min-h-[calc(100vh-96px)]">
-        {renderContent()}
+        {/* RIGHT: Preview / Info Panel (Fixed) */}
+        <div className="hidden md:flex w-1/2 lg:w-5/12 bg-[#F4F2ED] relative overflow-hidden flex-col justify-between">
+           
+           {/* Contextual Preview */}
+           {hoveredProject ? (
+              <div className="absolute inset-0 z-10 p-12 flex flex-col justify-end animate-in fade-in duration-200">
+                  <img 
+                    src={hoveredProject.heroUrl} 
+                    className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-multiply grayscale"
+                    alt="" 
+                  />
+                  <div className="relative z-20">
+                     <h2 className="text-6xl font-medium tracking-tighter mb-4">{hoveredProject.title}</h2>
+                     <p className="text-xl font-light opacity-80">{hoveredProject.tagline}</p>
+                     <div className="mt-8 flex gap-2">
+                        {hoveredProject.tags.map(tag => (
+                          <span key={tag} className="px-3 py-1 border border-black/10 rounded-full font-mono text-[10px] uppercase bg-white/50">
+                            {tag}
+                          </span>
+                        ))}
+                     </div>
+                  </div>
+              </div>
+           ) : (
+              <div className="absolute inset-0 p-12 flex flex-col justify-between">
+                 {/* Default State: About/Skills */}
+                 <div className="space-y-12 max-w-sm">
+                    {SKILLS.slice(0, 2).map((group) => (
+                       <div key={group.category}>
+                          <h3 className="font-mono text-xs uppercase tracking-widest mb-4 opacity-40 border-b border-black/10 pb-2">{group.category}</h3>
+                          <ul className="grid grid-cols-2 gap-2">
+                             {group.items.map(item => (
+                               <li key={item} className="text-sm font-medium opacity-80">{item}</li>
+                             ))}
+                          </ul>
+                       </div>
+                    ))}
+                 </div>
+                 
+                 <div className="border-t border-black/10 pt-8">
+                    <p className="font-mono text-xs uppercase tracking-widest opacity-40 mb-4">Philosophy</p>
+                    <p className="text-lg leading-relaxed font-light text-balance">
+                      "The interface should be a silent partner, not a noisy decoration."
+                    </p>
+                 </div>
+              </div>
+           )}
+        </div>
       </main>
 
-      <footer className="bg-white border-t border-slate-100 py-24 mt-32">
-        <div className="max-w-7xl mx-auto px-8 flex justify-between items-center gap-6">
-          <div className="text-slate-500 text-sm font-medium">
-            © {new Date().getFullYear()} Ethereal Utility.
-          </div>
-          <div className="flex gap-8">
-            <a href="#" className="text-slate-400 hover:text-slate-900 transition-colors focus:outline-none focus:ring-2 focus:ring-[#2B6B7C] rounded-md" aria-label="Github">
-              <Github className="w-5 h-5" />
-            </a>
-            <a href="#" className="text-slate-400 hover:text-slate-900 transition-colors focus:outline-none focus:ring-2 focus:ring-[#2B6B7C] rounded-md" aria-label="LinkedIn">
-              <Linkedin className="w-5 h-5" />
-            </a>
-          </div>
-        </div>
+      {/* FOOTER */}
+      <footer className="border-t-ink px-4 md:px-8 py-6 flex justify-between items-center bg-[#FDFCF8]">
+         <span className="font-mono text-[10px] uppercase opacity-40">
+           © {new Date().getFullYear()} / Loc: San Francisco
+         </span>
+         <div className="flex gap-6 font-mono text-[10px] uppercase">
+            <a href="#" className="hover:underline">Github</a>
+            <a href="#" className="hover:underline">LinkedIn</a>
+            <a href="#" className="hover:underline">Read.CV</a>
+         </div>
       </footer>
+
+      {/* CONTACT MODAL (Simple Overlay) */}
+      {isContactOpen && (
+         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/20 backdrop-blur-sm" onClick={() => setIsContactOpen(false)}>
+            <div className="bg-[#FDFCF8] p-8 md:p-12 w-full max-w-md border border-black shadow-2xl relative" onClick={e => e.stopPropagation()}>
+               <button onClick={() => setIsContactOpen(false)} className="absolute top-4 right-4 p-2 hover:bg-black/5">
+                  <X className="w-5 h-5" />
+               </button>
+               <h3 className="font-mono text-xs uppercase tracking-widest mb-8 opacity-40">Transmission</h3>
+               <div className="space-y-6">
+                  <div>
+                     <p className="text-sm opacity-60 mb-1">Email</p>
+                     <a href="mailto:hello@ramanadesign.tech" className="text-xl font-medium hover:underline">hello@ramanadesign.tech</a>
+                  </div>
+                  <div>
+                     <p className="text-sm opacity-60 mb-1">Phone</p>
+                     <p className="text-xl font-medium">+1 (555) 123-4567</p>
+                  </div>
+               </div>
+            </div>
+         </div>
+      )}
     </div>
   );
 };
