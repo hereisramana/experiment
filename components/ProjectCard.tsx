@@ -35,7 +35,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) =>
         <img 
           src={project.thumbnailUrl} 
           alt={`Thumbnail for ${project.title}`}
-          className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 motion-reduce:transform-none"
+          /* Reduced scale from 105 to 102 for vestibular comfort */
+          className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transform-none"
           loading="lazy"
         />
         {/* Luminous overlay on hover */}

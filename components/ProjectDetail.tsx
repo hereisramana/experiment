@@ -31,18 +31,18 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
 
       <div className="max-w-6xl mx-auto px-8 pb-48">
         
-        {/* Header: Pure Typography */}
+        {/* Header: Adjusted Vertical Rhythm */}
         <header className="mb-24">
-          <h1 className="text-8xl font-bold text-slate-900 mb-8 tracking-tighter leading-[0.9] font-heading">
+          <h1 className="text-7xl md:text-8xl font-bold text-slate-900 mb-8 tracking-tighter leading-[0.9] font-heading">
             {project.title}
           </h1>
-          <p className="text-3xl text-slate-600 leading-tight max-w-4xl font-light">
+          <p className="text-2xl md:text-3xl text-slate-600 leading-tight max-w-4xl font-light">
             {project.tagline}
           </p>
         </header>
 
-        {/* Hero: Fixed height for wide screens so content is visible */}
-        <div className="w-full h-[70vh] bg-[#F5F5F5] rounded-xl overflow-hidden mb-24 shadow-ethereal-sm border border-slate-100">
+        {/* Hero: Fixed height */}
+        <div className="w-full h-[50vh] md:h-[70vh] bg-[#F5F5F5] rounded-xl overflow-hidden mb-24 shadow-ethereal-sm border border-slate-100">
           {project.videoUrl ? (
             <video 
               src={project.videoUrl}
@@ -62,8 +62,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
           />
         </div>
 
-        {/* Info Grid: Fixed 4 columns */}
-        <div className="grid grid-cols-4 gap-12 mb-32 border-t border-slate-200 pt-10">
+        {/* Info Grid: Clustered for Proximity (Gestalt) */}
+        <div className="flex flex-wrap gap-x-16 gap-y-10 mb-32 border-t border-slate-200 pt-10">
           <div>
             <span className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-3">Role</span>
             <span className="block font-medium text-slate-900 text-lg">{project.role}</span>
@@ -77,8 +77,9 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
             <span className="block font-medium text-slate-900 text-lg">{project.tags[0]}</span>
           </div>
           {project.liveUrl && (
-            <div className="flex items-start">
-              <a 
+            <div className="flex flex-col justify-between">
+               <span className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-3 opacity-0">Link</span>
+               <a 
                 href={project.liveUrl}
                 target="_blank"
                 rel="noreferrer"
@@ -90,16 +91,16 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
           )}
         </div>
 
-        {/* Narrative Section: Fixed 12 column layout */}
-        <div className="grid grid-cols-12 gap-16">
+        {/* Narrative Section: Invisible Columns (Max-Width 65ch) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           
-          <div className="col-span-8 space-y-24">
+          <div className="lg:col-span-8 space-y-24">
             <section>
               <h3 className="text-4xl font-bold text-slate-900 mb-8 tracking-tight">The Context</h3>
-              <p className="text-xl text-slate-600 leading-relaxed">{project.description}</p>
+              <p className="text-xl text-slate-600 leading-relaxed max-w-[65ch]">{project.description}</p>
             </section>
 
-            <section className="grid grid-cols-2 gap-16">
+            <section className="grid grid-cols-1 md:grid-cols-2 gap-16">
                <div>
                  <h4 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-6">Challenge</h4>
                  <p className="text-lg text-slate-800 leading-relaxed">{project.challenge}</p>
@@ -112,11 +113,11 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
 
             <section>
               <h3 className="text-4xl font-bold text-slate-900 mb-8 tracking-tight">Interaction Logic</h3>
-              <p className="text-xl text-slate-600 leading-relaxed mb-8">{project.interactionNotes}</p>
+              <p className="text-xl text-slate-600 leading-relaxed mb-8 max-w-[65ch]">{project.interactionNotes}</p>
             </section>
           </div>
 
-          <div className="col-span-4 space-y-8">
+          <div className="lg:col-span-4 space-y-8">
              <div className="sticky top-32 p-10 bg-[#F9FAFB] rounded-2xl border border-slate-100">
                 <h4 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-6">Outcome</h4>
                 <p className="text-slate-700 leading-relaxed font-medium text-lg">

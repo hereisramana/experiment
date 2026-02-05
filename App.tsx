@@ -116,20 +116,21 @@ export const App: React.FC = () => {
       case 'ABOUT':
         return (
           <div className="max-w-4xl mx-auto px-4 py-32 animate-in fade-in slide-in-from-bottom-2 duration-500">
-             <h1 className="text-8xl font-bold text-slate-900 mb-16 tracking-tighter font-heading">
+             <h1 className="text-7xl md:text-8xl font-bold text-slate-900 mb-16 tracking-tighter font-heading">
                About.
              </h1>
              
-             <div className="grid grid-cols-12 gap-12">
-               <div className="col-span-8">
-                 <div className="prose prose-xl text-slate-600 leading-relaxed mb-16">
+             <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
+               <div className="col-span-1 md:col-span-8">
+                 <div className="text-slate-600 leading-relaxed mb-16 text-xl">
+                   {/* Explicit Max-Width for Readability (65ch) */}
                    {ABOUT_TEXT.split('\n').map((paragraph, idx) => (
-                     paragraph.trim() && <p key={idx} className="mb-6">{paragraph}</p>
+                     paragraph.trim() && <p key={idx} className="mb-6 max-w-[65ch]">{paragraph}</p>
                    ))}
                  </div>
                </div>
                
-               <div className="col-span-4 space-y-12">
+               <div className="col-span-1 md:col-span-4 space-y-12">
                   {SKILLS.map((skillGroup) => (
                     <div key={skillGroup.category}>
                       <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest mb-4 border-b border-slate-200 pb-2">
@@ -153,13 +154,13 @@ export const App: React.FC = () => {
       default:
         return (
           <div className="max-w-7xl mx-auto px-8 py-32">
-            {/* Hero Section: Typography as Structure */}
-            <section className="mb-48 animate-in fade-in slide-in-from-bottom-2 duration-500">
-              <h1 className="text-9xl font-bold text-slate-900 leading-[0.9] tracking-tighter mb-8 font-heading">
+            {/* Hero Section: Vertical Rhythm Adjusted */}
+            <section className="mb-32 lg:mb-48 animate-in fade-in slide-in-from-bottom-2 duration-500">
+              <h1 className="text-7xl lg:text-8xl font-bold text-slate-900 leading-[0.9] tracking-tighter mb-8 font-heading">
                 Ramana.
               </h1>
               <div className="max-w-2xl">
-                 <p className="text-3xl text-slate-600 leading-tight font-light mb-12">
+                 <p className="text-2xl lg:text-3xl text-slate-600 leading-tight font-light mb-12">
                    Senior Product Designer & Technologist building <span className="text-slate-900 font-medium">calm interactive systems</span>.
                  </p>
                  <div className="flex gap-6">
@@ -179,8 +180,8 @@ export const App: React.FC = () => {
                 <span className="text-sm font-bold text-slate-500">0{PROJECTS.length}</span>
               </div>
               
-              {/* Forced 2-column grid for Desktop */}
-              <div className="grid grid-cols-2 gap-x-16 gap-y-32">
+              {/* Responsive Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-16 md:gap-y-32">
                 {PROJECTS.map(project => (
                   <ProjectCard 
                     key={project.id} 
@@ -218,15 +219,21 @@ export const App: React.FC = () => {
             <div className="flex items-center gap-12">
               <button 
                 onClick={() => handleNavClick('HOME')} 
-                className={`text-sm font-bold tracking-wide uppercase transition-colors rounded-md py-1 px-2 focus:outline-none focus:ring-2 focus:ring-[#2B6B7C] ${view === 'HOME' && !selectedProjectId ? 'text-slate-900' : 'text-slate-500 hover:text-slate-900'}`}
+                className={`relative text-sm font-bold tracking-wide uppercase transition-colors rounded-md py-1 px-2 focus:outline-none focus:ring-2 focus:ring-[#2B6B7C] ${view === 'HOME' && !selectedProjectId ? 'text-slate-900' : 'text-slate-500 hover:text-slate-900'}`}
               >
                 Work
+                {(view === 'HOME' && !selectedProjectId) && (
+                  <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 bg-[#2B6B7C] rounded-full animate-in fade-in duration-300" />
+                )}
               </button>
               <button 
                 onClick={() => handleNavClick('ABOUT')} 
-                className={`text-sm font-bold tracking-wide uppercase transition-colors rounded-md py-1 px-2 focus:outline-none focus:ring-2 focus:ring-[#2B6B7C] ${view === 'ABOUT' ? 'text-slate-900' : 'text-slate-500 hover:text-slate-900'}`}
+                className={`relative text-sm font-bold tracking-wide uppercase transition-colors rounded-md py-1 px-2 focus:outline-none focus:ring-2 focus:ring-[#2B6B7C] ${view === 'ABOUT' ? 'text-slate-900' : 'text-slate-500 hover:text-slate-900'}`}
               >
                 About
+                {view === 'ABOUT' && (
+                  <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 bg-[#2B6B7C] rounded-full animate-in fade-in duration-300" />
+                )}
               </button>
               <Button 
                 variant="primary" 
