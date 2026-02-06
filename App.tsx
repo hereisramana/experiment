@@ -3,7 +3,7 @@ import { PROJECTS, SKILLS } from './constants';
 import { ViewState } from './types';
 import { ProjectCard } from './components/ProjectCard';
 import { ProjectDetail } from './components/ProjectDetail';
-import { X, Globe, Github, Linkedin } from 'lucide-react';
+import { X, Globe, ArrowDownRight, Github } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [view, setView] = useState<ViewState>('HOME');
@@ -64,8 +64,17 @@ export const App: React.FC = () => {
               <a href="#" className="p-2 hover:bg-[#333333] hover:text-white rounded-[var(--radius-sm)] transition-all group" aria-label="Github">
                 <Github className="w-4 h-4 opacity-60 group-hover:opacity-100" />
               </a>
-              <a href="#" className="p-2 hover:bg-[#0077b5] hover:text-white rounded-[var(--radius-sm)] transition-all group" aria-label="LinkedIn">
-                <Linkedin className="w-4 h-4 opacity-60 group-hover:opacity-100" />
+              <a 
+                href="#" 
+                className="p-2 hover:bg-[#0077b5] hover:text-white rounded-[var(--radius-sm)] transition-all group flex items-center justify-center w-8 h-8" 
+                aria-label="LinkedIn"
+              >
+                <span 
+                  className="text-[15px] font-bold leading-none opacity-80 group-hover:opacity-100 pb-0.5" 
+                  style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}
+                >
+                  in
+                </span>
               </a>
             </div>
         </div>

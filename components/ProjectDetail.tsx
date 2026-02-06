@@ -31,13 +31,18 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
     }
   };
 
+  // Inject the specific accent color for the button hover state
+  const buttonStyle = {
+    '--button-hover-bg': project.accentColor || 'var(--color-accent-light)'
+  } as React.CSSProperties;
+
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-12 bg-[var(--color-paper)] h-screen overflow-hidden">
         
         {/* LEFT COLUMN: PURE SIMULATOR (Sticky) */}
-        <div className="lg:col-span-5 bg-[var(--color-ink)] text-[var(--color-paper)] p-6 md:p-8 h-full flex flex-col items-center justify-center border-r border-[var(--color-paper)]/10 relative z-20">
+        <div className="lg:col-span-5 bg-[var(--color-ink)] text-[var(--color-paper)] h-full flex flex-col relative z-20 border-r border-[var(--color-paper)]/10">
           
-          {/* Back Button - Updated typography (sans) and solid hover area */}
+          {/* Back Button - Absolute positioning top-left */}
           <button 
             onClick={onBack}
             className="absolute top-6 left-6 md:top-8 md:left-8 group flex items-center py-2 px-4 rounded-[var(--radius-sm)] transition-all duration-300 hover:bg-[var(--color-paper)]/10 z-30 -ml-4"
@@ -48,44 +53,45 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
             </span>
           </button>
 
-          {/* THE SIMULATOR: Dynamic Scaling based on Height (vh) to fit laptop screens */}
-          <div className="relative w-full h-full flex flex-col items-center justify-center gap-6 md:gap-8">
+          {/* THE SIMULATOR: Flexible Container Layout */}
+          {/* pt-24 ensures we clear the Back button. pb-8 gives breathing room at bottom. */}
+          <div className="w-full h-full flex flex-col items-center pt-24 pb-8 px-6 md:px-12">
              
-             {/* Device Bezel - Height constrained to Viewport Height (dvh) 
-                 aspect ratio drives width. max-h-[65dvh] ensures room for button below.
-             */}
-             <div className="relative max-h-[60dvh] md:max-h-[65dvh] aspect-[9/19.5] w-auto bg-black rounded-[calc(2dvh+20px)] border-4 border-[var(--color-ink-subtle)]/50 shadow-2xl overflow-hidden ring-1 ring-white/10 transform transition-transform duration-700 hover:scale-[1.01]">
-                
-                {/* Screen Content */}
-                {project.videoUrl ? (
-                   <video 
-                     src={project.videoUrl} 
-                     autoPlay 
-                     muted 
-                     loop 
-                     playsInline 
-                     className="w-full h-full object-cover opacity-95" 
-                   />
-                ) : (
-                   <img 
-                     src={project.heroUrl} 
-                     alt="Prototype Preview" 
-                     className="w-full h-full object-cover opacity-95" 
-                   />
-                )}
+             {/* Media Frame - flex-1 min-h-0 allows it to take all remaining vertical space */}
+             <div className="flex-1 w-full min-h-0 flex items-center justify-center mb-8 relative">
+                <div className="relative w-full h-full bg-black rounded-xl border border-[var(--color-ink-subtle)]/30 shadow-2xl overflow-hidden ring-1 ring-white/10">
+                   {/* Screen Content - object-contain ensures 4:5 or 1:1 videos fit perfectly without crop */}
+                   {project.videoUrl ? (
+                      <video 
+                        src={project.videoUrl} 
+                        autoPlay 
+                        muted 
+                        loop 
+                        playsInline 
+                        className="w-full h-full object-contain opacity-95" 
+                      />
+                   ) : (
+                      <img 
+                        src={project.heroUrl} 
+                        alt="Prototype Preview" 
+                        className="w-full h-full object-contain opacity-95" 
+                      />
+                   )}
+                </div>
              </div>
              
-             {/* Live Prototype Link */}
-             <div className="w-[80%] max-w-[280px]">
+             {/* Live Prototype Link - Rigid footer element */}
+             <div className="w-full max-w-[280px] shrink-0">
                 {project.liveUrl ? (
                    <a 
                      href={project.liveUrl} 
                      target="_blank" 
                      rel="noreferrer" 
-                     className="group flex items-center justify-center gap-3 w-full py-3 md:py-4 bg-[var(--color-paper)] text-[var(--color-ink)] text-[10px] md:text-xs uppercase font-medium tracking-wider rounded-[var(--radius-sm)] hover:bg-[var(--color-accent-light)] transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                     style={buttonStyle}
+                     className="group flex items-center justify-center gap-3 w-full py-3 md:py-4 bg-[var(--color-paper)] text-[var(--color-ink)] text-[10px] md:text-xs uppercase font-medium tracking-wider rounded-[var(--radius-sm)] hover:bg-[var(--button-hover-bg)] transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                    >
                       <span>Launch Prototype</span>
-                      <ArrowUpRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      <ArrowUpRight className="w-3 h-3 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:stroke-[3px]" />
                    </a>
                 ) : (
                    <div className="w-full py-3 md:py-4 border border-[var(--color-paper)]/20 text-[var(--color-paper)] text-[10px] md:text-xs uppercase font-medium tracking-wider rounded-[var(--radius-sm)] text-center opacity-50 cursor-not-allowed">
