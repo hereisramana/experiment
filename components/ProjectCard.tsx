@@ -17,24 +17,20 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClic
   } as React.CSSProperties;
 
   return (
-    <div 
-      className="group relative cursor-pointer transition-colors duration-200"
-      onClick={() => onClick(project.id)}
+    <a 
+      href={`?project=${project.id}`}
+      className="group relative cursor-pointer block text-left"
+      onClick={(e) => {
+        e.preventDefault();
+        onClick(project.id);
+      }}
       onMouseEnter={() => onHover(project.id)}
       onMouseLeave={() => onHover(null)}
-      role="button"
-      tabIndex={0}
       style={style}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onClick(project.id);
-        }
-      }}
     >
       <div className="flex items-center w-full py-5 px-4 
                       rounded-[var(--radius-md)]
-                      hover:bg-[var(--hover-bg)]
+                      group-hover:bg-[var(--hover-bg)]
                       transition-all duration-300 ease-soft relative overflow-hidden">
         
         {/* Col 1: ID - Fixed Width (Kept Mono for technical feel) */}
@@ -56,6 +52,6 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClic
            </span>
         </div>
       </div>
-    </div>
+    </a>
   );
 };

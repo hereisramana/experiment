@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PROJECTS, SKILLS } from './constants';
 import { ViewState } from './types';
 import { ProjectCard } from './components/ProjectCard';
@@ -11,9 +11,45 @@ export const App: React.FC = () => {
   const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
   const [isContactOpen, setIsContactOpen] = useState(false);
 
+  // Handle Browser History Navigation
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const projectId = params.get('project');
+      
+      if (projectId) {
+        setSelectedProjectId(projectId);
+        setView('PROJECT_DETAIL');
+      } else {
+        setSelectedProjectId(null);
+        setView('HOME');
+      }
+    };
+
+    // Initial check on load
+    handlePopState();
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   const handleProjectClick = (id: string) => {
+    const newUrl = `?project=${id}`;
+    window.history.pushState({ projectId: id }, '', newUrl);
     setSelectedProjectId(id);
     setView('PROJECT_DETAIL');
+  };
+
+  const handleBack = () => {
+    // If there is history, go back (native browser behavior)
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      // Fallback if opened directly
+      window.history.replaceState(null, '', '/');
+      setSelectedProjectId(null);
+      setView('HOME');
+    }
   };
 
   const currentProject = PROJECTS.find(p => p.id === selectedProjectId);
@@ -24,10 +60,7 @@ export const App: React.FC = () => {
     return (
       <ProjectDetail 
         project={currentProject} 
-        onBack={() => {
-          setView('HOME');
-          setSelectedProjectId(null);
-        }} 
+        onBack={handleBack} 
       />
     );
   }
@@ -36,6 +69,14 @@ export const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-[var(--color-paper)] text-[var(--color-ink)] selection:bg-[var(--color-accent-light)] flex flex-col relative overflow-x-hidden">
       
+      {/* Skip Navigation Link for Accessibility */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-[100] px-4 py-2 bg-[var(--color-ink)] text-[var(--color-paper)] font-mono text-xs rounded-[var(--radius-sm)]"
+      >
+        Skip to main content
+      </a>
+
       {/* Global Analog Noise Overlay */}
       <div className="bg-noise"></div>
 
@@ -56,7 +97,7 @@ export const App: React.FC = () => {
         <div className="flex-1 flex justify-end items-center gap-4 md:gap-6">
             <button 
               onClick={() => setIsContactOpen(true)}
-              className="group text-[10px] uppercase font-medium text-[var(--color-ink)] hover:text-white transition-colors border border-[var(--color-paper-dark)]/30 px-4 py-2 rounded-[var(--radius-sm)] flex items-center gap-2 hover:bg-[#2B6B7C] hover:border-[#2B6B7C]"
+              className="group text-[10px] uppercase font-semibold tracking-widest text-[var(--color-ink)] hover:text-white transition-colors border border-[var(--color-paper-dark)]/30 px-4 py-2 rounded-[var(--radius-sm)] flex items-center gap-2 hover:bg-[#2B6B7C] hover:border-[#2B6B7C]"
             >
               Contact Me
             </button>
@@ -80,7 +121,7 @@ export const App: React.FC = () => {
         </div>
       </header>
 
-      <main className="flex-1 flex flex-col lg:flex-row gap-4 px-4 md:px-8 pb-4 md:pb-8 relative z-10">
+      <main id="main-content" className="flex-1 flex flex-col lg:flex-row gap-4 px-4 md:px-8 pb-4 md:pb-8 relative z-10">
         
         {/* LEFT: Content */}
         <div className="w-full lg:w-7/12 py-4 lg:py-8 lg:pr-12 flex flex-col justify-center">
@@ -94,7 +135,6 @@ export const App: React.FC = () => {
               <p className="text-lg md:text-xl text-[var(--color-ink-subtle)] max-w-md leading-relaxed">
                 Specializing in calm interactive systems and technical clarity.
               </p>
-              {/* Redundant CTA removed here for cleaner layout */}
             </div>
           </div>
 
