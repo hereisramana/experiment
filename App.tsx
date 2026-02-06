@@ -3,7 +3,7 @@ import { PROJECTS, SKILLS } from './constants';
 import { ViewState } from './types';
 import { ProjectCard } from './components/ProjectCard';
 import { ProjectDetail } from './components/ProjectDetail';
-import { X, Globe } from 'lucide-react';
+import { X, Globe, ArrowDownRight } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [view, setView] = useState<ViewState>('HOME');
@@ -51,32 +51,32 @@ export const App: React.FC = () => {
     <div className="min-h-screen bg-[var(--color-paper)] text-[var(--color-ink)] selection:bg-[var(--color-accent-light)] flex flex-col relative">
       <RegistrationMarks />
       
-      {/* HEADER */}
-      <header className="px-4 md:px-12 py-8 flex justify-between items-baseline border-b border-transparent">
-        <div className="flex flex-col gap-1">
-          <h1 className="font-mono text-sm uppercase tracking-widest font-bold text-[var(--color-ink)]">
-            Ramana Design<span className="opacity-40">.Tech</span>
+      {/* HEADER: Strictly Minimal */}
+      <header className="px-4 md:px-12 py-8 flex items-center justify-between border-b border-transparent relative z-20">
+        <div className="flex-1">
+          <h1 className="font-mono text-sm font-bold text-[var(--color-ink)] lowercase tracking-tight">
+            ramanadesign.tech
           </h1>
-          <span className="font-mono text-[9px] uppercase tracking-widest opacity-40">
-            SYS: ONLINE / V.2.4
-          </span>
         </div>
-        <div className="flex gap-6">
-           <div className="hidden md:flex gap-2 items-center">
-             <div className="w-1.5 h-1.5 bg-[var(--color-accent)] rounded-full animate-pulse opacity-50"></div>
-             <span className="font-mono text-xs uppercase tracking-wide opacity-50">Available for 2024</span>
-           </div>
-           <button onClick={() => setIsContactOpen(true)} className="font-mono text-xs uppercase opacity-60 hover:opacity-100 underline decoration-[var(--color-paper-dark)] underline-offset-4 hover:decoration-[var(--color-accent)] transition-all">
-             Contact
-           </button>
+        
+        <div className="flex-1 flex justify-center">
+           <span className="font-mono text-xs uppercase tracking-[0.2em] font-medium">
+             Portfolio
+           </span>
+        </div>
+
+        <div className="flex-1 flex justify-end">
+           {/* Empty right side as requested, balancing the layout */}
         </div>
       </header>
 
       <main className="flex-1 flex flex-col lg:flex-row gap-4 px-4 md:px-8 pb-8 relative z-10">
         
-        {/* LEFT: Project Index - "The List" */}
-        <div className="w-full lg:w-7/12 py-4 md:py-8 lg:pr-12 flex flex-col">
-          <div className="mb-12 md:mb-32 mt-4 relative">
+        {/* LEFT: Content */}
+        <div className="w-full lg:w-7/12 py-8 lg:pr-12 flex flex-col">
+          
+          {/* HERO SECTION */}
+          <div className="mb-24 md:mb-32 mt-4 relative">
              {/* Decorative tracking number */}
              <div className="absolute -left-6 top-1 font-mono text-[9px] text-[var(--color-ink)] opacity-20 hidden lg:block -rotate-90 origin-top-right">
                 REF-01-HDR
@@ -84,17 +84,28 @@ export const App: React.FC = () => {
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight leading-[1.05] mb-6 text-[var(--color-ink)]">
               Senior Product Designer & Technologist.
             </h2>
-            <p className="text-lg md:text-xl text-[var(--color-ink-subtle)] max-w-md leading-relaxed">
-              Specializing in calm interactive systems and technical clarity.
-            </p>
+            <div className="space-y-6">
+              <p className="text-lg md:text-xl text-[var(--color-ink-subtle)] max-w-md leading-relaxed">
+                Specializing in calm interactive systems and technical clarity.
+              </p>
+              <button 
+                onClick={() => setIsContactOpen(true)}
+                className="group flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[var(--color-ink)] hover:text-[var(--color-accent)] transition-colors"
+              >
+                <span>Get in touch</span>
+                <ArrowDownRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5" />
+              </button>
+            </div>
           </div>
 
+          {/* PROJECT LIST */}
           <div className="mt-auto">
-             <div className="flex items-end justify-between pb-3 mb-2 mx-4 md:mx-4">
-                <span className="font-mono text-xs uppercase tracking-widest opacity-40">Index</span>
-                <span className="font-mono text-xs uppercase tracking-widest opacity-40">Select Work</span>
+             <div className="flex items-baseline gap-2 pb-6 mb-2 border-b border-[var(--color-ink)]/10">
+                <h3 className="text-lg font-medium tracking-tight">Projects</h3>
+                <span className="font-mono text-xs opacity-40 align-super">({PROJECTS.length})</span>
              </div>
-             <div>
+             
+             <div className="flex flex-col gap-6">
                 {PROJECTS.map((project, idx) => (
                   <ProjectCard 
                     key={project.id} 
@@ -169,14 +180,22 @@ export const App: React.FC = () => {
       </main>
 
       {/* FOOTER - DARK MASS */}
-      <footer className="border-t border-[var(--color-paper-dark)] px-4 md:px-12 py-8 flex justify-between items-center bg-[var(--color-ink)] text-[var(--color-paper)] relative z-10">
+      <footer className="border-t border-[var(--color-paper-dark)] px-4 md:px-12 py-8 flex flex-col md:flex-row justify-between items-center bg-[var(--color-ink)] text-[var(--color-paper)] relative z-10 gap-4">
          <span className="font-mono text-[10px] uppercase opacity-40">
            © {new Date().getFullYear()} / Loc: San Francisco / Lat: 37.77
          </span>
-         <div className="flex gap-6 font-mono text-[10px] uppercase text-[var(--color-paper-dark)]">
-            <a href="#" className="hover:text-[var(--color-paper)] transition-colors">Github</a>
-            <a href="#" className="hover:text-[var(--color-paper)] transition-colors">LinkedIn</a>
-            <a href="#" className="hover:text-[var(--color-paper)] transition-colors">Read.CV</a>
+         
+         <div className="flex gap-8 items-center">
+            <button 
+              onClick={() => setIsContactOpen(true)}
+              className="font-mono text-[10px] uppercase text-[var(--color-paper)] hover:text-[var(--color-accent-light)] transition-colors border border-[var(--color-paper-dark)]/30 px-3 py-1 rounded-sm"
+            >
+              Contact Me
+            </button>
+            <div className="flex gap-6 font-mono text-[10px] uppercase text-[var(--color-paper-dark)]">
+              <a href="#" className="hover:text-[var(--color-paper)] transition-colors">Github</a>
+              <a href="#" className="hover:text-[var(--color-paper)] transition-colors">LinkedIn</a>
+            </div>
          </div>
       </footer>
 
