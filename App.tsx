@@ -3,7 +3,7 @@ import { PROJECTS, SKILLS } from './constants';
 import { ViewState } from './types';
 import { ProjectCard } from './components/ProjectCard';
 import { ProjectDetail } from './components/ProjectDetail';
-import { X, Globe, ArrowDownRight } from 'lucide-react';
+import { X, Globe, ArrowDownRight, Github, Linkedin } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [view, setView] = useState<ViewState>('HOME');
@@ -51,7 +51,7 @@ export const App: React.FC = () => {
         </div>
 
         <div className="flex-1 flex justify-end">
-           {/* Empty right side as requested, balancing the layout */}
+           {/* Empty right side */}
         </div>
       </header>
 
@@ -63,7 +63,7 @@ export const App: React.FC = () => {
           {/* HERO SECTION */}
           <div className="mb-24 md:mb-32 mt-4 relative">
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight leading-[1.05] mb-6 text-[var(--color-ink)]">
-              Senior Product Designer & Technologist.
+              Product Designer & Technologist.
             </h2>
             <div className="space-y-6">
               <p className="text-lg md:text-xl text-[var(--color-ink-subtle)] max-w-md leading-relaxed">
@@ -163,7 +163,7 @@ export const App: React.FC = () => {
       {/* FOOTER - DARK MASS */}
       <footer className="border-t border-[var(--color-paper-dark)] px-4 md:px-12 py-8 flex flex-col md:flex-row justify-between items-center bg-[var(--color-ink)] text-[var(--color-paper)] relative z-10 gap-4">
          <span className="font-mono text-[10px] uppercase opacity-40">
-           © {new Date().getFullYear()} / Loc: San Francisco / Lat: 37.77
+           © {new Date().getFullYear()}
          </span>
          
          <div className="flex gap-8 items-center">
@@ -173,9 +173,13 @@ export const App: React.FC = () => {
             >
               Contact Me
             </button>
-            <div className="flex gap-6 font-mono text-[10px] uppercase text-[var(--color-paper-dark)]">
-              <a href="#" className="hover:text-[var(--color-paper)] transition-colors">Github</a>
-              <a href="#" className="hover:text-[var(--color-paper)] transition-colors">LinkedIn</a>
+            <div className="flex gap-6 text-[var(--color-paper-dark)] items-center">
+              <a href="#" className="hover:text-[var(--color-paper)] transition-colors" aria-label="Github">
+                <Github className="w-4 h-4" />
+              </a>
+              <a href="#" className="hover:text-[var(--color-paper)] transition-colors" aria-label="LinkedIn">
+                <Linkedin className="w-4 h-4" />
+              </a>
             </div>
          </div>
       </footer>

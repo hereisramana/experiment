@@ -18,14 +18,14 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
         {/* LEFT COLUMN: PURE SIMULATOR (Sticky) */}
         <div className="lg:col-span-5 bg-[var(--color-ink)] text-[var(--color-paper)] p-6 md:p-8 lg:h-screen lg:sticky lg:top-0 flex flex-col items-center justify-center border-r border-[var(--color-paper)]/10 overflow-hidden relative z-20">
           
-          {/* Back Button - Studio Mode */}
+          {/* Back Button - Simple */}
           <button 
             onClick={onBack}
             className="absolute top-8 left-8 group flex items-center py-2 pr-4 rounded-[var(--radius-sm)] transition-all duration-300 hover:bg-[var(--color-paper)]/10"
-            aria-label="Return to Studio"
+            aria-label="Back"
           >
-            <span className="font-mono text-xs uppercase tracking-widest text-[var(--color-paper)] opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
-                ← Studio
+            <span className="font-mono text-xs uppercase tracking-widest text-[var(--color-paper)] opacity-60 group-hover:opacity-100 group-hover:-translate-x-1 transition-all">
+                ← Back
             </span>
           </button>
 
@@ -93,26 +93,11 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
            <div className="h-full overflow-y-auto p-6 md:p-12 lg:p-24 no-scrollbar">
                <div className="max-w-2xl mx-auto space-y-20 animate-in slide-in-from-bottom-4 duration-700 ease-soft pb-24">
                   
-                  {/* HEADER INFO */}
+                  {/* HEADER INFO: Minimal */}
                   <div className="pb-12 border-b border-[var(--color-paper-dark)]">
-                     <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight mb-6 leading-[1.1] text-[var(--color-ink)]">
-                      {project.title}
+                     <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight mb-2 leading-[1.1] text-[var(--color-ink)]">
+                      {project.title} <span className="block md:inline md:text-[0.6em] text-[var(--color-ink-subtle)] font-light mt-2 md:mt-0 md:ml-2">— Case Study</span>
                      </h1>
-                     <p className="text-xl font-light text-[var(--color-ink-subtle)] leading-relaxed text-balance">
-                      {project.tagline}
-                     </p>
-                     
-                     {/* Meta Data Row */}
-                     <div className="flex gap-8 mt-8 font-mono text-xs uppercase tracking-wider text-[var(--color-ink)] opacity-60">
-                        <div>
-                           <span className="opacity-50 mr-2">Role:</span>
-                           {project.role}
-                        </div>
-                        <div>
-                           <span className="opacity-50 mr-2">Time:</span>
-                           {project.duration}
-                        </div>
-                     </div>
                   </div>
 
                   {/* SECTION: CONTEXT */}
@@ -170,7 +155,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                   >
                      <div className="h-px bg-[var(--color-ink)] flex-1 mr-6 opacity-30 group-hover:opacity-100 transition-all origin-left scale-x-50 group-hover:scale-x-100"></div>
                      <span className="font-mono text-xs uppercase tracking-widest flex items-center gap-2 group-hover:text-[var(--color-accent)]">
-                        Return to Studio <ArrowLeft className="w-3 h-3 rotate-180 transition-transform group-hover:translate-x-1" />
+                        <ArrowLeft className="w-3 h-3 transition-transform group-hover:-translate-x-1" /> Back
                      </span>
                   </div>
 
