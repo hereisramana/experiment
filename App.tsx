@@ -121,15 +121,33 @@ export const App: React.FC = () => {
            
            {/* Contextual Preview */}
            {hoveredProject ? (
-              <div className="absolute inset-0 z-10 p-12 flex flex-col justify-end animate-in fade-in duration-500 ease-soft">
-                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-ink)] via-[var(--color-ink)]/50 to-transparent z-10 opacity-90" />
-                  <img 
-                    src={hoveredProject.heroUrl} 
-                    className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay grayscale contrast-125 transition-all duration-700 group-hover:scale-105"
-                    alt="" 
-                  />
+              <div className="absolute inset-0 z-10 p-12 flex flex-col justify-end animate-in fade-in duration-500 ease-soft overflow-hidden">
                   
-                  <div className="relative z-20">
+                  {/* OPTION 2 Implementation: The "Hero Component" Macro Shot */}
+                  <div className="absolute inset-0 bg-[var(--color-ink)] overflow-hidden">
+                      {/* Ambient light for depth */}
+                      <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-[var(--color-accent)]/10 to-transparent opacity-50" />
+                      
+                      {/* The Floating Component Container */}
+                      <div className="absolute inset-0 flex items-center justify-center perspective-[2000px]">
+                          <div className="relative w-[120%] h-[120%] transform rotate-[-12deg] translate-x-8 translate-y-12 scale-110 shadow-2xl transition-transform duration-1000 ease-out group-hover:rotate-[-10deg] group-hover:scale-[1.15] group-hover:translate-y-8">
+                              {/* The Image - Full Color, No Filters */}
+                              <img 
+                                src={hoveredProject.heroUrl} 
+                                className="w-full h-full object-cover rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border border-[var(--color-paper)]/10"
+                                alt="Interface Detail" 
+                              />
+                              
+                              {/* Specular Highlight/Gloss */}
+                              <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 pointer-events-none rounded-xl" />
+                          </div>
+                      </div>
+                  </div>
+                  
+                  {/* Text Scrim - Gradient to ensure text pop */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-ink)] via-[var(--color-ink)]/60 to-transparent z-10" />
+                  
+                  <div className="relative z-20 pointer-events-none">
                      <div className="flex justify-between items-baseline mb-2">
                        <h2 className="text-5xl font-medium tracking-tight text-[var(--color-paper)]">{hoveredProject.title}</h2>
                      </div>
