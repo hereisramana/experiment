@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Project } from '../types';
 import { ArrowLeft, ArrowUpRight, ArrowDown } from 'lucide-react';
 
@@ -8,9 +8,28 @@ interface ProjectDetailProps {
 }
 
 export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
+
   useEffect(() => {
+    // Reset scroll to top of window (for mobile) and container (for desktop)
     window.scrollTo(0, 0);
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
   }, [project.id]);
+
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+      // Hide if we are within 50px of the bottom to prevent clutter
+      if (scrollHeight - scrollTop - clientHeight < 50) {
+        setShowScrollIndicator(false);
+      } else {
+        setShowScrollIndicator(true);
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-12 bg-[var(--color-paper)]">
@@ -29,16 +48,12 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
             </span>
           </button>
 
-          {/* THE SIMULATOR: Video in iPhone 16 Frame */}
-          {/* iPhone 16 Aspect Ratio is roughly 19.5:9 (~2.16) */}
+          {/* THE SIMULATOR: Pure Content Frame, No Skeumorphism */}
           <div className="relative w-full max-w-[340px] flex flex-col items-center">
              
-             {/* Device Bezel */}
-             <div className="relative w-full aspect-[9/19.5] bg-black rounded-[46px] border-[8px] border-[var(--color-ink-subtle)]/30 shadow-2xl overflow-hidden ring-1 ring-white/10 transform transition-transform duration-700 hover:scale-[1.01]">
+             {/* Device Bezel - Simplified to just a frame */}
+             <div className="relative w-full aspect-[9/19.5] bg-black rounded-[46px] border-4 border-[var(--color-ink-subtle)]/50 shadow-2xl overflow-hidden ring-1 ring-white/10 transform transition-transform duration-700 hover:scale-[1.01]">
                 
-                {/* Dynamic Island Hint */}
-                <div className="absolute top-4 left-1/2 -translate-x-1/2 w-[30%] h-7 bg-black rounded-full z-30 pointer-events-none"></div>
-
                 {/* Screen Content */}
                 {project.videoUrl ? (
                    <video 
@@ -56,9 +71,6 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                      className="w-full h-full object-cover opacity-95" 
                    />
                 )}
-                
-                {/* Glare/Reflection Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-transparent pointer-events-none z-20" />
              </div>
              
              {/* Live Prototype Link */}
@@ -85,13 +97,17 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
         {/* RIGHT COLUMN: The Manual / Spec Sheet (Scrollable) */}
         <div className="lg:col-span-7 bg-[var(--color-paper)] relative h-screen">
            
-           {/* Scroll Indicator - Floating above content */}
-           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 pointer-events-none animate-bounce z-10 mix-blend-multiply hidden lg:block">
-              <ArrowDown className="w-5 h-5 text-[var(--color-ink)] opacity-30" />
+           {/* Scroll Indicator - Vanishes on scroll end */}
+           <div className={`absolute bottom-8 left-1/2 -translate-x-1/2 pointer-events-none transition-opacity duration-300 z-10 mix-blend-multiply hidden lg:block ${showScrollIndicator ? 'opacity-100' : 'opacity-0'}`}>
+              <ArrowDown className="w-5 h-5 text-[var(--color-ink)] opacity-30 animate-bounce" />
            </div>
 
-           <div className="h-full overflow-y-auto p-6 md:p-12 lg:p-24 no-scrollbar">
-               <div className="max-w-2xl mx-auto space-y-20 animate-in slide-in-from-bottom-4 duration-700 ease-soft pb-24">
+           <div 
+             ref={scrollRef}
+             onScroll={handleScroll}
+             className="h-full overflow-y-auto p-6 md:p-12 lg:p-24 no-scrollbar"
+           >
+               <div className="max-w-2xl mx-auto space-y-20 animate-in slide-in-from-bottom-4 duration-700 ease-soft pb-12">
                   
                   {/* HEADER INFO: Minimal */}
                   <div className="pb-12 border-b border-[var(--color-paper-dark)]">
@@ -102,10 +118,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
 
                   {/* SECTION: CONTEXT */}
                   <section>
-                     <div className="flex items-baseline gap-4 mb-8">
-                        <span className="font-mono text-xs text-[var(--color-accent)] font-bold">01</span>
-                        <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--color-ink)] opacity-40">System Context</h3>
-                     </div>
+                     <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--color-ink)] opacity-40 mb-8">System Context</h3>
                      <p className="text-lg md:text-xl leading-relaxed text-[var(--color-ink)]">
                         {project.description}
                      </p>
@@ -113,10 +126,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
 
                   {/* SECTION: ARCHITECTURE */}
                   <section className="grid gap-12">
-                     <div className="flex items-baseline gap-4 mb-2">
-                        <span className="font-mono text-xs text-[var(--color-accent)] font-bold">02</span>
-                        <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--color-ink)] opacity-40">Architecture</h3>
-                     </div>
+                     <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--color-ink)] opacity-40 mb-2">Architecture</h3>
                      
                      <div className="grid md:grid-cols-2 gap-12 bg-[var(--color-paper-dim)]/20 p-6 rounded-[var(--radius-md)] border border-[var(--color-paper-dark)]/50">
                         <div className="space-y-4">
@@ -136,10 +146,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
 
                   {/* SECTION: LOGIC */}
                   <section>
-                     <div className="flex items-baseline gap-4 mb-8">
-                        <span className="font-mono text-xs text-[var(--color-accent)] font-bold">03</span>
-                        <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--color-ink)] opacity-40">Interaction Logic</h3>
-                     </div>
+                     <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--color-ink)] opacity-40 mb-8">Interaction Logic</h3>
                      
                      <div className="pl-6 border-l-2 border-[var(--color-ink)] relative">
                         <p className="text-lg leading-relaxed text-[var(--color-ink)] italic">
@@ -155,7 +162,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                   >
                      <div className="h-px bg-[var(--color-ink)] flex-1 mr-6 opacity-30 group-hover:opacity-100 transition-all origin-left scale-x-50 group-hover:scale-x-100"></div>
                      <span className="font-mono text-xs uppercase tracking-widest flex items-center gap-2 group-hover:text-[var(--color-accent)]">
-                        <ArrowLeft className="w-3 h-3 transition-transform group-hover:-translate-x-1" /> Back
+                        <ArrowLeft className="w-3 h-3 transition-transform group-hover:-translate-x-1" /> Back to Main Page
                      </span>
                   </div>
 

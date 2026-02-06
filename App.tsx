@@ -36,6 +36,9 @@ export const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-[var(--color-paper)] text-[var(--color-ink)] selection:bg-[var(--color-accent-light)] flex flex-col relative">
       
+      {/* Global Analog Noise Overlay */}
+      <div className="bg-noise"></div>
+
       {/* HEADER: Strictly Minimal */}
       <header className="px-4 md:px-12 py-8 flex items-center justify-between border-b border-transparent relative z-20">
         <div className="flex-1">
@@ -112,15 +115,10 @@ export const App: React.FC = () => {
                     className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay grayscale contrast-125 transition-all duration-700 group-hover:scale-105"
                     alt="" 
                   />
-                  {/* Technical Overlay Grain on Dark Background */}
-                  <div className="absolute inset-0 opacity-20 bg-noise mix-blend-overlay z-10 pointer-events-none"></div>
-
+                  
                   <div className="relative z-20">
                      <div className="flex justify-between items-baseline mb-2">
                        <h2 className="text-5xl font-medium tracking-tight text-[var(--color-paper)]">{hoveredProject.title}</h2>
-                       <span className="font-mono text-[9px] uppercase opacity-40 border border-[var(--color-paper-dark)] px-1 py-0.5 rounded-[2px]">
-                          IMG_PREV_0{PROJECTS.findIndex(p => p.id === hoveredProject.id) + 1}
-                       </span>
                      </div>
                      <p className="text-xl font-light opacity-80 text-balance text-[var(--color-paper-dim)]">{hoveredProject.tagline}</p>
                      <div className="mt-8 flex gap-2">
@@ -192,8 +190,8 @@ export const App: React.FC = () => {
                <button onClick={() => setIsContactOpen(false)} className="absolute top-6 right-6 p-2 hover:bg-[var(--color-paper-dim)] rounded-full transition-colors opacity-50 hover:opacity-100">
                   <X className="w-5 h-5" />
                </button>
-               <h3 className="font-mono text-xs uppercase tracking-widest mb-8 opacity-40">Transmission</h3>
-               <div className="space-y-6">
+               {/* Clean, no "Transmission" label */}
+               <div className="space-y-6 mt-4">
                   <div>
                      <p className="text-sm opacity-50 mb-1 font-mono uppercase text-[10px]">Email</p>
                      <a href="mailto:hello@ramanadesign.tech" className="text-xl font-medium hover:text-[var(--color-accent)] transition-colors">hello@ramanadesign.tech</a>
