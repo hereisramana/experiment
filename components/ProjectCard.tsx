@@ -49,7 +49,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClic
           </h3>
         </div>
 
-        {/* Hover Guidance Label - Updated to Sans for 'Button' feel */}
+        {/* Hover Guidance Label - Sans Serif for 'Button' feel */}
         <div className="absolute right-6 opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ease-soft hidden md:block">
            <span className="text-[10px] uppercase font-medium tracking-widest text-[var(--color-ink)] flex items-center gap-2">
              View Case Study →

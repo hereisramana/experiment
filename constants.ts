@@ -35,7 +35,7 @@ export const PROJECTS: Project[] = [
     solution: 'A multi-tier filtering logic that visualizes ingredients rather than just hiding dishes. The "Strict Mode" toggle completely removes unsafe items, while "Soft Mode" dims them and highlights the conflicting ingredient. This transparency builds trust.',
     interactionNotes: 'I designed a "Sticky Filter Chip" pattern that remains accessible at the bottom of the screen (thumb zone) on mobile. Tapping it expands a modal with large, toggleable allergen icons. The transition uses a spring animation to feel responsive and lightweight.',
     outcome: 'The design system was adopted by a mid-sized delivery startup, resulting in a 15% decrease in support tickets related to allergen inquiries.',
-    accentColor: '#FF7043' // Soft Orange
+    accentColor: '#F2A188' // Pastel Salmon
   }
 ];
 

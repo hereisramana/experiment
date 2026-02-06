@@ -37,7 +37,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
         {/* LEFT COLUMN: PURE SIMULATOR (Sticky) */}
         <div className="lg:col-span-5 bg-[var(--color-ink)] text-[var(--color-paper)] p-6 md:p-8 h-full flex flex-col items-center justify-center border-r border-[var(--color-paper)]/10 relative z-20">
           
-          {/* Back Button - Updated typography and hover area */}
+          {/* Back Button - Updated typography (sans) and solid hover area */}
           <button 
             onClick={onBack}
             className="absolute top-6 left-6 md:top-8 md:left-8 group flex items-center py-2 px-4 rounded-[var(--radius-sm)] transition-all duration-300 hover:bg-[var(--color-paper)]/10 z-30 -ml-4"
