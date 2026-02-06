@@ -3,7 +3,7 @@ import { PROJECTS, SKILLS } from './constants';
 import { ViewState } from './types';
 import { ProjectCard } from './components/ProjectCard';
 import { ProjectDetail } from './components/ProjectDetail';
-import { X, Globe, ArrowDownRight, Github } from 'lucide-react';
+import { X, Globe, Github } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [view, setView] = useState<ViewState>('HOME');
