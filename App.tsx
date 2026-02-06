@@ -19,37 +19,22 @@ export const App: React.FC = () => {
   const currentProject = PROJECTS.find(p => p.id === selectedProjectId);
   const hoveredProject = PROJECTS.find(p => p.id === hoveredProjectId);
 
-  // Helper for Registration Marks (The "Lens" Look)
-  const RegistrationMarks = () => (
-    <>
-      <div className="bg-noise" />
-      <div className="fixed top-4 left-4 w-2 h-2 border-l border-t border-[var(--color-ink)] opacity-30 pointer-events-none z-50" />
-      <div className="fixed top-4 right-4 w-2 h-2 border-r border-t border-[var(--color-ink)] opacity-30 pointer-events-none z-50" />
-      <div className="fixed bottom-4 left-4 w-2 h-2 border-l border-b border-[var(--color-ink)] opacity-30 pointer-events-none z-50" />
-      <div className="fixed bottom-4 right-4 w-2 h-2 border-r border-b border-[var(--color-ink)] opacity-30 pointer-events-none z-50" />
-    </>
-  );
-
   // Render Detailed View
   if (view === 'PROJECT_DETAIL' && currentProject) {
     return (
-      <>
-        <RegistrationMarks />
-        <ProjectDetail 
-          project={currentProject} 
-          onBack={() => {
-            setView('HOME');
-            setSelectedProjectId(null);
-          }} 
-        />
-      </>
+      <ProjectDetail 
+        project={currentProject} 
+        onBack={() => {
+          setView('HOME');
+          setSelectedProjectId(null);
+        }} 
+      />
     );
   }
 
   // Render Index/Home View
   return (
     <div className="min-h-screen bg-[var(--color-paper)] text-[var(--color-ink)] selection:bg-[var(--color-accent-light)] flex flex-col relative">
-      <RegistrationMarks />
       
       {/* HEADER: Strictly Minimal */}
       <header className="px-4 md:px-12 py-8 flex items-center justify-between border-b border-transparent relative z-20">
@@ -77,10 +62,6 @@ export const App: React.FC = () => {
           
           {/* HERO SECTION */}
           <div className="mb-24 md:mb-32 mt-4 relative">
-             {/* Decorative tracking number */}
-             <div className="absolute -left-6 top-1 font-mono text-[9px] text-[var(--color-ink)] opacity-20 hidden lg:block -rotate-90 origin-top-right">
-                REF-01-HDR
-             </div>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight leading-[1.05] mb-6 text-[var(--color-ink)]">
               Senior Product Designer & Technologist.
             </h2>
