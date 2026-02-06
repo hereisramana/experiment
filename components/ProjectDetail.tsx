@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Project } from '../types';
-import { ArrowLeft, ArrowUpRight, ArrowDown, Play, Square } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, ArrowDown, Play, Pause, Square } from 'lucide-react';
 
 interface ProjectDetailProps {
   project: Project;
@@ -124,7 +124,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                         <video 
                           ref={videoRef}
                           src={project.videoUrl} 
-                          className="w-full h-full object-contain opacity-95" 
+                          className="w-full h-full object-contain opacity-95 cursor-pointer" 
                           playsInline
                           onClick={togglePlay}
                           onTimeUpdate={handleTimeUpdate}
@@ -133,25 +133,27 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                         />
                         
                         {/* Custom Controls Overlay */}
-                        <div className={`absolute inset-0 flex flex-col justify-end transition-opacity duration-300 ${isPlaying ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>
+                        <div className={`absolute inset-0 flex flex-col justify-end transition-opacity duration-300 pointer-events-none ${isPlaying ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>
                            
-                           {/* Big Center Play Button (Only when paused) */}
-                           {!isPlaying && (
-                             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                               <button 
-                                 onClick={togglePlay}
-                                 className="pointer-events-auto w-16 h-16 rounded-full bg-[var(--color-paper)]/10 backdrop-blur-sm border border-[var(--color-paper)]/20 flex items-center justify-center hover:bg-[var(--color-paper)]/20 hover:scale-105 transition-all text-white"
-                                 aria-label="Play Video"
-                               >
+                           {/* Big Center Toggle Button */}
+                           <div className="absolute inset-0 flex items-center justify-center">
+                             <button 
+                               onClick={togglePlay}
+                               className="pointer-events-auto w-16 h-16 rounded-full bg-[var(--color-paper)]/10 backdrop-blur-sm border border-[var(--color-paper)]/20 flex items-center justify-center hover:bg-[var(--color-paper)]/20 hover:scale-105 transition-all text-white shadow-lg"
+                               aria-label={isPlaying ? "Pause Video" : "Play Video"}
+                             >
+                               {isPlaying ? (
+                                 <Pause className="w-6 h-6 fill-white stroke-none" />
+                               ) : (
                                  <Play className="w-6 h-6 fill-white stroke-none ml-1" />
-                               </button>
-                             </div>
-                           )}
+                               )}
+                             </button>
+                           </div>
 
                            {/* Bottom Bar: Timeline & Stats */}
-                           <div className="bg-black/80 backdrop-blur-md border-t border-white/10 p-3 flex items-center gap-3">
-                              <button onClick={togglePlay} className="text-white/80 hover:text-white transition-colors">
-                                {isPlaying ? <span className="text-[10px] font-mono uppercase">Pause</span> : <Play className="w-3 h-3 fill-current" />}
+                           <div className="bg-black/80 backdrop-blur-md border-t border-white/10 p-3 flex items-center gap-3 pointer-events-auto">
+                              <button onClick={togglePlay} className="text-white/80 hover:text-white transition-colors" aria-label={isPlaying ? "Pause" : "Play"}>
+                                {isPlaying ? <Pause className="w-3 h-3 fill-current" /> : <Play className="w-3 h-3 fill-current" />}
                               </button>
                               
                               <button onClick={stopVideo} className="text-white/80 hover:text-[var(--color-feedback-error)] transition-colors" aria-label="Stop">
@@ -271,7 +273,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
 
                   {/* FOOTER: Sign-off */}
                   <div className="pt-12 mt-0">
-                     <p className="font-mono text-[10px] text-[var(--color-ink-subtle)] opacity-40 mb-6 uppercase tracking-widest">
+                     <p className="font-mono text-[10px] text-[var(--color-ink-subtle)] mb-6 uppercase tracking-widest">
                         That’s the end. Thanks for being here.
                      </p>
                      
