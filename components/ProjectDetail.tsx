@@ -156,14 +156,20 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                   </section>
 
                   {/* FOOTER: Sign-off */}
-                  <div 
-                     className="pt-24 mt-12 opacity-40 hover:opacity-100 transition-opacity cursor-pointer flex justify-between items-center group"
-                     onClick={onBack}
-                  >
-                     <div className="h-px bg-[var(--color-ink)] flex-1 mr-6 opacity-30 group-hover:opacity-100 transition-all origin-left scale-x-50 group-hover:scale-x-100"></div>
-                     <span className="font-mono text-xs uppercase tracking-widest flex items-center gap-2 group-hover:text-[var(--color-accent)]">
-                        <ArrowLeft className="w-3 h-3 transition-transform group-hover:-translate-x-1" /> Back to Main Page
-                     </span>
+                  <div className="pt-12 mt-0">
+                     <p className="font-mono text-[10px] text-[var(--color-ink-subtle)] opacity-40 mb-6 uppercase tracking-widest">
+                        That’s the end. Thanks for being here.
+                     </p>
+                     
+                     <div 
+                        className="opacity-40 hover:opacity-100 transition-opacity cursor-pointer flex justify-between items-center group"
+                        onClick={onBack}
+                     >
+                        <div className="h-px bg-[var(--color-ink)] flex-1 mr-6 opacity-30 group-hover:opacity-100 transition-all origin-left scale-x-50 group-hover:scale-x-100"></div>
+                        <span className="font-mono text-xs uppercase tracking-widest flex items-center gap-2 group-hover:text-[var(--color-accent)]">
+                           <ArrowLeft className="w-3 h-3 transition-transform group-hover:-translate-x-1" /> Back to Main Page
+                        </span>
+                     </div>
                   </div>
 
                </div>

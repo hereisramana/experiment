@@ -39,7 +39,7 @@ export const App: React.FC = () => {
       {/* Global Analog Noise Overlay */}
       <div className="bg-noise"></div>
 
-      {/* HEADER: Strictly Minimal */}
+      {/* HEADER: Action Bar */}
       <header className="px-4 md:px-12 py-8 flex items-center justify-between border-b border-transparent relative z-20">
         <div className="flex-1">
           <h1 className="font-mono text-sm font-bold text-[var(--color-ink)] lowercase tracking-tight">
@@ -47,14 +47,27 @@ export const App: React.FC = () => {
           </h1>
         </div>
         
-        <div className="flex-1 flex justify-center">
-           <span className="font-mono text-xs uppercase tracking-[0.2em] font-medium">
+        <div className="flex-1 flex justify-center hidden md:flex">
+           <span className="font-mono text-xs uppercase tracking-[0.2em] font-medium opacity-50">
              Portfolio
            </span>
         </div>
 
-        <div className="flex-1 flex justify-end">
-           {/* Empty right side */}
+        <div className="flex-1 flex justify-end items-center gap-6">
+            <button 
+              onClick={() => setIsContactOpen(true)}
+              className="font-mono text-[10px] uppercase text-[var(--color-ink)] hover:text-[var(--color-accent)] transition-colors border border-[var(--color-paper-dark)]/30 px-3 py-1 rounded-sm"
+            >
+              Contact
+            </button>
+            <div className="flex gap-4 text-[var(--color-ink)] opacity-60">
+              <a href="#" className="hover:text-[var(--color-accent)] transition-colors" aria-label="Github">
+                <Github className="w-4 h-4" />
+              </a>
+              <a href="#" className="hover:text-[var(--color-accent)] transition-colors" aria-label="LinkedIn">
+                <Linkedin className="w-4 h-4" />
+              </a>
+            </div>
         </div>
       </header>
 
@@ -104,7 +117,7 @@ export const App: React.FC = () => {
         </div>
 
         {/* RIGHT: Preview / Info Panel (Floating Sheet) - DARK MASS */}
-        <div className="hidden lg:flex lg:w-5/12 bg-[var(--color-ink)] text-[var(--color-paper)] rounded-[var(--radius-lg)] relative overflow-hidden flex-col justify-between shadow-sm group">
+        <div className="hidden lg:flex lg:w-5/12 bg-[var(--color-ink)] text-[var(--color-paper)] rounded-[var(--radius-lg)] relative overflow-hidden flex-col justify-between shadow-sm group min-h-[500px]">
            
            {/* Contextual Preview */}
            {hoveredProject ? (
@@ -157,30 +170,6 @@ export const App: React.FC = () => {
            )}
         </div>
       </main>
-
-      {/* FOOTER - DARK MASS */}
-      <footer className="border-t border-[var(--color-paper-dark)] px-4 md:px-12 py-8 flex flex-col md:flex-row justify-between items-center bg-[var(--color-ink)] text-[var(--color-paper)] relative z-10 gap-4">
-         <span className="font-mono text-[10px] uppercase opacity-40">
-           © {new Date().getFullYear()}
-         </span>
-         
-         <div className="flex gap-8 items-center">
-            <button 
-              onClick={() => setIsContactOpen(true)}
-              className="font-mono text-[10px] uppercase text-[var(--color-paper)] hover:text-[var(--color-accent-light)] transition-colors border border-[var(--color-paper-dark)]/30 px-3 py-1 rounded-sm"
-            >
-              Contact Me
-            </button>
-            <div className="flex gap-6 text-[var(--color-paper-dark)] items-center">
-              <a href="#" className="hover:text-[var(--color-paper)] transition-colors" aria-label="Github">
-                <Github className="w-4 h-4" />
-              </a>
-              <a href="#" className="hover:text-[var(--color-paper)] transition-colors" aria-label="LinkedIn">
-                <Linkedin className="w-4 h-4" />
-              </a>
-            </div>
-         </div>
-      </footer>
 
       {/* CONTACT MODAL */}
       {isContactOpen && (
