@@ -34,13 +34,13 @@ export const App: React.FC = () => {
 
   // Render Index/Home View
   return (
-    <div className="min-h-screen bg-[var(--color-paper)] text-[var(--color-ink)] selection:bg-[var(--color-accent-light)] flex flex-col relative">
+    <div className="min-h-screen bg-[var(--color-paper)] text-[var(--color-ink)] selection:bg-[var(--color-accent-light)] flex flex-col relative overflow-x-hidden">
       
       {/* Global Analog Noise Overlay */}
       <div className="bg-noise"></div>
 
       {/* HEADER: Action Bar */}
-      <header className="px-4 md:px-12 py-8 flex items-center justify-between border-b border-transparent relative z-20">
+      <header className="px-4 md:px-12 py-6 md:py-8 flex items-center justify-between border-b border-transparent relative z-20 shrink-0">
         <div className="flex-1">
           <h1 className="font-mono text-sm font-bold text-[var(--color-ink)] lowercase tracking-tight">
             ramanadesign.tech
@@ -53,56 +53,51 @@ export const App: React.FC = () => {
            </span>
         </div>
 
-        <div className="flex-1 flex justify-end items-center gap-6">
+        <div className="flex-1 flex justify-end items-center gap-4 md:gap-6">
             <button 
               onClick={() => setIsContactOpen(true)}
-              className="font-mono text-[10px] uppercase text-[var(--color-ink)] hover:text-[var(--color-accent)] transition-colors border border-[var(--color-paper-dark)]/30 px-3 py-1 rounded-sm"
+              className="group font-mono text-[10px] uppercase text-[var(--color-ink)] hover:text-[var(--color-accent)] transition-colors border border-[var(--color-paper-dark)]/30 px-4 py-2 rounded-[var(--radius-sm)] flex items-center gap-2 hover:bg-[var(--color-paper-dim)]/30"
             >
               Contact
+              <ArrowDownRight className="w-3 h-3 opacity-50 group-hover:opacity-100 transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5" />
             </button>
-            <div className="flex gap-4 text-[var(--color-ink)] opacity-60">
-              <a href="#" className="hover:text-[var(--color-accent)] transition-colors" aria-label="Github">
-                <Github className="w-4 h-4" />
+            <div className="flex gap-2 text-[var(--color-ink)]">
+              <a href="#" className="p-2 hover:bg-[var(--color-paper-dim)]/30 rounded-[var(--radius-sm)] hover:text-[var(--color-accent)] transition-all" aria-label="Github">
+                <Github className="w-4 h-4 opacity-60 hover:opacity-100" />
               </a>
-              <a href="#" className="hover:text-[var(--color-accent)] transition-colors" aria-label="LinkedIn">
-                <Linkedin className="w-4 h-4" />
+              <a href="#" className="p-2 hover:bg-[var(--color-paper-dim)]/30 rounded-[var(--radius-sm)] hover:text-[var(--color-accent)] transition-all" aria-label="LinkedIn">
+                <Linkedin className="w-4 h-4 opacity-60 hover:opacity-100" />
               </a>
             </div>
         </div>
       </header>
 
-      <main className="flex-1 flex flex-col lg:flex-row gap-4 px-4 md:px-8 pb-8 relative z-10">
+      <main className="flex-1 flex flex-col lg:flex-row gap-4 px-4 md:px-8 pb-4 md:pb-8 relative z-10">
         
         {/* LEFT: Content */}
-        <div className="w-full lg:w-7/12 py-8 lg:pr-12 flex flex-col">
+        <div className="w-full lg:w-7/12 py-4 lg:py-8 lg:pr-12 flex flex-col justify-center">
           
-          {/* HERO SECTION */}
-          <div className="mb-24 md:mb-32 mt-4 relative">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight leading-[1.05] mb-6 text-[var(--color-ink)]">
+          {/* HERO SECTION - Tighter margins for 16:10 screens */}
+          <div className="mb-12 lg:mb-20 mt-2 relative">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight leading-[1.05] mb-4 md:mb-6 text-[var(--color-ink)]">
               Product Designer & Technologist.
             </h2>
             <div className="space-y-6">
               <p className="text-lg md:text-xl text-[var(--color-ink-subtle)] max-w-md leading-relaxed">
                 Specializing in calm interactive systems and technical clarity.
               </p>
-              <button 
-                onClick={() => setIsContactOpen(true)}
-                className="group flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[var(--color-ink)] hover:text-[var(--color-accent)] transition-colors"
-              >
-                <span>Get in touch</span>
-                <ArrowDownRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5" />
-              </button>
+              {/* Redundant CTA removed here for cleaner layout */}
             </div>
           </div>
 
           {/* PROJECT LIST */}
           <div className="mt-auto">
-             <div className="flex items-baseline gap-2 pb-6 mb-2 border-b border-[var(--color-ink)]/10">
+             <div className="flex items-baseline gap-2 pb-4 md:pb-6 mb-2 border-b border-[var(--color-ink)]/10">
                 <h3 className="text-lg font-medium tracking-tight">Projects</h3>
                 <span className="font-mono text-xs opacity-40 align-super">({PROJECTS.length})</span>
              </div>
              
-             <div className="flex flex-col gap-6">
+             <div className="flex flex-col gap-4 md:gap-6">
                 {PROJECTS.map((project, idx) => (
                   <ProjectCard 
                     key={project.id} 

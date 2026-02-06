@@ -32,15 +32,15 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
   };
 
   return (
-    <div className="min-h-screen lg:grid lg:grid-cols-12 bg-[var(--color-paper)]">
+    <div className="min-h-screen lg:grid lg:grid-cols-12 bg-[var(--color-paper)] h-screen overflow-hidden">
         
         {/* LEFT COLUMN: PURE SIMULATOR (Sticky) */}
-        <div className="lg:col-span-5 bg-[var(--color-ink)] text-[var(--color-paper)] p-6 md:p-8 lg:h-screen lg:sticky lg:top-0 flex flex-col items-center justify-center border-r border-[var(--color-paper)]/10 overflow-hidden relative z-20">
+        <div className="lg:col-span-5 bg-[var(--color-ink)] text-[var(--color-paper)] p-6 md:p-8 h-full flex flex-col items-center justify-center border-r border-[var(--color-paper)]/10 relative z-20">
           
           {/* Back Button - Simple */}
           <button 
             onClick={onBack}
-            className="absolute top-8 left-8 group flex items-center py-2 pr-4 rounded-[var(--radius-sm)] transition-all duration-300 hover:bg-[var(--color-paper)]/10"
+            className="absolute top-6 left-6 md:top-8 md:left-8 group flex items-center py-2 pr-4 rounded-[var(--radius-sm)] transition-all duration-300 hover:bg-[var(--color-paper)]/10 z-30"
             aria-label="Back"
           >
             <span className="font-mono text-xs uppercase tracking-widest text-[var(--color-paper)] opacity-60 group-hover:opacity-100 group-hover:-translate-x-1 transition-all">
@@ -48,11 +48,13 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
             </span>
           </button>
 
-          {/* THE SIMULATOR: Pure Content Frame, No Skeumorphism */}
-          <div className="relative w-full max-w-[340px] flex flex-col items-center">
+          {/* THE SIMULATOR: Dynamic Scaling based on Height (vh) to fit laptop screens */}
+          <div className="relative w-full h-full flex flex-col items-center justify-center gap-6 md:gap-8">
              
-             {/* Device Bezel - Simplified to just a frame */}
-             <div className="relative w-full aspect-[9/19.5] bg-black rounded-[46px] border-4 border-[var(--color-ink-subtle)]/50 shadow-2xl overflow-hidden ring-1 ring-white/10 transform transition-transform duration-700 hover:scale-[1.01]">
+             {/* Device Bezel - Height constrained to Viewport Height (dvh) 
+                 aspect ratio drives width. max-h-[65dvh] ensures room for button below.
+             */}
+             <div className="relative max-h-[60dvh] md:max-h-[65dvh] aspect-[9/19.5] w-auto bg-black rounded-[calc(2dvh+20px)] border-4 border-[var(--color-ink-subtle)]/50 shadow-2xl overflow-hidden ring-1 ring-white/10 transform transition-transform duration-700 hover:scale-[1.01]">
                 
                 {/* Screen Content */}
                 {project.videoUrl ? (
@@ -74,19 +76,19 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
              </div>
              
              {/* Live Prototype Link */}
-             <div className="mt-8 w-full">
+             <div className="w-[80%] max-w-[280px]">
                 {project.liveUrl ? (
                    <a 
                      href={project.liveUrl} 
                      target="_blank" 
                      rel="noreferrer" 
-                     className="group flex items-center justify-center gap-3 w-full py-4 bg-[var(--color-paper)] text-[var(--color-ink)] font-mono text-xs uppercase tracking-wider rounded-[var(--radius-sm)] hover:bg-[var(--color-accent-light)] transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                     className="group flex items-center justify-center gap-3 w-full py-3 md:py-4 bg-[var(--color-paper)] text-[var(--color-ink)] font-mono text-[10px] md:text-xs uppercase tracking-wider rounded-[var(--radius-sm)] hover:bg-[var(--color-accent-light)] transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                    >
                       <span>Launch Prototype</span>
                       <ArrowUpRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                    </a>
                 ) : (
-                   <div className="w-full py-4 border border-[var(--color-paper)]/20 text-[var(--color-paper)] font-mono text-xs uppercase tracking-wider rounded-[var(--radius-sm)] text-center opacity-50 cursor-not-allowed">
+                   <div className="w-full py-3 md:py-4 border border-[var(--color-paper)]/20 text-[var(--color-paper)] font-mono text-[10px] md:text-xs uppercase tracking-wider rounded-[var(--radius-sm)] text-center opacity-50 cursor-not-allowed">
                       Prototype Offline
                    </div>
                 )}
@@ -95,7 +97,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
         </div>
 
         {/* RIGHT COLUMN: The Manual / Spec Sheet (Scrollable) */}
-        <div className="lg:col-span-7 bg-[var(--color-paper)] relative h-screen">
+        <div className="lg:col-span-7 bg-[var(--color-paper)] relative h-full overflow-hidden">
            
            {/* Scroll Indicator - Vanishes on scroll end */}
            <div className={`absolute bottom-8 left-1/2 -translate-x-1/2 pointer-events-none transition-opacity duration-300 z-10 mix-blend-multiply hidden lg:block ${showScrollIndicator ? 'opacity-100' : 'opacity-0'}`}>
@@ -107,7 +109,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
              onScroll={handleScroll}
              className="h-full overflow-y-auto p-6 md:p-12 lg:p-24 no-scrollbar"
            >
-               <div className="max-w-2xl mx-auto space-y-20 animate-in slide-in-from-bottom-4 duration-700 ease-soft pb-12">
+               <div className="max-w-2xl mx-auto space-y-20 animate-in slide-in-from-bottom-4 duration-700 ease-soft pb-24">
                   
                   {/* HEADER INFO: Minimal */}
                   <div className="pb-12 border-b border-[var(--color-paper-dark)]">
