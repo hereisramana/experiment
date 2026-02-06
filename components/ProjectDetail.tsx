@@ -37,13 +37,13 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
         {/* LEFT COLUMN: PURE SIMULATOR (Sticky) */}
         <div className="lg:col-span-5 bg-[var(--color-ink)] text-[var(--color-paper)] p-6 md:p-8 h-full flex flex-col items-center justify-center border-r border-[var(--color-paper)]/10 relative z-20">
           
-          {/* Back Button - Simple */}
+          {/* Back Button - Updated typography and hover area */}
           <button 
             onClick={onBack}
-            className="absolute top-6 left-6 md:top-8 md:left-8 group flex items-center py-2 pr-4 rounded-[var(--radius-sm)] transition-all duration-300 hover:bg-[var(--color-paper)]/10 z-30"
+            className="absolute top-6 left-6 md:top-8 md:left-8 group flex items-center py-2 px-4 rounded-[var(--radius-sm)] transition-all duration-300 hover:bg-[var(--color-paper)]/10 z-30 -ml-4"
             aria-label="Back"
           >
-            <span className="font-mono text-xs uppercase tracking-widest text-[var(--color-paper)] opacity-60 group-hover:opacity-100 group-hover:-translate-x-1 transition-all">
+            <span className="text-xs uppercase font-medium tracking-widest text-[var(--color-paper)] opacity-60 group-hover:opacity-100 group-hover:-translate-x-1 transition-all">
                 ← Back
             </span>
           </button>
@@ -82,13 +82,13 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                      href={project.liveUrl} 
                      target="_blank" 
                      rel="noreferrer" 
-                     className="group flex items-center justify-center gap-3 w-full py-3 md:py-4 bg-[var(--color-paper)] text-[var(--color-ink)] font-mono text-[10px] md:text-xs uppercase tracking-wider rounded-[var(--radius-sm)] hover:bg-[var(--color-accent-light)] transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                     className="group flex items-center justify-center gap-3 w-full py-3 md:py-4 bg-[var(--color-paper)] text-[var(--color-ink)] text-[10px] md:text-xs uppercase font-medium tracking-wider rounded-[var(--radius-sm)] hover:bg-[var(--color-accent-light)] transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                    >
                       <span>Launch Prototype</span>
                       <ArrowUpRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                    </a>
                 ) : (
-                   <div className="w-full py-3 md:py-4 border border-[var(--color-paper)]/20 text-[var(--color-paper)] font-mono text-[10px] md:text-xs uppercase tracking-wider rounded-[var(--radius-sm)] text-center opacity-50 cursor-not-allowed">
+                   <div className="w-full py-3 md:py-4 border border-[var(--color-paper)]/20 text-[var(--color-paper)] text-[10px] md:text-xs uppercase font-medium tracking-wider rounded-[var(--radius-sm)] text-center opacity-50 cursor-not-allowed">
                       Prototype Offline
                    </div>
                 )}
@@ -168,7 +168,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                         onClick={onBack}
                      >
                         <div className="h-px bg-[var(--color-ink)] flex-1 mr-6 opacity-30 group-hover:opacity-100 transition-all origin-left scale-x-50 group-hover:scale-x-100"></div>
-                        <span className="font-mono text-xs uppercase tracking-widest flex items-center gap-2 group-hover:text-[var(--color-accent)]">
+                        <span className="text-xs uppercase font-medium tracking-widest flex items-center gap-2 group-hover:text-[var(--color-accent)]">
                            <ArrowLeft className="w-3 h-3 transition-transform group-hover:-translate-x-1" /> Back to Main Page
                         </span>
                      </div>

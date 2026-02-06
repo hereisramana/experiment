@@ -14,6 +14,7 @@ export interface Project {
   solution: string;
   interactionNotes: string; // Specific focus on interaction design
   outcome: string;
+  accentColor?: string; // Custom hover background color
 }
 
 export type ViewState = 'HOME' | 'PROJECT_DETAIL' | 'ABOUT';

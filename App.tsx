@@ -56,16 +56,16 @@ export const App: React.FC = () => {
         <div className="flex-1 flex justify-end items-center gap-4 md:gap-6">
             <button 
               onClick={() => setIsContactOpen(true)}
-              className="group font-mono text-[10px] uppercase text-[var(--color-ink)] hover:text-[var(--color-accent)] transition-colors border border-[var(--color-paper-dark)]/30 px-4 py-2 rounded-[var(--radius-sm)] flex items-center gap-2 hover:bg-[var(--color-paper-dim)]/30"
+              className="group text-[10px] uppercase font-medium text-[var(--color-ink)] hover:text-[#2B6B7C] transition-colors border border-[var(--color-paper-dark)]/30 px-4 py-2 rounded-[var(--radius-sm)] flex items-center gap-2 hover:bg-[var(--color-paper-dim)]/30"
             >
               Contact
               <ArrowDownRight className="w-3 h-3 opacity-50 group-hover:opacity-100 transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5" />
             </button>
             <div className="flex gap-2 text-[var(--color-ink)]">
-              <a href="#" className="p-2 hover:bg-[var(--color-paper-dim)]/30 rounded-[var(--radius-sm)] hover:text-[var(--color-accent)] transition-all" aria-label="Github">
+              <a href="#" className="p-2 hover:bg-[var(--color-paper-dim)]/30 rounded-[var(--radius-sm)] hover:text-[#333333] transition-all" aria-label="Github">
                 <Github className="w-4 h-4 opacity-60 hover:opacity-100" />
               </a>
-              <a href="#" className="p-2 hover:bg-[var(--color-paper-dim)]/30 rounded-[var(--radius-sm)] hover:text-[var(--color-accent)] transition-all" aria-label="LinkedIn">
+              <a href="#" className="p-2 hover:bg-[var(--color-paper-dim)]/30 rounded-[var(--radius-sm)] hover:text-[#0077b5] transition-all" aria-label="LinkedIn">
                 <Linkedin className="w-4 h-4 opacity-60 hover:opacity-100" />
               </a>
             </div>

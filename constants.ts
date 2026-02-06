@@ -16,7 +16,8 @@ export const PROJECTS: Project[] = [
     challenge: 'Design a social platform that minimizes performance anxiety and toxicity while fostering genuine emotional connection among strangers.',
     solution: 'A minimalist interface that removes "likes" and public metrics. Interactions are limited to private "resonations" — pre-written empathetic responses. The visual design uses calming gradients and heavy whitespace to reduce cognitive load.',
     interactionNotes: 'The core interaction is the "Resonate" action. Instead of a quick double-tap (Like), users must hold a button for 1.5 seconds to acknowledge a memory. This "Time-to-Resonate" friction is intentional, ensuring users actually read and process the emotion before reacting.',
-    outcome: 'Usability testing showed a 40% increase in time-spent-reading compared to standard feeds, with qualitative feedback highlighting a sense of safety and reduced anxiety.'
+    outcome: 'Usability testing showed a 40% increase in time-spent-reading compared to standard feeds, with qualitative feedback highlighting a sense of safety and reduced anxiety.',
+    accentColor: '#A8C5A8' // Sage Green
   },
   {
     id: 'flavor-filter',
@@ -33,7 +34,8 @@ export const PROJECTS: Project[] = [
     challenge: 'Filtering menus often feels binary (show/hide). Users with multiple restrictions (e.g., Gluten-Free + Vegan + Nut Allergy) often face empty states or confusing results. The goal was to provide granular control without overwhelming the user.',
     solution: 'A multi-tier filtering logic that visualizes ingredients rather than just hiding dishes. The "Strict Mode" toggle completely removes unsafe items, while "Soft Mode" dims them and highlights the conflicting ingredient. This transparency builds trust.',
     interactionNotes: 'I designed a "Sticky Filter Chip" pattern that remains accessible at the bottom of the screen (thumb zone) on mobile. Tapping it expands a modal with large, toggleable allergen icons. The transition uses a spring animation to feel responsive and lightweight.',
-    outcome: 'The design system was adopted by a mid-sized delivery startup, resulting in a 15% decrease in support tickets related to allergen inquiries.'
+    outcome: 'The design system was adopted by a mid-sized delivery startup, resulting in a 15% decrease in support tickets related to allergen inquiries.',
+    accentColor: '#FF7043' // Soft Orange
   }
 ];
 
