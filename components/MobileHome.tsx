@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { PROJECTS, SKILLS } from '../constants';
 import { ProjectCard } from './ProjectCard';
-import { X, Globe, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Globe, ArrowRight, ArrowLeft } from 'lucide-react';
 
 interface MobileHomeProps {
   onNavigate: (projectId: string) => void;
@@ -12,7 +12,6 @@ type PaneMode = 'ABOUT' | 'PROJECT';
 
 export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate, setIsContactOpen }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [activePane, setActivePane] = useState<0 | 1>(0);
   const [mode, setMode] = useState<PaneMode>('ABOUT');
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
 
@@ -25,7 +24,6 @@ export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate, setIsContact
         left: index * width,
         behavior: 'smooth'
       });
-      setActivePane(index);
     }
   };
 
