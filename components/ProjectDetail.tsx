@@ -48,12 +48,12 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
 
   const togglePlay = () => {
     if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
+      if (videoRef.current.paused) {
         videoRef.current.play();
+      } else {
+        videoRef.current.pause();
       }
-      setIsPlaying(!isPlaying);
+      // State updates are handled by onPlay/onPause listeners to ensure sync
     }
   };
 
@@ -87,7 +87,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
             </span>
           </button>
 
-         <div className="w-full max-w-md lg:max-w-full h-[60vh] lg:h-[70%] lg:aspect-auto relative mb-8 flex justify-center">
+         {/* Video Container: Flex-1 on mobile to fill space, Fixed height on desktop */}
+         <div className="w-full max-w-md lg:max-w-full flex-1 lg:flex-none min-h-0 lg:h-[70%] lg:aspect-auto relative mb-6 lg:mb-8 flex justify-center">
             <div className="relative w-full h-full bg-black rounded-xl border border-[var(--color-ink-subtle)]/30 shadow-2xl overflow-hidden ring-1 ring-white/10 group">
                {project.videoUrl ? (
                   <>
@@ -99,6 +100,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                       onTimeUpdate={handleTimeUpdate}
                       onLoadedMetadata={handleLoadedMetadata}
                       onEnded={() => setIsPlaying(false)}
+                      onPlay={() => setIsPlaying(true)}
+                      onPause={() => setIsPlaying(false)}
                     />
                     
                     {/* CLICK SHIELD: Transparent overlay to capture touch/clicks reliably */}
@@ -142,7 +145,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
             </div>
          </div>
          
-         <div className="w-full max-w-[280px]">
+         {/* Button Container - Shrink-0 prevents it from being crushed, z-20 ensures clickable */}
+         <div className="w-full max-w-[280px] shrink-0 z-20">
             {project.liveUrl ? (
                <a 
                  href={project.liveUrl} 
