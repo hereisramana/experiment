@@ -3,6 +3,7 @@ import { PROJECTS, SKILLS } from './constants';
 import { ViewState } from './types';
 import { ProjectCard } from './components/ProjectCard';
 import { ProjectDetail } from './components/ProjectDetail';
+import { MobileHome } from './components/MobileHome';
 import { X, Globe, Github } from 'lucide-react';
 
 export const App: React.FC = () => {
@@ -10,6 +11,7 @@ export const App: React.FC = () => {
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Handle Browser History Navigation
   useEffect(() => {
@@ -31,6 +33,16 @@ export const App: React.FC = () => {
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  // Simple Mobile Detection Hook logic
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024); // Matching lg breakpoint
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const handleProjectClick = (id: string) => {
@@ -65,7 +77,40 @@ export const App: React.FC = () => {
     );
   }
 
-  // Render Index/Home View
+  // Mobile Layout
+  if (isMobile) {
+    return (
+      <>
+        <MobileHome 
+          onNavigate={handleProjectClick}
+          setIsContactOpen={setIsContactOpen}
+        />
+        {/* Contact Modal (Shared) */}
+        {isContactOpen && (
+           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[var(--color-ink)]/10 backdrop-blur-md" onClick={() => setIsContactOpen(false)}>
+              <div className="bg-[var(--color-paper)] p-8 md:p-12 w-full max-w-md rounded-[var(--radius-lg)] shadow-2xl relative border border-[var(--color-paper-dark)]" onClick={e => e.stopPropagation()}>
+                 <div className="absolute top-0 left-0 w-full h-1 bg-[var(--color-ink)]" />
+                 <button onClick={() => setIsContactOpen(false)} className="absolute top-6 right-6 p-2 hover:bg-[var(--color-paper-dim)] rounded-full transition-colors opacity-50 hover:opacity-100">
+                    <X className="w-5 h-5" />
+                 </button>
+                 <div className="space-y-6 mt-4">
+                    <div>
+                       <p className="text-sm opacity-50 mb-1 font-mono uppercase text-[10px]">Email</p>
+                       <a href="mailto:hello@ramanadesign.tech" className="text-xl font-medium hover:text-[var(--color-accent)] transition-colors">hello@ramanadesign.tech</a>
+                    </div>
+                    <div>
+                       <p className="text-sm opacity-50 mb-1 font-mono uppercase text-[10px]">Phone</p>
+                       <p className="text-xl font-medium">+1 (555) 123-4567</p>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        )}
+      </>
+    );
+  }
+
+  // Render Index/Home View (Desktop)
   return (
     <div className="min-h-screen bg-[var(--color-paper)] text-[var(--color-ink)] selection:bg-[var(--color-accent-light)] flex flex-col relative overflow-x-hidden">
       
@@ -238,7 +283,7 @@ export const App: React.FC = () => {
             <div className="bg-[var(--color-paper)] p-8 md:p-12 w-full max-w-md rounded-[var(--radius-lg)] shadow-2xl relative border border-[var(--color-paper-dark)]" onClick={e => e.stopPropagation()}>
                <div className="absolute top-0 left-0 w-full h-1 bg-[var(--color-ink)]" />
                <button onClick={() => setIsContactOpen(false)} className="absolute top-6 right-6 p-2 hover:bg-[var(--color-paper-dim)] rounded-full transition-colors opacity-50 hover:opacity-100">
-                  <X className="w-5 h-5" />
+                    <X className="w-5 h-5" />
                </button>
                {/* Clean, no "Transmission" label */}
                <div className="space-y-6 mt-4">

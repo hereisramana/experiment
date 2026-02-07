@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Project } from '../types';
-import { ArrowLeft, ArrowUpRight, ArrowDown, Play, Pause, Square } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, ArrowDown, Play, Pause, Square, ChevronRight, ChevronLeft } from 'lucide-react';
 
 interface ProjectDetailProps {
   project: Project;
@@ -97,10 +97,10 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
   } as React.CSSProperties;
 
   return (
-    <div className="min-h-screen lg:grid lg:grid-cols-12 bg-[var(--color-paper)] h-screen overflow-hidden">
+    <div className="h-screen w-screen bg-[var(--color-paper)] overflow-hidden flex flex-row lg:grid lg:grid-cols-12 overflow-x-auto snap-x snap-mandatory lg:overflow-x-hidden">
         
-        {/* LEFT COLUMN: PURE SIMULATOR (Sticky) */}
-        <div className="lg:col-span-5 bg-[var(--color-ink)] text-[var(--color-paper)] h-full flex flex-col relative z-20 border-r border-[var(--color-paper)]/10">
+        {/* LEFT COLUMN: PURE SIMULATOR (Sticky on Desktop, Pane 1 on Mobile) */}
+        <div className="min-w-full w-full lg:min-w-0 snap-start lg:col-span-5 bg-[var(--color-ink)] text-[var(--color-paper)] h-full flex flex-col relative z-20 border-r border-[var(--color-paper)]/10 shrink-0">
           
           {/* Back Button - Inverse Ink Style */}
           <button 
@@ -190,7 +190,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
              </div>
              
              {/* Live Prototype Link */}
-             <div className="w-full max-w-[280px] shrink-0">
+             <div className="w-full max-w-[280px] shrink-0 mb-4 lg:mb-0">
                 {project.liveUrl ? (
                    <a 
                      href={project.liveUrl} 
@@ -208,12 +208,24 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                    </div>
                 )}
              </div>
+             
+             {/* Mobile Swipe Guidance */}
+             <div className="lg:hidden flex items-center gap-2 text-[var(--color-paper)] opacity-40 animate-pulse">
+                <span className="text-[10px] uppercase tracking-widest">Swipe for Case Study</span>
+                <ChevronRight className="w-4 h-4" />
+             </div>
           </div>
         </div>
 
-        {/* RIGHT COLUMN: The Manual / Spec Sheet */}
-        <div className="lg:col-span-7 bg-[var(--color-paper)] relative h-full overflow-hidden">
+        {/* RIGHT COLUMN: The Manual / Spec Sheet (Pane 2 on Mobile) */}
+        <div className="min-w-full w-full lg:min-w-0 snap-start lg:col-span-7 bg-[var(--color-paper)] relative h-full overflow-hidden shrink-0 flex flex-col">
            
+           {/* Mobile Swipe Back Guidance */}
+           <div className="lg:hidden absolute top-6 left-6 z-30 pointer-events-none text-[var(--color-ink)] opacity-30 flex items-center gap-2">
+               <ChevronLeft className="w-4 h-4" />
+               <span className="text-[10px] uppercase tracking-widest">Prototype</span>
+           </div>
+
            <div className={`absolute bottom-8 left-1/2 -translate-x-1/2 pointer-events-none transition-opacity duration-300 z-10 mix-blend-multiply hidden lg:block ${showScrollIndicator ? 'opacity-100' : 'opacity-0'}`}>
               <ArrowDown className="w-5 h-5 text-[var(--color-ink)] opacity-30 animate-bounce" />
            </div>
@@ -221,7 +233,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
            <div 
              ref={scrollRef}
              onScroll={handleScroll}
-             className="h-full overflow-y-auto p-6 md:p-12 lg:p-24 no-scrollbar"
+             className="h-full overflow-y-auto p-6 md:p-12 lg:p-24 no-scrollbar pt-20 lg:pt-24"
            >
                <div className="max-w-2xl mx-auto space-y-20 animate-in slide-in-from-bottom-4 duration-700 ease-soft pb-24">
                   
