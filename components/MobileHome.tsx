@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { PROJECTS, SKILLS } from '../constants';
 import { ProjectCard } from './ProjectCard';
-import { Globe, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Globe, ArrowRight } from 'lucide-react';
 
 interface MobileHomeProps {
   onNavigate: (projectId: string) => void;

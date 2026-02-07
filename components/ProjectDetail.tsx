@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Project } from '../types';
-import { ArrowLeft, ArrowUpRight, ArrowDown, Play, Pause, Square, FileText, MonitorPlay } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Play, Pause, FileText, MonitorPlay } from 'lucide-react';
 
 interface ProjectDetailProps {
   project: Project;
@@ -11,7 +11,6 @@ type TabMode = 'VIDEO' | 'WRITTEN';
 
 export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
   const [activeTab, setActiveTab] = useState<TabMode>('VIDEO');
-  const scrollRef = useRef<HTMLDivElement>(null);
   
   // Custom Video Player State
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -55,16 +54,6 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
         videoRef.current.play();
       }
       setIsPlaying(!isPlaying);
-    }
-  };
-
-  const stopVideo = () => {
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-      setIsPlaying(false);
-      setProgress(0);
-      setCurrentTimeStr("00:00");
     }
   };
 
