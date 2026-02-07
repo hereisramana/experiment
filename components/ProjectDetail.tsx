@@ -87,33 +87,37 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
             </span>
           </button>
 
-         <div className="w-full max-w-md lg:max-w-full aspect-[9/16] lg:aspect-auto lg:h-[70%] relative mb-8">
+         <div className="w-full max-w-md lg:max-w-full h-[60vh] lg:h-[70%] lg:aspect-auto relative mb-8 flex justify-center">
             <div className="relative w-full h-full bg-black rounded-xl border border-[var(--color-ink-subtle)]/30 shadow-2xl overflow-hidden ring-1 ring-white/10 group">
                {project.videoUrl ? (
                   <>
                     <video 
                       ref={videoRef}
                       src={project.videoUrl} 
-                      className="w-full h-full object-cover lg:object-contain opacity-95 cursor-pointer" 
+                      className="w-full h-full object-contain opacity-95" 
                       playsInline
-                      onClick={togglePlay}
                       onTimeUpdate={handleTimeUpdate}
                       onLoadedMetadata={handleLoadedMetadata}
                       onEnded={() => setIsPlaying(false)}
                     />
                     
-                    {/* Controls */}
-                    <div className={`absolute inset-0 flex flex-col justify-end transition-opacity duration-300 pointer-events-none ${isPlaying ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>
-                       <div className="absolute inset-0 flex items-center justify-center">
+                    {/* CLICK SHIELD: Transparent overlay to capture touch/clicks reliably */}
+                    <div 
+                        className="absolute inset-0 z-10 cursor-pointer" 
+                        onClick={togglePlay} 
+                    />
+                    
+                    {/* Controls Overlay */}
+                    <div className={`absolute inset-0 z-20 flex flex-col justify-end transition-opacity duration-300 pointer-events-none ${isPlaying ? 'opacity-0 lg:group-hover:opacity-100' : 'opacity-100'}`}>
+                       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                          <button 
-                           onClick={togglePlay}
-                           className="pointer-events-auto w-16 h-16 rounded-full bg-[var(--color-paper)]/10 backdrop-blur-sm border border-[var(--color-paper)]/20 flex items-center justify-center hover:bg-[var(--color-paper)]/20 hover:scale-105 transition-all text-white shadow-lg active:scale-90 touch-manipulation"
+                           className="w-16 h-16 rounded-full bg-[var(--color-paper)]/10 backdrop-blur-sm border border-[var(--color-paper)]/20 flex items-center justify-center text-white shadow-lg touch-manipulation"
                          >
                            {isPlaying ? <Pause className="w-6 h-6 fill-white stroke-none" /> : <Play className="w-6 h-6 fill-white stroke-none ml-1" />}
                          </button>
                        </div>
 
-                       <div className="bg-black/80 backdrop-blur-md border-t border-white/10 p-3 flex items-center gap-3 pointer-events-auto">
+                       <div className="bg-black/80 backdrop-blur-md border-t border-white/10 p-3 flex items-center gap-3 pointer-events-auto" onClick={e => e.stopPropagation()}>
                           <button onClick={togglePlay} className="text-white/80 p-2 -ml-2 active:text-white active:scale-90 transition-transform" aria-label="Play/Pause">
                             {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}
                           </button>
