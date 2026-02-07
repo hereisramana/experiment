@@ -87,8 +87,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
             </span>
           </button>
 
-         {/* Video Container: Flex-1 on mobile to fill space, Fixed aspect 4:5 on desktop */}
-         <div className="w-full max-w-md lg:max-w-full flex-1 lg:flex-none min-h-0 lg:h-[70%] lg:aspect-[4/5] relative mb-6 lg:mb-8 flex justify-center">
+         {/* Video Container: Flexible on both Mobile and Desktop now */}
+         <div className="w-full max-w-md lg:max-w-full flex-1 min-h-0 relative mb-6 lg:mb-8 flex justify-center">
             <div className="relative w-full h-full bg-black rounded-xl border border-[var(--color-ink-subtle)]/30 shadow-2xl overflow-hidden ring-1 ring-white/10 group">
                {project.videoUrl ? (
                   <>
