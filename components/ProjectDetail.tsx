@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Project } from '../types';
-import { ArrowLeft, ArrowUpRight, Play, Pause, FileText, MonitorPlay } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Play, Pause } from 'lucide-react';
 
 interface ProjectDetailProps {
   project: Project;
@@ -145,7 +145,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                  target="_blank" 
                  rel="noreferrer" 
                  style={buttonStyle}
-                 className="group flex items-center justify-center gap-3 w-full py-4 bg-[var(--color-paper)] text-[var(--color-ink)] text-xs uppercase font-medium tracking-wider rounded-[var(--radius-sm)] hover:bg-[var(--button-hover-bg)] active:scale-95 transition-all duration-300 shadow-lg"
+                 className="group flex items-center justify-center gap-3 w-full py-4 bg-[var(--color-paper)] text-[var(--color-ink)] text-xs uppercase font-medium tracking-wider rounded-[var(--radius-sm)] hover:bg-[var(--button-hover-bg)] active:bg-[var(--button-hover-bg)] active:scale-[0.98] transition-all duration-200 shadow-lg touch-manipulation"
                >
                   <span>Launch Prototype</span>
                   <ArrowUpRight className="w-3 h-3" />
@@ -208,27 +208,45 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
   return (
     <div className="h-screen w-screen bg-[var(--color-paper)] overflow-hidden flex flex-col lg:grid lg:grid-cols-12">
         
-        {/* MOBILE HEADER: Toggle Tabs */}
-        <div className="shrink-0 lg:hidden flex border-b border-[var(--color-paper-dark)] bg-[var(--color-paper)] sticky top-0 z-50">
-           <button 
-             onClick={() => setActiveTab('VIDEO')}
-             className={`flex-1 py-4 flex items-center justify-center gap-2 text-[10px] uppercase font-bold tracking-widest transition-colors ${activeTab === 'VIDEO' ? 'bg-[var(--color-ink)] text-[var(--color-paper)]' : 'text-[var(--color-ink)] hover:bg-[var(--color-paper-dim)]'}`}
-           >
-              <MonitorPlay className="w-4 h-4" /> Video Case Study
-           </button>
-           <button 
-             onClick={() => setActiveTab('WRITTEN')}
-             className={`flex-1 py-4 flex items-center justify-center gap-2 text-[10px] uppercase font-bold tracking-widest transition-colors ${activeTab === 'WRITTEN' ? 'bg-[var(--color-ink)] text-[var(--color-paper)]' : 'text-[var(--color-ink)] hover:bg-[var(--color-paper-dim)]'}`}
-           >
-              <FileText className="w-4 h-4" /> Written Case Study
-           </button>
+        {/* MOBILE HEADER: Minimalist Design */}
+        <div className="shrink-0 lg:hidden flex items-center bg-[var(--color-paper)] border-b border-[var(--color-paper-dark)]/20 sticky top-0 z-50 px-4 h-14">
+           {/* Left: Back */}
            <button 
              onClick={onBack}
-             className="px-4 border-l border-[var(--color-paper-dark)]/20 active:bg-[var(--color-paper-dark)]"
+             className="p-2 -ml-2 rounded-full hover:bg-[var(--color-paper-dim)] active:bg-[var(--color-paper-dark)] transition-colors"
              aria-label="Back"
            >
-             <ArrowLeft className="w-4 h-4" />
+             <ArrowLeft className="w-5 h-5 text-[var(--color-ink)]" />
            </button>
+
+           {/* Right: Tabs */}
+           <div className="flex-1 flex justify-end items-center gap-6">
+               <button 
+                 onClick={() => setActiveTab('VIDEO')}
+                 className={`
+                    relative py-2 text-[11px] font-bold uppercase tracking-widest transition-all
+                    ${activeTab === 'VIDEO' ? 'text-[var(--color-ink)] opacity-100' : 'text-[var(--color-ink)] opacity-40 hover:opacity-80'}
+                 `}
+               >
+                  Video Log
+                  {activeTab === 'VIDEO' && (
+                    <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[var(--color-ink)]" />
+                  )}
+               </button>
+               
+               <button 
+                 onClick={() => setActiveTab('WRITTEN')}
+                 className={`
+                    relative py-2 text-[11px] font-bold uppercase tracking-widest transition-all
+                    ${activeTab === 'WRITTEN' ? 'text-[var(--color-ink)] opacity-100' : 'text-[var(--color-ink)] opacity-40 hover:opacity-80'}
+                 `}
+               >
+                  Case Study
+                  {activeTab === 'WRITTEN' && (
+                    <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[var(--color-ink)]" />
+                  )}
+               </button>
+           </div>
         </div>
 
         {/* CONTENT AREA */}
