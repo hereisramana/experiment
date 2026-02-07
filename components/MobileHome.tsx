@@ -1,14 +1,13 @@
 import React, { useRef, useState } from 'react';
 import { PROJECTS, SKILLS } from '../constants';
 import { ProjectCard } from './ProjectCard';
-import { Globe, ArrowRight } from 'lucide-react';
+import { Globe, ArrowRight, Mail, Phone, Github, Linkedin } from 'lucide-react';
 
 interface MobileHomeProps {
   onNavigate: (projectId: string) => void;
-  setIsContactOpen: (isOpen: boolean) => void;
 }
 
-export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate, setIsContactOpen }) => {
+export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate }) => {
   const topScrollRef = useRef<HTMLDivElement>(null);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
 
@@ -29,6 +28,9 @@ export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate, setIsContact
 
   const selectedProject = PROJECTS.find(p => p.id === selectedProjectId);
 
+  // Shared button style for the header icons
+  const iconBtnStyle = "p-2 rounded-[var(--radius-sm)] border border-[var(--color-paper-dark)]/30 text-[var(--color-ink)] transition-all active:scale-90 active:bg-[var(--color-ink)] active:text-[var(--color-paper)] touch-manipulation";
+
   return (
     <div className="h-screen w-screen flex flex-col bg-[var(--color-paper)] overflow-hidden">
       
@@ -45,12 +47,22 @@ export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate, setIsContact
                <h1 className="font-mono text-sm font-bold text-[var(--color-ink)] lowercase tracking-tight">
                   ramanadesign.tech
                </h1>
-               <button 
-                 onClick={() => setIsContactOpen(true)}
-                 className="text-[10px] uppercase font-semibold tracking-widest text-[var(--color-ink)] border border-[var(--color-paper-dark)]/30 px-3 py-1.5 rounded-[var(--radius-sm)] active:bg-[var(--color-ink)] active:text-[var(--color-paper)] transition-colors touch-manipulation"
-               >
-                 Contact
-               </button>
+               
+               {/* Action Icons Row */}
+               <div className="flex items-center gap-2">
+                 <a href="mailto:hello@ramanadesign.tech" className={iconBtnStyle} aria-label="Email">
+                    <Mail className="w-4 h-4" />
+                 </a>
+                 <a href="tel:+15551234567" className={iconBtnStyle} aria-label="Call">
+                    <Phone className="w-4 h-4" />
+                 </a>
+                 <a href="#" className={iconBtnStyle} aria-label="Github">
+                    <Github className="w-4 h-4" />
+                 </a>
+                 <a href="#" className={iconBtnStyle} aria-label="LinkedIn">
+                    <Linkedin className="w-4 h-4" />
+                 </a>
+               </div>
             </div>
 
             <div className="flex-1 flex flex-col justify-center pb-8">

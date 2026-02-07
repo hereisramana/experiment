@@ -80,33 +80,9 @@ export const App: React.FC = () => {
   // Mobile Layout
   if (isMobile) {
     return (
-      <>
-        <MobileHome 
-          onNavigate={handleProjectClick}
-          setIsContactOpen={setIsContactOpen}
-        />
-        {/* Contact Modal (Shared) */}
-        {isContactOpen && (
-           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[var(--color-ink)]/10 backdrop-blur-md" onClick={() => setIsContactOpen(false)}>
-              <div className="bg-[var(--color-paper)] p-8 md:p-12 w-full max-w-md rounded-[var(--radius-lg)] shadow-2xl relative border border-[var(--color-paper-dark)]" onClick={e => e.stopPropagation()}>
-                 <div className="absolute top-0 left-0 w-full h-1 bg-[var(--color-ink)]" />
-                 <button onClick={() => setIsContactOpen(false)} className="absolute top-6 right-6 p-2 hover:bg-[var(--color-paper-dim)] rounded-full transition-colors opacity-50 hover:opacity-100">
-                    <X className="w-5 h-5" />
-                 </button>
-                 <div className="space-y-6 mt-4">
-                    <div>
-                       <p className="text-sm opacity-50 mb-1 font-mono uppercase text-[10px]">Email</p>
-                       <a href="mailto:hello@ramanadesign.tech" className="text-xl font-medium hover:text-[var(--color-accent)] transition-colors">hello@ramanadesign.tech</a>
-                    </div>
-                    <div>
-                       <p className="text-sm opacity-50 mb-1 font-mono uppercase text-[10px]">Phone</p>
-                       <p className="text-xl font-medium">+1 (555) 123-4567</p>
-                    </div>
-                 </div>
-              </div>
-           </div>
-        )}
-      </>
+      <MobileHome 
+        onNavigate={handleProjectClick}
+      />
     );
   }
 
@@ -277,8 +253,8 @@ export const App: React.FC = () => {
         </div>
       </main>
 
-      {/* CONTACT MODAL */}
-      {isContactOpen && (
+      {/* CONTACT MODAL (Desktop Only) */}
+      {isContactOpen && !isMobile && (
          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[var(--color-ink)]/10 backdrop-blur-md" onClick={() => setIsContactOpen(false)}>
             <div className="bg-[var(--color-paper)] p-8 md:p-12 w-full max-w-md rounded-[var(--radius-lg)] shadow-2xl relative border border-[var(--color-paper-dark)]" onClick={e => e.stopPropagation()}>
                <div className="absolute top-0 left-0 w-full h-1 bg-[var(--color-ink)]" />

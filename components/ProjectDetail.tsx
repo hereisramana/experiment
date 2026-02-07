@@ -107,22 +107,22 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                        <div className="absolute inset-0 flex items-center justify-center">
                          <button 
                            onClick={togglePlay}
-                           className="pointer-events-auto w-16 h-16 rounded-full bg-[var(--color-paper)]/10 backdrop-blur-sm border border-[var(--color-paper)]/20 flex items-center justify-center hover:bg-[var(--color-paper)]/20 hover:scale-105 transition-all text-white shadow-lg active:scale-95 touch-manipulation"
+                           className="pointer-events-auto w-16 h-16 rounded-full bg-[var(--color-paper)]/10 backdrop-blur-sm border border-[var(--color-paper)]/20 flex items-center justify-center hover:bg-[var(--color-paper)]/20 hover:scale-105 transition-all text-white shadow-lg active:scale-90 touch-manipulation"
                          >
                            {isPlaying ? <Pause className="w-6 h-6 fill-white stroke-none" /> : <Play className="w-6 h-6 fill-white stroke-none ml-1" />}
                          </button>
                        </div>
 
                        <div className="bg-black/80 backdrop-blur-md border-t border-white/10 p-3 flex items-center gap-3 pointer-events-auto">
-                          <button onClick={togglePlay} className="text-white/80" aria-label="Play/Pause">
-                            {isPlaying ? <Pause className="w-3 h-3 fill-current" /> : <Play className="w-3 h-3 fill-current" />}
+                          <button onClick={togglePlay} className="text-white/80 p-2 -ml-2 active:text-white active:scale-90 transition-transform" aria-label="Play/Pause">
+                            {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}
                           </button>
                           <span className="font-mono text-[10px] text-white/50 w-20 text-center">{currentTimeStr} / {durationStr}</span>
                           <div 
-                            className="flex-1 h-6 flex items-center cursor-pointer"
+                            className="flex-1 h-10 flex items-center cursor-pointer group/timeline"
                             onClick={handleTimelineClick}
                           >
-                            <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden relative">
+                            <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden relative group-active/timeline:h-2 transition-all">
                                <div 
                                  className="h-full bg-[var(--color-accent-light)] absolute top-0 left-0"
                                  style={{ width: `${progress}%` }}
@@ -195,7 +195,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
 
           <div className="pt-8">
              <button 
-                className="opacity-60 hover:opacity-100 transition-opacity cursor-pointer flex items-center gap-3 text-xs uppercase font-medium tracking-widest"
+                className="opacity-60 hover:opacity-100 active:scale-95 transition-all cursor-pointer flex items-center gap-3 text-xs uppercase font-medium tracking-widest"
                 onClick={onBack}
              >
                 <ArrowLeft className="w-3 h-3" /> Back to Projects
@@ -224,7 +224,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                <button 
                  onClick={() => setActiveTab('VIDEO')}
                  className={`
-                    relative py-2 text-[11px] font-bold uppercase tracking-widest transition-all
+                    relative py-2 text-[11px] font-bold uppercase tracking-widest transition-all active:scale-95
                     ${activeTab === 'VIDEO' ? 'text-[var(--color-ink)] opacity-100' : 'text-[var(--color-ink)] opacity-40 hover:opacity-80'}
                  `}
                >
@@ -237,7 +237,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                <button 
                  onClick={() => setActiveTab('WRITTEN')}
                  className={`
-                    relative py-2 text-[11px] font-bold uppercase tracking-widest transition-all
+                    relative py-2 text-[11px] font-bold uppercase tracking-widest transition-all active:scale-95
                     ${activeTab === 'WRITTEN' ? 'text-[var(--color-ink)] opacity-100' : 'text-[var(--color-ink)] opacity-40 hover:opacity-80'}
                  `}
                >
