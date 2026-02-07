@@ -76,7 +76,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
   // --- SUB-COMPONENTS ---
   
   const VideoSection = () => (
-    <div className="w-full h-full flex flex-col items-center justify-center p-6 lg:p-12 lg:pt-24 bg-[var(--color-ink)] text-[var(--color-paper)] relative">
+    <div className="w-full h-full flex flex-col items-center justify-center p-6 pb-24 lg:p-12 lg:pt-24 bg-[var(--color-ink)] text-[var(--color-paper)] relative">
          {/* Back Button (Desktop Only) */}
          <button 
             onClick={onBack}
@@ -206,7 +206,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
   );
 
   return (
-    <div className="h-screen w-screen bg-[var(--color-paper)] overflow-hidden flex flex-col lg:grid lg:grid-cols-12">
+    <div className="h-[100dvh] w-screen bg-[var(--color-paper)] overflow-hidden flex flex-col lg:grid lg:grid-cols-12">
         
         {/* MOBILE HEADER: Minimalist Design */}
         <div className="shrink-0 lg:hidden flex items-center bg-[var(--color-paper)] border-b border-[var(--color-paper-dark)]/20 sticky top-0 z-50 px-4 h-14">

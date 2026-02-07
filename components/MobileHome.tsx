@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { PROJECTS, SKILLS } from '../constants';
 import { ProjectCard } from './ProjectCard';
-import { Globe, ArrowRight, Mail, Phone, Github, Linkedin } from 'lucide-react';
+import { Globe, ArrowRight, Mail, Phone, Github } from 'lucide-react';
 
 interface MobileHomeProps {
   onNavigate: (projectId: string) => void;
@@ -28,11 +28,11 @@ export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate }) => {
 
   const selectedProject = PROJECTS.find(p => p.id === selectedProjectId);
 
-  // Shared button style for the header icons
-  const iconBtnStyle = "p-2 rounded-[var(--radius-sm)] border border-[var(--color-paper-dark)]/30 text-[var(--color-ink)] transition-all active:scale-90 active:bg-[var(--color-ink)] active:text-[var(--color-paper)] touch-manipulation";
+  // Shared button style for the header icons with specific color overrides in the JSX
+  const baseIconBtnStyle = "p-2 rounded-[var(--radius-sm)] border border-[var(--color-paper-dark)]/30 text-[var(--color-ink)] transition-all active:scale-90 active:text-white touch-manipulation flex items-center justify-center w-9 h-9";
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-[var(--color-paper)] overflow-hidden">
+    <div className="h-[100dvh] w-screen flex flex-col bg-[var(--color-paper)] overflow-hidden overscroll-none">
       
       {/* UPPER DECK: Horizontal Snap (Hero + Dark Pane) */}
       <div 
@@ -50,17 +50,38 @@ export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate }) => {
                
                {/* Action Icons Row */}
                <div className="flex items-center gap-2">
-                 <a href="mailto:hello@ramanadesign.tech" className={iconBtnStyle} aria-label="Email">
+                 <a 
+                   href="mailto:hello@ramanadesign.tech" 
+                   className={`${baseIconBtnStyle} active:bg-blue-500 active:border-blue-500`} 
+                   aria-label="Email"
+                 >
                     <Mail className="w-4 h-4" />
                  </a>
-                 <a href="tel:+15551234567" className={iconBtnStyle} aria-label="Call">
+                 <a 
+                   href="tel:+15551234567" 
+                   className={`${baseIconBtnStyle} active:bg-emerald-500 active:border-emerald-500`} 
+                   aria-label="Call"
+                 >
                     <Phone className="w-4 h-4" />
                  </a>
-                 <a href="#" className={iconBtnStyle} aria-label="Github">
+                 <a 
+                   href="#" 
+                   className={`${baseIconBtnStyle} active:bg-[#333] active:border-[#333]`} 
+                   aria-label="Github"
+                 >
                     <Github className="w-4 h-4" />
                  </a>
-                 <a href="#" className={iconBtnStyle} aria-label="LinkedIn">
-                    <Linkedin className="w-4 h-4" />
+                 <a 
+                   href="#" 
+                   className={`${baseIconBtnStyle} active:bg-[#0077b5] active:border-[#0077b5]`} 
+                   aria-label="LinkedIn"
+                 >
+                    <span 
+                      className="text-[14px] font-bold leading-none pb-0.5" 
+                      style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}
+                    >
+                      in
+                    </span>
                  </a>
                </div>
             </div>
@@ -158,7 +179,7 @@ export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate }) => {
              <span className="font-mono text-xs text-[var(--color-ink)] opacity-30">{PROJECTS.length}</span>
           </div>
           
-          <div className="h-full overflow-y-auto p-4 pb-12 space-y-3">
+          <div className="h-full overflow-y-auto p-4 pb-32 space-y-3">
              {PROJECTS.map((project, idx) => (
                 <ProjectCard 
                   key={project.id} 
@@ -170,8 +191,6 @@ export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate }) => {
                   onNavigate={onNavigate}
                 />
              ))}
-             {/* Spacer for bottom safe area */}
-             <div className="h-8"></div>
           </div>
       </div>
 
