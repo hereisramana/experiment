@@ -5,14 +5,13 @@ import { ViewState, DetailMode } from './types';
 import { ProjectCard } from './components/ProjectCard';
 import { ProjectDetail } from './components/ProjectDetail';
 import { MobileHome } from './components/MobileHome';
-import { X, Globe, Github, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [view, setView] = useState<ViewState>('HOME');
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [detailMode, setDetailMode] = useState<DetailMode>('VIDEO');
   const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
-  const [isContactOpen, setIsContactOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [hasScrolledList, setHasScrolledList] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
