@@ -16,7 +16,6 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, i
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentTimeStr, setCurrentTimeStr] = useState("00:00");
-  const [durationStr, setDurationStr] = useState("00:00");
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
@@ -42,12 +41,6 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, i
       const duration = videoRef.current.duration;
       setProgress((current / duration) * 100);
       setCurrentTimeStr(formatTime(current));
-    }
-  };
-
-  const handleLoadedMetadata = () => {
-    if (videoRef.current) {
-      setDurationStr(formatTime(videoRef.current.duration));
     }
   };
 
@@ -88,7 +81,6 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, i
                       className="w-full h-full object-contain" 
                       playsInline
                       onTimeUpdate={handleTimeUpdate}
-                      onLoadedMetadata={handleLoadedMetadata}
                       onEnded={() => setIsPlaying(false)}
                       onPlay={() => setIsPlaying(true)}
                       onPause={() => setIsPlaying(false)}
