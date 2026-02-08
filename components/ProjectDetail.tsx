@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Project } from '../types';
-import { ArrowLeft, ArrowUpRight, Play, Pause, ChevronLeft, ChevronRight, } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Play, Pause, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface ProjectDetailProps {
   project: Project;
@@ -62,6 +62,19 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
 
   const widths = getWidths();
 
+  // Button handlers
+  const handleLeftButtonClick = () => {
+    if (viewMode === 'VIDEO_FOCUS') setViewMode('BALANCED');
+    else if (viewMode === 'BALANCED') setViewMode('VIDEO_FOCUS');
+    else setViewMode('BALANCED');
+  };
+
+  const handleRightButtonClick = () => {
+    if (viewMode === 'TEXT_FOCUS') setViewMode('BALANCED');
+    else if (viewMode === 'BALANCED') setViewMode('TEXT_FOCUS');
+    else setViewMode('BALANCED');
+  };
+
   return (
     <div className="h-[100dvh] w-screen bg-[var(--color-paper)] overflow-hidden flex flex-col select-none font-sans">
       
@@ -90,12 +103,12 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
         
         {/* Left: Video Pane (Framed) */}
         <div 
-          className="h-full bg-black overflow-hidden relative flex items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]" 
+          className="h-full bg-[var(--color-paper)] overflow-hidden relative flex items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] border-r border-[var(--color-paper-dark)]/20" 
           style={{ width: widths.left }}
         >
-           {/* The "Frame" */}
-           <div className={`relative w-full h-full p-8 md:p-16 lg:p-24 flex items-center justify-center transition-opacity duration-500 ${viewMode === 'TEXT_FOCUS' ? 'opacity-20' : 'opacity-100'}`}>
-               <div className="relative w-full aspect-video bg-[#111] rounded-lg shadow-[0_40px_100px_rgba(0,0,0,0.6)] border border-white/5 overflow-hidden group">
+           {/* The "Frame" Container - Acts as the whitespace border */}
+           <div className={`relative w-full h-full p-6 md:p-8 flex items-center justify-center transition-all duration-500 ${viewMode === 'TEXT_FOCUS' ? 'opacity-40 blur-sm scale-95' : 'opacity-100 scale-100'}`}>
+               <div className="relative w-full h-full bg-black rounded-[var(--radius-lg)] shadow-2xl border border-[var(--color-paper-dark)] overflow-hidden group">
                    {project.videoUrl ? (
                       <>
                         <video 
@@ -134,16 +147,15 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                </div>
            </div>
 
-           {/* Inner Edge Expand Button (Left Pane) */}
-           {viewMode !== 'VIDEO_FOCUS' && (
-             <button 
-               onClick={() => setViewMode(viewMode === 'TEXT_FOCUS' ? 'BALANCED' : 'VIDEO_FOCUS')}
-               className="absolute right-0 top-1/2 -translate-y-1/2 z-50 p-3 bg-white/10 backdrop-blur-xl border border-white/10 text-white rounded-l-full hover:bg-white hover:text-black transition-all hover:pr-5 group"
-               title="Expand Video"
-             >
-               {viewMode === 'TEXT_FOCUS' ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-             </button>
-           )}
+           {/* Expand Button (Left Pane) - Floating independent button */}
+           <button 
+             onClick={handleLeftButtonClick}
+             className="absolute right-8 top-1/2 -translate-y-1/2 z-50 p-3 bg-[var(--color-paper)] shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[var(--color-paper-dark)]/50 text-[var(--color-ink)] rounded-full hover:scale-110 hover:border-[var(--color-ink)] transition-all active:scale-95 group"
+             title={viewMode === 'VIDEO_FOCUS' ? "Collapse Video" : "Expand Video"}
+           >
+             {/* If Video is Focused (Big), point Left to Collapse. If Balanced/Small, point Right to Expand */}
+             {viewMode === 'VIDEO_FOCUS' ? <ChevronLeft className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
+           </button>
         </div>
 
         {/* Right: Written Pane */}
@@ -151,18 +163,17 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
           className="h-full bg-[var(--color-paper)] overflow-y-auto no-scrollbar scroll-smooth transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] relative" 
           style={{ width: widths.right }}
         >
-           {/* Inner Edge Expand Button (Right Pane) */}
-           {viewMode !== 'TEXT_FOCUS' && (
-             <button 
-               onClick={() => setViewMode(viewMode === 'VIDEO_FOCUS' ? 'BALANCED' : 'TEXT_FOCUS')}
-               className="absolute left-0 top-1/2 -translate-y-1/2 z-50 p-3 bg-[var(--color-ink)]/10 backdrop-blur-xl border border-[var(--color-ink)]/10 text-[var(--color-ink)] rounded-r-full hover:bg-[var(--color-ink)] hover:text-white transition-all hover:pl-5 group"
-               title="Expand Text"
-             >
-               {viewMode === 'VIDEO_FOCUS' ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
-             </button>
-           )}
+           {/* Expand Button (Right Pane) - Floating independent button */}
+           <button 
+             onClick={handleRightButtonClick}
+             className="absolute left-8 top-1/2 -translate-y-1/2 z-50 p-3 bg-[var(--color-paper)] shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[var(--color-paper-dark)]/50 text-[var(--color-ink)] rounded-full hover:scale-110 hover:border-[var(--color-ink)] transition-all active:scale-95 group"
+             title={viewMode === 'TEXT_FOCUS' ? "Collapse Text" : "Expand Text"}
+           >
+             {/* If Text is Focused (Big), point Right to Collapse. If Balanced/Small, point Left to Expand */}
+             {viewMode === 'TEXT_FOCUS' ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
+           </button>
 
-           <div className={`p-12 lg:p-24 max-w-3xl mx-auto space-y-24 pb-48 transition-opacity duration-500 ${viewMode === 'VIDEO_FOCUS' ? 'opacity-20' : 'opacity-100'}`}>
+           <div className={`p-12 lg:p-24 max-w-3xl mx-auto space-y-24 pb-48 transition-opacity duration-500 ${viewMode === 'VIDEO_FOCUS' ? 'opacity-20 pointer-events-none' : 'opacity-100'}`}>
               <div className="pb-12 border-b border-[var(--color-paper-dark)]">
                  <h2 className="text-5xl lg:text-6xl font-medium tracking-tight mb-4 leading-[1.05] text-[var(--color-ink)]">
                   {project.title}
