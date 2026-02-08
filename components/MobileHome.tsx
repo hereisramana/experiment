@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import { PROJECTS, SKILLS } from '../constants';
 import { ProjectCard } from './ProjectCard';
 import { Globe, ArrowRight, Mail, Phone, Github, ChevronRight } from 'lucide-react';
@@ -65,8 +65,8 @@ export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate }) => {
               </div>
             </div>
 
-            {/* Mobile Swipe Hint */}
-            <div className={`absolute bottom-8 right-0 flex items-center gap-2 transition-all duration-700 pointer-events-none ${hasSwiped ? 'opacity-0 translate-x-10' : 'opacity-40 animate-pulse'}`}>
+            {/* Mobile Swipe Hint: Appears contextually to guide the user to the Profile/Inspect view */}
+            <div className={`absolute bottom-8 right-6 flex items-center gap-2 transition-all duration-1000 pointer-events-none ${hasSwiped ? 'opacity-0 translate-x-12' : 'opacity-40 animate-pulse'}`}>
                 <span className="font-mono text-[9px] uppercase tracking-[0.2em]">[ Swipe for Profile ]</span>
                 <ChevronRight className="w-4 h-4" />
             </div>
