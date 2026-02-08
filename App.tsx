@@ -3,7 +3,7 @@ import { PROJECTS, SKILLS, ABOUT_TEXT } from './constants';
 import { ViewState, HomeRightPaneMode } from './types';
 import { ProjectDetail } from './components/ProjectDetail';
 import { MobileHome } from './components/MobileHome';
-import { Github, Phone, X, ArrowUpRight, } from 'lucide-react';
+import { Github, Phone, X, ArrowUpRight } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [view, setView] = useState<ViewState>('HOME');
@@ -23,13 +23,65 @@ export const App: React.FC = () => {
         setRightPaneMode('PROJECTS');
         setSelectedProjectId(null);
       } else {
-        setView(state.view);
+        setView(state.view || 'HOME');
         setRightPaneMode(state.rightPaneMode || 'PROJECTS');
-        setSelectedProjectId(state.projectId);
+        setSelectedProjectId(state.projectId || null);
       }
     };
 
     window.addEventListener('popstate', handlePopState);
+
+    // Initial State Restoration & History Reconstruction
+    const restoreState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const pId = params.get('project');
+      const v = params.get('view');
+      const state = window.history.state;
+
+      if (state) {
+         // Browser restored state
+         setView(state.view || 'HOME');
+         setRightPaneMode(state.rightPaneMode || 'PROJECTS');
+         setSelectedProjectId(state.projectId || null);
+      } else if (pId) {
+         // Deep Link Handling
+         if (v === 'detail') {
+            // Reconstruct History: Home -> Overview -> Detail
+            // 1. Replace current entry with Overview (so Back lands here)
+            const overviewUrl = `?project=${pId}&view=overview`;
+            window.history.replaceState(
+               { view: 'HOME', rightPaneMode: 'OVERVIEW', projectId: pId }, 
+               '', 
+               overviewUrl
+            );
+            
+            // 2. Push Detail
+            const detailUrl = `?project=${pId}&view=detail`;
+            window.history.pushState(
+               { view: 'PROJECT_DETAIL', projectId: pId }, 
+               '', 
+               detailUrl
+            );
+
+            setSelectedProjectId(pId);
+            setView('PROJECT_DETAIL');
+         } else if (v === 'overview') {
+            // Set Overview
+            const overviewUrl = `?project=${pId}&view=overview`;
+            window.history.replaceState(
+               { view: 'HOME', rightPaneMode: 'OVERVIEW', projectId: pId }, 
+               '', 
+               overviewUrl
+            );
+            setSelectedProjectId(pId);
+            setRightPaneMode('OVERVIEW');
+            setView('HOME');
+         }
+      }
+    };
+
+    restoreState();
+
     return () => {
       window.removeEventListener('resize', checkMobile);
       window.removeEventListener('popstate', handlePopState);
@@ -47,8 +99,22 @@ export const App: React.FC = () => {
   };
 
   const handleLaunchDeepDive = (id: string) => {
-    const newUrl = `?project=${id}&view=detail`;
-    window.history.pushState({ view: 'PROJECT_DETAIL', projectId: id }, '', newUrl);
+    // Inject "Overview" state into history before pushing Detail
+    // This ensures "Back" returns to the Overview pane.
+    const overviewUrl = `?project=${id}&view=overview`;
+    window.history.pushState(
+       { view: 'HOME', rightPaneMode: 'OVERVIEW', projectId: id }, 
+       '', 
+       overviewUrl
+    );
+
+    const detailUrl = `?project=${id}&view=detail`;
+    window.history.pushState(
+       { view: 'PROJECT_DETAIL', projectId: id }, 
+       '', 
+       detailUrl
+    );
+    
     setSelectedProjectId(id);
     setView('PROJECT_DETAIL');
   };
@@ -56,6 +122,8 @@ export const App: React.FC = () => {
   const handleCloseOverview = () => {
     setRightPaneMode('PROJECTS');
     setSelectedProjectId(null);
+    // Optional: clear URL params if we want to return to clean URL
+    window.history.pushState(null, '', window.location.pathname);
   };
 
   const currentProject = PROJECTS.find(p => p.id === selectedProjectId);
