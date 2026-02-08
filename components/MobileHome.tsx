@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PROJECTS, SKILLS, ABOUT_TEXT } from '../constants';
 import { Project, DetailMode } from '../types';
-import { Mail, ArrowLeft, Play, FileText } from 'lucide-react';
+import { Mail, ArrowLeft, Play, FileText, Github, Phone } from 'lucide-react';
 
 interface MobileHomeProps {
   onNavigate: (projectId: string, mode?: DetailMode) => void;
@@ -101,9 +101,11 @@ export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate, selectedProj
        {/* Header */}
        <div className={`flex justify-between items-center px-6 py-6 border-b border-[var(--color-paper-dark)]/10 transition-colors ${activeTab === 'ABOUT' ? 'bg-[var(--color-paper-dim)]' : 'bg-[var(--color-paper)]'}`}>
           <h1 className="font-mono text-sm font-bold text-[var(--color-ink)] lowercase tracking-tight">ramanadesign.tech</h1>
-           <div className="flex items-center gap-2">
+           <div className="flex items-center gap-1.5">
+             <a href="tel:+1234567890" className={baseIconBtnStyle} aria-label="Phone"><Phone className="w-4 h-4" /></a>
+             <a href="https://github.com" target="_blank" rel="noreferrer" className={baseIconBtnStyle} aria-label="GitHub"><Github className="w-4 h-4" /></a>
              <a href="mailto:hello@ramanadesign.tech" className={baseIconBtnStyle} aria-label="Email"><Mail className="w-4 h-4" /></a>
-             <a href="#" className={baseIconBtnStyle} aria-label="LinkedIn">
+             <a href="https://linkedin.com" target="_blank" rel="noreferrer" className={baseIconBtnStyle} aria-label="LinkedIn">
                <span className="text-[15px] font-bold leading-none opacity-80 active:opacity-100 pb-0.5" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>in</span>
              </a>
            </div>
