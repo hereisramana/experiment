@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Project } from '../types';
-import { ArrowLeft, ArrowUpRight, Play, Pause, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Play, Pause, ChevronLeft, ChevronRight, } from 'lucide-react';
 
 interface ProjectDetailProps {
   project: Project;
