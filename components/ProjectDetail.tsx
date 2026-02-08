@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { Project, DetailMode } from '../types';
 import { ArrowLeft, ArrowUpRight, Play, Pause } from 'lucide-react';
@@ -10,11 +9,9 @@ interface ProjectDetailProps {
 }
 
 export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, initialMode = 'VIDEO' }) => {
-  // Mode is now handled by parents on mobile, but internally tracked for desktop flexibility
   const [activeTab, setActiveTab] = useState<DetailMode>(initialMode);
   const [isMobile, setIsMobile] = useState(false);
   
-  // Custom Video Player State
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -29,12 +26,10 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, i
     return () => window.removeEventListener('resize', checkMobile);
   }, [project.id]);
 
-  // Sync internal mode if prop changes
   useEffect(() => {
     setActiveTab(initialMode);
   }, [initialMode]);
 
-  // Video Logic
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
@@ -58,11 +53,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, i
 
   const togglePlay = () => {
     if (videoRef.current) {
-      if (videoRef.current.paused) {
-        videoRef.current.play();
-      } else {
-        videoRef.current.pause();
-      }
+      if (videoRef.current.paused) videoRef.current.play();
+      else videoRef.current.pause();
     }
   };
 
@@ -70,18 +62,13 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, i
     if (videoRef.current) {
       const rect = e.currentTarget.getBoundingClientRect();
       const x = e.clientX - rect.left;
-      const width = rect.width;
-      const percentage = x / width;
-      const newTime = percentage * videoRef.current.duration;
-      videoRef.current.currentTime = newTime;
-      setProgress(percentage * 100);
+      const percentage = x / rect.width;
+      videoRef.current.currentTime = percentage * videoRef.current.duration;
     }
   };
 
-  // --- SUB-COMPONENTS ---
-  
   const VideoSection = () => (
-    <div className="w-full h-full flex flex-col items-center justify-center p-6 pb-24 lg:p-12 lg:pt-24 bg-[var(--color-paper)] lg:bg-[var(--color-ink)] text-[var(--color-ink)] lg:text-[var(--color-paper)] relative transition-colors duration-300">
+    <div className="w-full h-full flex flex-col items-center bg-[var(--color-paper)] lg:bg-[var(--color-ink)] relative transition-colors duration-300">
          <button 
             onClick={onBack}
             className="hidden lg:flex absolute top-8 left-8 group items-center py-2 px-4 rounded-[var(--radius-sm)] transition-all duration-300 z-30 -ml-4 hover:bg-[var(--color-ink)] hover:text-[var(--color-paper)] border border-transparent"
@@ -91,14 +78,14 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, i
             </span>
           </button>
 
-         <div className="w-full max-w-md lg:max-w-full flex-1 min-h-0 relative mb-6 lg:mb-8 flex justify-center items-center">
-            <div className="relative w-full aspect-video lg:aspect-auto lg:h-full bg-black rounded-xl border border-[var(--color-ink-subtle)]/30 shadow-2xl overflow-hidden group">
+         <div className="w-full flex-1 min-h-0 relative flex justify-center items-center bg-black overflow-hidden lg:rounded-xl lg:max-w-4xl lg:h-auto lg:aspect-video lg:my-auto">
+            <div className="relative w-full h-full lg:h-auto lg:aspect-video overflow-hidden group">
                {project.videoUrl ? (
                   <>
                     <video 
                       ref={videoRef}
                       src={project.videoUrl} 
-                      className="w-full h-full object-contain opacity-95" 
+                      className="w-full h-full object-contain" 
                       playsInline
                       onTimeUpdate={handleTimeUpdate}
                       onLoadedMetadata={handleLoadedMetadata}
@@ -109,21 +96,20 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, i
                     <div className="absolute inset-0 z-10 cursor-pointer" onClick={togglePlay} />
                     <div className={`absolute inset-0 z-20 flex flex-col justify-end transition-opacity duration-300 pointer-events-none ${isPlaying ? 'opacity-0 lg:group-hover:opacity-100' : 'opacity-100'}`}>
                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                         <button className="w-16 h-16 rounded-full bg-[var(--color-paper)]/10 backdrop-blur-sm border border-[var(--color-paper)]/20 flex items-center justify-center text-white shadow-lg">
+                         <button className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-lg">
                            {isPlaying ? <Pause className="w-6 h-6 fill-white stroke-none" /> : <Play className="w-6 h-6 fill-white stroke-none ml-1" />}
                          </button>
                        </div>
-                       <div className="bg-black/80 backdrop-blur-md border-t border-white/10 p-3 flex items-center gap-3 pointer-events-auto" onClick={e => e.stopPropagation()}>
-                          <button onClick={togglePlay} className="text-white/80 p-2 -ml-2 active:text-white transition-transform">
-                            {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}
-                          </button>
-                          <span className="font-mono text-[10px] text-white/50 w-20 text-center">{currentTimeStr} / {durationStr}</span>
-                          <div className="flex-1 h-10 flex items-center cursor-pointer group/timeline" onClick={handleTimelineClick}>
-                            <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden relative group-active/timeline:h-2 transition-all">
-                               <div className="h-full bg-[var(--color-accent-light)] absolute top-0 left-0" style={{ width: `${progress}%` }} />
-                            </div>
-                          </div>
+                    </div>
+                    {/* Progress Bar (Always visible on mobile) */}
+                    <div className="absolute bottom-0 left-0 right-0 z-30 pointer-events-auto h-12 bg-gradient-to-t from-black/80 to-transparent flex items-center gap-4 px-4 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
+                       <button onClick={togglePlay} className="text-white">
+                         {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}
+                       </button>
+                       <div className="flex-1 h-1 bg-white/20 rounded-full relative overflow-hidden" onClick={handleTimelineClick}>
+                         <div className="absolute left-0 top-0 h-full bg-white transition-all" style={{ width: `${progress}%` }} />
                        </div>
+                       <span className="font-mono text-[9px] text-white opacity-60">{currentTimeStr}</span>
                     </div>
                   </>
                ) : (
@@ -132,14 +118,13 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, i
             </div>
          </div>
          
-         <div className="w-full max-w-[280px] shrink-0 z-20">
-            {project.liveUrl ? (
-               <a href={project.liveUrl} target="_blank" rel="noreferrer" className="group flex items-center justify-center gap-3 w-full py-4 text-xs uppercase font-medium tracking-wider rounded-[var(--radius-sm)] active:scale-[0.98] transition-all duration-200 shadow-lg bg-[var(--color-ink)] text-[var(--color-paper)] lg:bg-[var(--color-paper)] lg:text-[var(--color-ink)]">
+         {/* Desktop Action (Keep but hidden on mobile) */}
+         <div className="hidden lg:block w-full max-w-[280px] shrink-0 z-20 mb-12">
+            {project.liveUrl && (
+               <a href={project.liveUrl} target="_blank" rel="noreferrer" className="group flex items-center justify-center gap-3 w-full py-4 text-xs uppercase font-medium tracking-wider rounded-[var(--radius-sm)] bg-[var(--color-paper)] text-[var(--color-ink)] shadow-lg hover:scale-[1.02] transition-transform">
                   <span>Launch Prototype</span>
                   <ArrowUpRight className="w-3 h-3" />
                </a>
-            ) : (
-               <div className="w-full py-4 border border-[var(--color-paper)]/20 text-[var(--color-paper)] text-xs uppercase font-medium tracking-wider rounded-[var(--radius-sm)] text-center opacity-50">Prototype Offline</div>
             )}
          </div>
     </div>
@@ -176,9 +161,9 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, i
                 <p className="text-lg leading-relaxed text-[var(--color-ink)] italic">{project.interactionNotes}</p>
              </div>
           </section>
-          <div className="pt-8">
-             <button className="opacity-60 hover:opacity-100 active:scale-95 transition-all cursor-pointer flex items-center gap-3 text-xs uppercase font-medium tracking-widest" onClick={onBack}>
-                <ArrowLeft className="w-3 h-3" /> Back
+          <div className="pt-8 lg:hidden">
+             <button className="opacity-60 hover:opacity-100 active:scale-95 transition-all cursor-pointer flex items-center gap-3 text-[10px] uppercase font-bold tracking-widest" onClick={onBack}>
+                <ArrowLeft className="w-3.5 h-3.5" /> Back to Overview
              </button>
           </div>
        </div>
@@ -187,24 +172,26 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, i
 
   return (
     <div className="h-[100dvh] w-screen bg-[var(--color-paper)] overflow-hidden flex flex-col lg:grid lg:grid-cols-12">
-        {/* MOBILE HEADER - Now simplified, no tab toggles */}
-        <div className="shrink-0 lg:hidden bg-inherit border-b border-[var(--color-paper-dark)]/20 sticky top-0 z-50 px-4 h-14 flex items-center justify-between">
-           <button onClick={onBack} className="p-2 -ml-2 rounded-full active:bg-[var(--color-paper-dark)]/20 transition-colors" aria-label="Back">
+        {/* MOBILE HEADER - Redesigned with Action & Clear Back Label */}
+        <div className="shrink-0 lg:hidden bg-inherit border-b border-[var(--color-paper-dark)]/20 sticky top-0 z-50 px-4 h-16 flex items-center justify-between">
+           <button onClick={onBack} className="flex items-center gap-2 p-2 -ml-2 rounded-full active:bg-[var(--color-paper-dark)]/20 transition-colors">
              <ArrowLeft className="w-5 h-5 text-[var(--color-ink)]" />
+             <span className="text-[10px] font-bold uppercase tracking-widest opacity-60">Back to Overview</span>
            </button>
-           <h2 className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] opacity-60">
-             {activeTab === 'VIDEO' ? 'Technical Demo' : 'Written Analysis'}
-           </h2>
-           <div className="w-9" />
+           
+           {project.liveUrl && (
+             <a href={project.liveUrl} target="_blank" rel="noreferrer" className="p-2.5 bg-[var(--color-ink)] text-white rounded-full shadow-lg active:scale-90 transition-transform">
+               <ArrowUpRight className="w-4 h-4" />
+             </a>
+           )}
         </div>
 
-        {/* Left Column (Desktop) / Main View (Mobile) */}
-        <div className={`lg:col-span-5 lg:block h-full overflow-hidden bg-[var(--color-paper)] lg:bg-[var(--color-ink)] ${activeTab === 'VIDEO' ? 'block flex-1' : 'hidden'}`}>
+        {/* Views */}
+        <div className={`lg:col-span-5 lg:block h-full overflow-hidden bg-black ${activeTab === 'VIDEO' ? 'block flex-1' : 'hidden'}`}>
            <VideoSection />
         </div>
 
-        {/* Right Column (Desktop) / Secondary View (Mobile) */}
-        <div className={`lg:col-span-7 lg:block h-full overflow-hidden bg-inherit border-l border-[var(--color-paper)]/10 ${activeTab === 'WRITTEN' ? 'block flex-1' : 'hidden'}`}>
+        <div className={`lg:col-span-7 lg:block h-full overflow-hidden bg-inherit border-l border-[var(--color-paper-dark)]/20 ${activeTab === 'WRITTEN' ? 'block flex-1' : 'hidden'}`}>
            <WrittenSection />
         </div>
     </div>
