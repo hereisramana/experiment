@@ -138,9 +138,15 @@ export const App: React.FC = () => {
               </div>
            ) : (
               <div className="absolute inset-0 p-12 flex flex-col justify-between">
-                 {/* IDLE HINT */}
-                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
-                    <span className="font-mono text-[10px] uppercase tracking-[0.4em]">[ Hover to inspect ]</span>
+                 {/* IDLE HINT with Viewfinder Aesthetic */}
+                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div className="relative flex items-center justify-center w-64 h-32 border border-white/5 opacity-40">
+                       <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/20" />
+                       <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/20" />
+                       <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-white/20" />
+                       <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white/20" />
+                       <span className="font-mono text-[10px] uppercase tracking-[0.4em] opacity-40">[ Inspect Mode ]</span>
+                    </div>
                  </div>
 
                  <div className="space-y-12 max-w-sm relative z-10">
