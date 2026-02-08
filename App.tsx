@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { PROJECTS, SKILLS } from './constants';
 import { ViewState, DetailMode } from './types';
@@ -69,7 +68,7 @@ export const App: React.FC = () => {
            <span className="font-mono text-xs uppercase tracking-[0.2em] font-medium opacity-50">Portfolio</span>
         </div>
         <div className="flex-1 flex justify-end items-center gap-4 md:gap-6">
-            <button onClick={() => setIsContactOpen(true)} className="group text-[10px] uppercase font-semibold tracking-widest text-[var(--color-ink)] hover:text-white transition-colors border border-[var(--color-paper-dark)]/30 px-4 py-2 rounded-[var(--radius-sm)] flex items-center gap-2 hover:bg-[#2B6B7C] hover:border-[#2B6B7C]">Contact Me</button>
+            <button className="group text-[10px] uppercase font-semibold tracking-widest text-[var(--color-ink)] hover:text-white transition-colors border border-[var(--color-paper-dark)]/30 px-4 py-2 rounded-[var(--radius-sm)] flex items-center gap-2 hover:bg-[#2B6B7C] hover:border-[#2B6B7C]">Contact Me</button>
             <div className="flex gap-2 text-[var(--color-ink)]">
               <a href="#" className="p-2 hover:bg-[#333333] hover:text-white rounded-[var(--radius-sm)] transition-all group flex items-center justify-center w-8 h-8" aria-label="LinkedIn">
                 <span className="text-[15px] font-bold leading-none opacity-80 group-hover:opacity-100 pb-0.5" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>in</span>
