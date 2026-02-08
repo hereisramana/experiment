@@ -1,23 +1,25 @@
 import React, { useState } from 'react';
 import { PROJECTS, SKILLS, ABOUT_TEXT } from '../constants';
 import { Project, DetailMode } from '../types';
-import { Mail, ArrowLeft, Play, FileText, ArrowUpRight, X } from 'lucide-react';
+import { Mail, ArrowLeft, Play, FileText } from 'lucide-react';
 
 interface MobileHomeProps {
-  onNavigate: (projectId: string, mode: DetailMode) => void;
+  onNavigate: (projectId: string, mode?: DetailMode) => void;
+  selectedProjectId: string | null;
+  onCloseOverview: () => void;
 }
 
 type Tab = 'WORKS' | 'ABOUT';
 
-export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate }) => {
+export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate, selectedProjectId, onCloseOverview }) => {
   const [activeTab, setActiveTab] = useState<Tab>('WORKS');
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const selectedProject = PROJECTS.find(p => p.id === selectedProjectId) || null;
 
   const baseIconBtnStyle = "p-2 rounded-[var(--radius-sm)] border border-[var(--color-paper-dark)]/30 text-[var(--color-ink)] transition-all active:scale-90 active:bg-[var(--color-paper-dim)] flex items-center justify-center w-9 h-9";
 
   const ProjectGridTile = ({ project }: { project: Project }) => (
     <button 
-      onClick={() => setSelectedProject(project)}
+      onClick={() => onNavigate(project.id)}
       className="group relative flex flex-col text-left active:scale-[0.98] transition-all duration-300"
     >
       <div className="aspect-square w-full bg-[var(--color-paper-dim)] rounded-[var(--radius-md)] overflow-hidden border border-[var(--color-paper-dark)]/30 shadow-sm relative">
@@ -39,16 +41,14 @@ export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate }) => {
     <div className="fixed inset-0 z-50 bg-[var(--color-paper)] flex flex-col animate-in fade-in zoom-in-95 duration-300">
       {/* Header */}
       <div className="h-14 border-b border-[var(--color-paper-dark)]/20 px-4 flex items-center justify-between bg-[var(--color-paper)]">
-        <button onClick={() => setSelectedProject(null)} className="p-2 -ml-2 rounded-full active:bg-[var(--color-paper-dim)]">
+        <button onClick={onCloseOverview} className="p-2 -ml-2 rounded-full active:bg-[var(--color-paper-dim)]">
           <ArrowLeft className="w-5 h-5" />
         </button>
         <span className="font-mono text-[10px] uppercase tracking-[0.2em] opacity-40">Project Overview</span>
-        <button onClick={() => setSelectedProject(null)} className="p-2 -mr-2">
-          <X className="w-5 h-5 opacity-40" />
-        </button>
+        <div className="w-9" />
       </div>
 
-      <div className="flex-1 overflow-y-auto no-scrollbar">
+      <div className="flex-1 overflow-y-auto no-scrollbar pb-32">
         {/* Hero */}
         <div className="w-full aspect-video bg-black overflow-hidden border-b border-[var(--color-paper-dark)]/10">
           <img src={project.heroUrl} alt={project.title} className="w-full h-full object-cover" />
@@ -71,52 +71,27 @@ export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate }) => {
               <p className="text-sm font-medium">{project.duration}</p>
             </div>
           </div>
-
-          <div className="space-y-4">
-            <h3 className="font-mono text-[10px] uppercase tracking-[0.2em] opacity-40">System Architecture</h3>
-            <div className="space-y-4">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-wider mb-1 text-[var(--color-ink)] opacity-60">The Challenge</p>
-                <p className="text-sm leading-relaxed text-[var(--color-ink-subtle)]">{project.challenge}</p>
-              </div>
-              <div>
-                <p className="text-xs font-bold uppercase tracking-wider mb-1 text-[var(--color-ink)] opacity-60">The Resolution</p>
-                <p className="text-sm leading-relaxed text-[var(--color-ink-subtle)]">{project.solution}</p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
       {/* Action Tray */}
-      <div className="p-4 bg-[var(--color-paper)] border-t border-[var(--color-paper-dark)]/30 space-y-2">
+      <div className="fixed bottom-0 left-0 right-0 p-4 pb-safe bg-[var(--color-paper)] border-t border-[var(--color-paper-dark)]/30 shadow-[0_-8px_32px_rgba(0,0,0,0.05)]">
         <div className="grid grid-cols-2 gap-2">
           <button 
             onClick={() => onNavigate(project.id, 'VIDEO')}
-            className="flex items-center justify-center gap-2 py-3.5 bg-[var(--color-paper-dim)] border border-[var(--color-paper-dark)] text-[var(--color-ink)] rounded-[var(--radius-sm)] text-xs uppercase font-bold tracking-widest active:bg-[var(--color-paper-dark)]"
+            className="flex items-center justify-center gap-2 py-4 bg-[var(--color-paper-dim)] border border-[var(--color-paper-dark)] text-[var(--color-ink)] rounded-[var(--radius-sm)] text-xs uppercase font-bold tracking-widest active:bg-[var(--color-paper-dark)]"
           >
             <Play className="w-3.5 h-3.5 fill-current" />
             <span>Video Demo</span>
           </button>
           <button 
             onClick={() => onNavigate(project.id, 'WRITTEN')}
-            className="flex items-center justify-center gap-2 py-3.5 bg-[var(--color-paper-dim)] border border-[var(--color-paper-dark)] text-[var(--color-ink)] rounded-[var(--radius-sm)] text-xs uppercase font-bold tracking-widest active:bg-[var(--color-paper-dark)]"
+            className="flex items-center justify-center gap-2 py-4 bg-[var(--color-paper-dim)] border border-[var(--color-paper-dark)] text-[var(--color-ink)] rounded-[var(--radius-sm)] text-xs uppercase font-bold tracking-widest active:bg-[var(--color-paper-dark)]"
           >
             <FileText className="w-3.5 h-3.5" />
             <span>Case Study</span>
           </button>
         </div>
-        {project.liveUrl && (
-          <a 
-            href={project.liveUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center justify-center gap-2 py-3.5 bg-[var(--color-ink)] text-[var(--color-paper)] rounded-[var(--radius-sm)] text-xs uppercase font-bold tracking-widest active:scale-[0.98] transition-transform w-full shadow-lg"
-          >
-            <span>Launch Prototype</span>
-            <ArrowUpRight className="w-3.5 h-3.5" />
-          </a>
-        )}
       </div>
     </div>
   );
