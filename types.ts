@@ -1,4 +1,3 @@
-
 export interface Project {
   id: string;
   title: string;
@@ -18,7 +17,8 @@ export interface Project {
   accentColor?: string;
 }
 
-export type ViewState = 'HOME' | 'PROJECT_DETAIL' | 'ABOUT';
+export type ViewState = 'HOME' | 'PROJECT_DETAIL';
+export type HomeRightPaneMode = 'PROJECTS' | 'ABOUT' | 'OVERVIEW';
 export type DetailMode = 'VIDEO' | 'WRITTEN';
 
 export interface ThemeColors {
