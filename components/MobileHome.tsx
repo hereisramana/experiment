@@ -1,3 +1,4 @@
+
 import React, { useRef, useState,} from 'react';
 import { PROJECTS, SKILLS } from '../constants';
 import { ProjectCard } from './ProjectCard';
@@ -51,6 +52,9 @@ export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate }) => {
                  <a href="mailto:hello@ramanadesign.tech" className={`${baseIconBtnStyle} active:bg-blue-500 active:border-blue-500`} aria-label="Email"><Mail className="w-4 h-4" /></a>
                  <a href="tel:+15551234567" className={`${baseIconBtnStyle} active:bg-emerald-500 active:border-emerald-500`} aria-label="Call"><Phone className="w-4 h-4" /></a>
                  <a href="#" className={`${baseIconBtnStyle} active:bg-[#333] active:border-[#333]`} aria-label="Github"><Github className="w-4 h-4" /></a>
+                 <a href="#" className={`${baseIconBtnStyle} active:bg-[#0077b5] active:border-[#0077b5]`} aria-label="LinkedIn">
+                   <span className="text-[15px] font-bold leading-none opacity-80 active:opacity-100 pb-0.5" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>in</span>
+                 </a>
                </div>
             </div>
 
