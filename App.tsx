@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { PROJECTS, SKILLS } from './constants';
 import { ViewState } from './types';
@@ -105,8 +106,6 @@ export const App: React.FC = () => {
                     <span className="font-mono text-[9px] uppercase tracking-[0.2em]">Scroll</span>
                     <ChevronDown className="w-3 h-3" />
                 </div>
-
-                <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-[var(--color-paper)] to-transparent pointer-events-none z-10" />
              </div>
           </div>
         </div>
