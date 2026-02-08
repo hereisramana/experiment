@@ -48,16 +48,12 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           transition-colors duration-200
       `}>
         
-        {/* Col 1: ID with Focus Brackets on Hover */}
+        {/* Col 1: ID */}
         <div className={`
-           w-12 md:w-20 font-mono text-xs transition-all duration-300 flex items-center
+           w-12 md:w-16 font-mono text-xs transition-colors
            ${isActive ? 'opacity-100 text-[var(--color-ink)]' : 'opacity-30 text-[var(--color-ink)] group-hover:opacity-100'}
         `}>
-          <span className="tabular-nums transition-all duration-300 group-hover:scale-110">
-            <span className="opacity-0 -mr-1 group-hover:opacity-100 transition-opacity">[</span>
-            {formattedIndex}
-            <span className="opacity-0 -ml-1 group-hover:opacity-100 transition-opacity">]</span>
-          </span>
+          {formattedIndex}
         </div>
 
         {/* Col 2: Title & Mobile Action */}
@@ -86,7 +82,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         {/* Desktop Hover Guidance (Hidden on Mobile) */}
         <div className="absolute right-6 opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ease-soft hidden md:block">
            <span className="text-[10px] uppercase font-medium tracking-widest text-[var(--color-ink)] flex items-center gap-2">
-             Inspect Details →
+             View Case Study →
            </span>
         </div>
       </div>
