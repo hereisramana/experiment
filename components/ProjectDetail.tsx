@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 import { Project } from '../types';
 import { ArrowLeft, ArrowUpRight, Play, Pause } from 'lucide-react';
@@ -69,14 +70,10 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
     }
   };
 
-  const buttonStyle = {
-    '--button-hover-bg': project.accentColor || 'var(--color-accent-light)'
-  } as React.CSSProperties;
-
   // --- SUB-COMPONENTS ---
   
   const VideoSection = () => (
-    <div className="w-full h-full flex flex-col items-center justify-center p-6 pb-24 lg:p-12 lg:pt-24 bg-[var(--color-ink)] text-[var(--color-paper)] relative">
+    <div className="w-full h-full flex flex-col items-center justify-center p-6 pb-24 lg:p-12 lg:pt-24 bg-[var(--color-paper)] lg:bg-[var(--color-ink)] text-[var(--color-ink)] lg:text-[var(--color-paper)] relative transition-colors duration-300">
          {/* Back Button (Desktop Only) */}
          <button 
             onClick={onBack}
@@ -88,8 +85,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
           </button>
 
          {/* Video Container: Flexible on both Mobile and Desktop now */}
-         <div className="w-full max-w-md lg:max-w-full flex-1 min-h-0 relative mb-6 lg:mb-8 flex justify-center">
-            <div className="relative w-full h-full bg-black rounded-xl border border-[var(--color-ink-subtle)]/30 shadow-2xl overflow-hidden ring-1 ring-white/10 group">
+         <div className="w-full max-w-md lg:max-w-full flex-1 min-h-0 relative mb-6 lg:mb-8 flex justify-center items-center">
+            <div className="relative w-full aspect-video lg:aspect-auto lg:h-full bg-black rounded-xl border border-[var(--color-ink-subtle)]/30 shadow-2xl overflow-hidden ring-1 ring-black/5 lg:ring-white/10 group">
                {project.videoUrl ? (
                   <>
                     <video 
@@ -152,8 +149,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                  href={project.liveUrl} 
                  target="_blank" 
                  rel="noreferrer" 
-                 style={buttonStyle}
-                 className="group flex items-center justify-center gap-3 w-full py-4 bg-[var(--color-paper)] text-[var(--color-ink)] text-xs uppercase font-medium tracking-wider rounded-[var(--radius-sm)] hover:bg-[var(--button-hover-bg)] active:bg-[var(--button-hover-bg)] active:scale-[0.98] transition-all duration-200 shadow-lg touch-manipulation"
+                 className="group flex items-center justify-center gap-3 w-full py-4 text-xs uppercase font-medium tracking-wider rounded-[var(--radius-sm)] active:scale-[0.98] transition-all duration-200 shadow-lg touch-manipulation bg-[var(--color-ink)] text-[var(--color-paper)] hover:bg-[var(--color-accent)] lg:bg-[var(--color-paper)] lg:text-[var(--color-ink)] lg:hover:bg-[var(--color-accent-light)]"
                >
                   <span>Launch Prototype</span>
                   <ArrowUpRight className="w-3 h-3" />
@@ -216,9 +212,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
   return (
     <div className="h-[100dvh] w-screen bg-[var(--color-paper)] overflow-hidden flex flex-col lg:grid lg:grid-cols-12">
         
-        {/* MOBILE HEADER: Minimalist Design */}
-        <div className="shrink-0 lg:hidden flex items-center bg-[var(--color-paper)] border-b border-[var(--color-paper-dark)]/20 sticky top-0 z-50 px-4 h-14">
-           {/* Left: Back */}
+        {/* MOBILE HEADER: Sticky Toggle Design */}
+        <div className="shrink-0 lg:hidden bg-[var(--color-paper)] border-b border-[var(--color-paper-dark)]/20 sticky top-0 z-50 px-4 h-14 flex items-center justify-between">
            <button 
              onClick={onBack}
              className="p-2 -ml-2 rounded-full hover:bg-[var(--color-paper-dim)] active:bg-[var(--color-paper-dark)] transition-colors"
@@ -227,41 +222,43 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
              <ArrowLeft className="w-5 h-5 text-[var(--color-ink)]" />
            </button>
 
-           {/* Right: Tabs */}
-           <div className="flex-1 flex justify-end items-center gap-6">
+           <div className="flex gap-6">
                <button 
                  onClick={() => setActiveTab('VIDEO')}
                  className={`
-                    relative py-2 text-[11px] font-bold uppercase tracking-widest transition-all active:scale-95
-                    ${activeTab === 'VIDEO' ? 'text-[var(--color-ink)] opacity-100' : 'text-[var(--color-ink)] opacity-40 hover:opacity-80'}
+                    relative py-4 text-[11px] font-bold uppercase tracking-widest transition-all
+                    ${activeTab === 'VIDEO' ? 'text-[var(--color-ink)]' : 'text-[var(--color-ink)]/40'}
                  `}
                >
                   Video Log
                   {activeTab === 'VIDEO' && (
-                    <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[var(--color-ink)]" />
+                    <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[var(--color-ink)] rounded-full" />
                   )}
                </button>
                
                <button 
                  onClick={() => setActiveTab('WRITTEN')}
                  className={`
-                    relative py-2 text-[11px] font-bold uppercase tracking-widest transition-all active:scale-95
-                    ${activeTab === 'WRITTEN' ? 'text-[var(--color-ink)] opacity-100' : 'text-[var(--color-ink)] opacity-40 hover:opacity-80'}
+                    relative py-4 text-[11px] font-bold uppercase tracking-widest transition-all
+                    ${activeTab === 'WRITTEN' ? 'text-[var(--color-ink)]' : 'text-[var(--color-ink)]/40'}
                  `}
                >
                   Case Study
                   {activeTab === 'WRITTEN' && (
-                    <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[var(--color-ink)]" />
+                    <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[var(--color-ink)] rounded-full" />
                   )}
                </button>
            </div>
+           
+           {/* Spacer to balance back button */}
+           <div className="w-9" />
         </div>
 
         {/* CONTENT AREA */}
         
         {/* Left Column (Desktop) / Main View (Mobile) */}
         <div className={`
-            lg:col-span-5 lg:block h-full overflow-hidden bg-[var(--color-ink)]
+            lg:col-span-5 lg:block h-full overflow-hidden bg-[var(--color-paper)] lg:bg-[var(--color-ink)]
             ${activeTab === 'VIDEO' ? 'block flex-1' : 'hidden'}
         `}>
            <VideoSection />
