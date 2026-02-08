@@ -4,7 +4,7 @@ import { ViewState, DetailMode } from './types';
 import { ProjectCard } from './components/ProjectCard';
 import { ProjectDetail } from './components/ProjectDetail';
 import { MobileHome } from './components/MobileHome';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Github, Phone } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [view, setView] = useState<ViewState>('HOME');
@@ -98,10 +98,16 @@ export const App: React.FC = () => {
         <div className="flex-1 justify-center hidden md:flex">
            <span className="font-mono text-xs uppercase tracking-[0.2em] font-medium opacity-50">Portfolio</span>
         </div>
-        <div className="flex-1 flex justify-end items-center gap-4 md:gap-6">
+        <div className="flex-1 flex justify-end items-center gap-2 md:gap-4">
             <button className="group text-[10px] uppercase font-semibold tracking-widest text-[var(--color-ink)] hover:text-white transition-colors border border-[var(--color-paper-dark)]/30 px-4 py-2 rounded-[var(--radius-sm)] flex items-center gap-2 hover:bg-[#2B6B7C] hover:border-[#2B6B7C]">Contact Me</button>
-            <div className="flex gap-2 text-[var(--color-ink)]">
-              <a href="#" className="p-2 hover:bg-[#333333] hover:text-white rounded-[var(--radius-sm)] transition-all group flex items-center justify-center w-8 h-8" aria-label="LinkedIn">
+            <div className="flex gap-1 text-[var(--color-ink)]">
+              <a href="tel:+1234567890" className="p-2 hover:bg-[#333333] hover:text-white rounded-[var(--radius-sm)] transition-all flex items-center justify-center w-8 h-8" aria-label="Phone">
+                <Phone className="w-4 h-4" />
+              </a>
+              <a href="https://github.com" target="_blank" rel="noreferrer" className="p-2 hover:bg-[#333333] hover:text-white rounded-[var(--radius-sm)] transition-all flex items-center justify-center w-8 h-8" aria-label="GitHub">
+                <Github className="w-4 h-4" />
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="p-2 hover:bg-[#333333] hover:text-white rounded-[var(--radius-sm)] transition-all group flex items-center justify-center w-8 h-8" aria-label="LinkedIn">
                 <span className="text-[15px] font-bold leading-none opacity-80 group-hover:opacity-100 pb-0.5" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>in</span>
               </a>
             </div>
