@@ -1,17 +1,18 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Project } from '../types';
+import { Project, DetailMode } from '../types';
 import { ArrowLeft, ArrowUpRight, Play, Pause } from 'lucide-react';
 
 interface ProjectDetailProps {
   project: Project;
   onBack: () => void;
+  initialMode?: DetailMode;
 }
 
-type TabMode = 'VIDEO' | 'WRITTEN';
-
-export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
-  const [activeTab, setActiveTab] = useState<TabMode>('VIDEO');
+export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, initialMode = 'VIDEO' }) => {
+  // Mode is now handled by parents on mobile, but internally tracked for desktop flexibility
+  const [activeTab, setActiveTab] = useState<DetailMode>(initialMode);
+  const [isMobile, setIsMobile] = useState(false);
   
   // Custom Video Player State
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -21,9 +22,17 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
   const [durationStr, setDurationStr] = useState("00:00");
 
   useEffect(() => {
-    // Reset scroll to top
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
     window.scrollTo(0, 0);
+    return () => window.removeEventListener('resize', checkMobile);
   }, [project.id]);
+
+  // Sync internal mode if prop changes
+  useEffect(() => {
+    setActiveTab(initialMode);
+  }, [initialMode]);
 
   // Video Logic
   const formatTime = (time: number) => {
@@ -54,7 +63,6 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
       } else {
         videoRef.current.pause();
       }
-      // State updates are handled by onPlay/onPause listeners to ensure sync
     }
   };
 
@@ -74,19 +82,17 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
   
   const VideoSection = () => (
     <div className="w-full h-full flex flex-col items-center justify-center p-6 pb-24 lg:p-12 lg:pt-24 bg-[var(--color-paper)] lg:bg-[var(--color-ink)] text-[var(--color-ink)] lg:text-[var(--color-paper)] relative transition-colors duration-300">
-         {/* Back Button (Desktop Only) */}
          <button 
             onClick={onBack}
-            className="hidden lg:flex absolute top-8 left-8 group items-center py-2 px-4 rounded-[var(--radius-sm)] transition-all duration-300 z-30 -ml-4 hover:bg-[var(--color-ink)] hover:text-[var(--color-paper)] hover:shadow-lg hover:border-[var(--color-paper)] border border-transparent"
+            className="hidden lg:flex absolute top-8 left-8 group items-center py-2 px-4 rounded-[var(--radius-sm)] transition-all duration-300 z-30 -ml-4 hover:bg-[var(--color-ink)] hover:text-[var(--color-paper)] border border-transparent"
           >
             <span className="text-xs uppercase font-medium tracking-widest text-[var(--color-paper)] opacity-80 group-hover:opacity-100 group-hover:-translate-x-1 transition-all flex items-center gap-2">
                 <ArrowLeft className="w-3 h-3 stroke-[3px]" /> Back
             </span>
           </button>
 
-         {/* Video Container: Flexible on both Mobile and Desktop now */}
          <div className="w-full max-w-md lg:max-w-full flex-1 min-h-0 relative mb-6 lg:mb-8 flex justify-center items-center">
-            <div className="relative w-full aspect-video lg:aspect-auto lg:h-full bg-black rounded-xl border border-[var(--color-ink-subtle)]/30 shadow-2xl overflow-hidden ring-1 ring-black/5 lg:ring-white/10 group">
+            <div className="relative w-full aspect-video lg:aspect-auto lg:h-full bg-black rounded-xl border border-[var(--color-ink-subtle)]/30 shadow-2xl overflow-hidden group">
                {project.videoUrl ? (
                   <>
                     <video 
@@ -100,37 +106,21 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                       onPlay={() => setIsPlaying(true)}
                       onPause={() => setIsPlaying(false)}
                     />
-                    
-                    {/* CLICK SHIELD: Transparent overlay to capture touch/clicks reliably */}
-                    <div 
-                        className="absolute inset-0 z-10 cursor-pointer" 
-                        onClick={togglePlay} 
-                    />
-                    
-                    {/* Controls Overlay */}
+                    <div className="absolute inset-0 z-10 cursor-pointer" onClick={togglePlay} />
                     <div className={`absolute inset-0 z-20 flex flex-col justify-end transition-opacity duration-300 pointer-events-none ${isPlaying ? 'opacity-0 lg:group-hover:opacity-100' : 'opacity-100'}`}>
                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                         <button 
-                           className="w-16 h-16 rounded-full bg-[var(--color-paper)]/10 backdrop-blur-sm border border-[var(--color-paper)]/20 flex items-center justify-center text-white shadow-lg touch-manipulation"
-                         >
+                         <button className="w-16 h-16 rounded-full bg-[var(--color-paper)]/10 backdrop-blur-sm border border-[var(--color-paper)]/20 flex items-center justify-center text-white shadow-lg">
                            {isPlaying ? <Pause className="w-6 h-6 fill-white stroke-none" /> : <Play className="w-6 h-6 fill-white stroke-none ml-1" />}
                          </button>
                        </div>
-
                        <div className="bg-black/80 backdrop-blur-md border-t border-white/10 p-3 flex items-center gap-3 pointer-events-auto" onClick={e => e.stopPropagation()}>
-                          <button onClick={togglePlay} className="text-white/80 p-2 -ml-2 active:text-white active:scale-90 transition-transform" aria-label="Play/Pause">
+                          <button onClick={togglePlay} className="text-white/80 p-2 -ml-2 active:text-white transition-transform">
                             {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}
                           </button>
                           <span className="font-mono text-[10px] text-white/50 w-20 text-center">{currentTimeStr} / {durationStr}</span>
-                          <div 
-                            className="flex-1 h-10 flex items-center cursor-pointer group/timeline"
-                            onClick={handleTimelineClick}
-                          >
+                          <div className="flex-1 h-10 flex items-center cursor-pointer group/timeline" onClick={handleTimelineClick}>
                             <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden relative group-active/timeline:h-2 transition-all">
-                               <div 
-                                 className="h-full bg-[var(--color-accent-light)] absolute top-0 left-0"
-                                 style={{ width: `${progress}%` }}
-                               />
+                               <div className="h-full bg-[var(--color-accent-light)] absolute top-0 left-0" style={{ width: `${progress}%` }} />
                             </div>
                           </div>
                        </div>
@@ -142,15 +132,9 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
             </div>
          </div>
          
-         {/* Button Container - Shrink-0 prevents it from being crushed, z-20 ensures clickable */}
          <div className="w-full max-w-[280px] shrink-0 z-20">
             {project.liveUrl ? (
-               <a 
-                 href={project.liveUrl} 
-                 target="_blank" 
-                 rel="noreferrer" 
-                 className="group flex items-center justify-center gap-3 w-full py-4 text-xs uppercase font-medium tracking-wider rounded-[var(--radius-sm)] active:scale-[0.98] transition-all duration-200 shadow-lg touch-manipulation bg-[var(--color-ink)] text-[var(--color-paper)] hover:bg-[var(--color-accent)] lg:bg-[var(--color-paper)] lg:text-[var(--color-ink)] lg:hover:bg-[var(--color-accent-light)]"
-               >
+               <a href={project.liveUrl} target="_blank" rel="noreferrer" className="group flex items-center justify-center gap-3 w-full py-4 text-xs uppercase font-medium tracking-wider rounded-[var(--radius-sm)] active:scale-[0.98] transition-all duration-200 shadow-lg bg-[var(--color-ink)] text-[var(--color-paper)] lg:bg-[var(--color-paper)] lg:text-[var(--color-ink)]">
                   <span>Launch Prototype</span>
                   <ArrowUpRight className="w-3 h-3" />
                </a>
@@ -162,23 +146,20 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
   );
 
   const WrittenSection = () => (
-    <div className="h-full overflow-y-auto p-6 md:p-12 lg:p-24 no-scrollbar lg:pt-24 bg-[var(--color-paper)]">
+    <div className={`h-full overflow-y-auto p-6 md:p-12 lg:p-24 no-scrollbar lg:pt-24 transition-colors duration-500 ${isMobile ? 'bg-[var(--color-paper-dim)]' : 'bg-[var(--color-paper)]'}`}>
        <div className="max-w-2xl mx-auto space-y-16 lg:space-y-20 pb-24 animate-in slide-in-from-bottom-4 duration-500">
-          
           <div className="pb-8 border-b border-[var(--color-paper-dark)]">
              <h1 className="text-3xl lg:text-6xl font-medium tracking-tight mb-2 leading-[1.1] text-[var(--color-ink)]">
               {project.title} <span className="block md:inline md:text-[0.6em] text-[var(--color-ink-subtle)] font-light mt-2 md:mt-0 md:ml-2">— Case Study</span>
              </h1>
           </div>
-
           <section>
              <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--color-ink)] opacity-40 mb-4">System Context</h3>
              <p className="text-lg leading-relaxed text-[var(--color-ink)]">{project.description}</p>
           </section>
-
           <section className="grid gap-8">
              <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--color-ink)] opacity-40 mb-2">Architecture</h3>
-             <div className="grid md:grid-cols-2 gap-8 bg-[var(--color-paper-dim)]/20 p-6 rounded-[var(--radius-md)] border border-[var(--color-paper-dark)]/50">
+             <div className="grid md:grid-cols-2 gap-8 bg-[var(--color-paper-dim)]/50 lg:bg-[var(--color-paper-dim)]/20 p-6 rounded-[var(--radius-md)] border border-[var(--color-paper-dark)]/50">
                 <div className="space-y-2">
                    <span className="font-mono text-[10px] uppercase tracking-wider text-[var(--color-ink)] opacity-50">Problem</span>
                    <p className="text-base leading-relaxed text-[var(--color-ink-subtle)]">{project.challenge}</p>
@@ -189,20 +170,15 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                 </div>
              </div>
           </section>
-
           <section>
              <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--color-ink)] opacity-40 mb-6">Interaction Logic</h3>
              <div className="pl-6 border-l-2 border-[var(--color-ink)]">
                 <p className="text-lg leading-relaxed text-[var(--color-ink)] italic">{project.interactionNotes}</p>
              </div>
           </section>
-
           <div className="pt-8">
-             <button 
-                className="opacity-60 hover:opacity-100 active:scale-95 transition-all cursor-pointer flex items-center gap-3 text-xs uppercase font-medium tracking-widest"
-                onClick={onBack}
-             >
-                <ArrowLeft className="w-3 h-3" /> Back to Projects
+             <button className="opacity-60 hover:opacity-100 active:scale-95 transition-all cursor-pointer flex items-center gap-3 text-xs uppercase font-medium tracking-widest" onClick={onBack}>
+                <ArrowLeft className="w-3 h-3" /> Back
              </button>
           </div>
        </div>
@@ -211,67 +187,26 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
 
   return (
     <div className="h-[100dvh] w-screen bg-[var(--color-paper)] overflow-hidden flex flex-col lg:grid lg:grid-cols-12">
-        
-        {/* MOBILE HEADER: Sticky Toggle Design */}
-        <div className="shrink-0 lg:hidden bg-[var(--color-paper)] border-b border-[var(--color-paper-dark)]/20 sticky top-0 z-50 px-4 h-14 flex items-center justify-between">
-           <button 
-             onClick={onBack}
-             className="p-2 -ml-2 rounded-full hover:bg-[var(--color-paper-dim)] active:bg-[var(--color-paper-dark)] transition-colors"
-             aria-label="Back"
-           >
+        {/* MOBILE HEADER - Now simplified, no tab toggles */}
+        <div className="shrink-0 lg:hidden bg-inherit border-b border-[var(--color-paper-dark)]/20 sticky top-0 z-50 px-4 h-14 flex items-center justify-between">
+           <button onClick={onBack} className="p-2 -ml-2 rounded-full active:bg-[var(--color-paper-dark)]/20 transition-colors" aria-label="Back">
              <ArrowLeft className="w-5 h-5 text-[var(--color-ink)]" />
            </button>
-
-           <div className="flex gap-6">
-               <button 
-                 onClick={() => setActiveTab('VIDEO')}
-                 className={`
-                    relative py-4 text-[11px] font-bold uppercase tracking-widest transition-all
-                    ${activeTab === 'VIDEO' ? 'text-[var(--color-ink)]' : 'text-[var(--color-ink)]/40'}
-                 `}
-               >
-                  Video Log
-                  {activeTab === 'VIDEO' && (
-                    <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[var(--color-ink)] rounded-full" />
-                  )}
-               </button>
-               
-               <button 
-                 onClick={() => setActiveTab('WRITTEN')}
-                 className={`
-                    relative py-4 text-[11px] font-bold uppercase tracking-widest transition-all
-                    ${activeTab === 'WRITTEN' ? 'text-[var(--color-ink)]' : 'text-[var(--color-ink)]/40'}
-                 `}
-               >
-                  Case Study
-                  {activeTab === 'WRITTEN' && (
-                    <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[var(--color-ink)] rounded-full" />
-                  )}
-               </button>
-           </div>
-           
-           {/* Spacer to balance back button */}
+           <h2 className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] opacity-60">
+             {activeTab === 'VIDEO' ? 'Technical Demo' : 'Written Analysis'}
+           </h2>
            <div className="w-9" />
         </div>
 
-        {/* CONTENT AREA */}
-        
         {/* Left Column (Desktop) / Main View (Mobile) */}
-        <div className={`
-            lg:col-span-5 lg:block h-full overflow-hidden bg-[var(--color-paper)] lg:bg-[var(--color-ink)]
-            ${activeTab === 'VIDEO' ? 'block flex-1' : 'hidden'}
-        `}>
+        <div className={`lg:col-span-5 lg:block h-full overflow-hidden bg-[var(--color-paper)] lg:bg-[var(--color-ink)] ${activeTab === 'VIDEO' ? 'block flex-1' : 'hidden'}`}>
            <VideoSection />
         </div>
 
         {/* Right Column (Desktop) / Secondary View (Mobile) */}
-        <div className={`
-            lg:col-span-7 lg:block h-full overflow-hidden bg-[var(--color-paper)] border-l border-[var(--color-paper)]/10
-            ${activeTab === 'WRITTEN' ? 'block flex-1' : 'hidden'}
-        `}>
+        <div className={`lg:col-span-7 lg:block h-full overflow-hidden bg-inherit border-l border-[var(--color-paper)]/10 ${activeTab === 'WRITTEN' ? 'block flex-1' : 'hidden'}`}>
            <WrittenSection />
         </div>
-
     </div>
   );
 };
