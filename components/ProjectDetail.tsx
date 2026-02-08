@@ -1,16 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Project, DetailMode } from '../types';
+import { Project } from '../types';
 import { ArrowLeft, ArrowUpRight, Play, Pause } from 'lucide-react';
 
 interface ProjectDetailProps {
   project: Project;
   onBack: () => void;
-  initialMode?: DetailMode;
 }
 
-export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, initialMode = 'VIDEO' }) => {
-  const [activeTab, setActiveTab] = useState<DetailMode>(initialMode);
-  const [isMobile, setIsMobile] = useState(false);
+export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
+  const [splitRatio, setSplitRatio] = useState(50); // percentage of left pane
+  const [isResizing, setIsResizing] = useState(false);
   
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -18,16 +17,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, i
   const [currentTimeStr, setCurrentTimeStr] = useState("00:00");
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
     window.scrollTo(0, 0);
-    return () => window.removeEventListener('resize', checkMobile);
   }, [project.id]);
-
-  useEffect(() => {
-    setActiveTab(initialMode);
-  }, [initialMode]);
 
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
@@ -60,25 +51,66 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, i
     }
   };
 
-  const VideoSection = () => (
-    <div className="w-full h-full flex flex-col items-center bg-[var(--color-paper)] lg:bg-[var(--color-ink)] relative transition-colors duration-300">
-         <button 
-            onClick={onBack}
-            className="hidden lg:flex absolute top-8 left-8 group items-center py-2 px-4 rounded-[var(--radius-sm)] transition-all duration-300 z-30 -ml-4 hover:bg-[var(--color-ink)] hover:text-[var(--color-paper)] border border-transparent"
-          >
-            <span className="text-xs uppercase font-medium tracking-widest text-[var(--color-paper)] opacity-80 group-hover:opacity-100 group-hover:-translate-x-1 transition-all flex items-center gap-2">
-                <ArrowLeft className="w-3 h-3 stroke-[3px]" /> Back
-            </span>
-          </button>
+  const startResizing = (e: React.MouseEvent) => {
+    setIsResizing(true);
+    e.preventDefault();
+  };
 
-         <div className="w-full flex-1 min-h-0 relative flex justify-center items-center bg-black overflow-hidden lg:rounded-xl lg:max-w-4xl lg:h-auto lg:aspect-video lg:my-auto">
-            <div className="relative w-full h-full lg:h-auto lg:aspect-video overflow-hidden group">
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizing) return;
+      const ratio = (e.clientX / window.innerWidth) * 100;
+      setSplitRatio(Math.min(Math.max(ratio, 20), 80));
+    };
+
+    const handleMouseUp = () => setIsResizing(false);
+
+    if (isResizing) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isResizing]);
+
+  return (
+    <div className="h-[100dvh] w-screen bg-[var(--color-paper)] overflow-hidden flex flex-col select-none">
+      
+      {/* Universal Header */}
+      <header className="h-16 shrink-0 border-b border-[var(--color-paper-dark)]/20 px-6 flex items-center justify-between bg-[var(--color-paper)] z-50">
+        <button onClick={onBack} className="flex items-center gap-2 group p-2 -ml-2 rounded-full hover:bg-[var(--color-paper-dim)] transition-colors">
+          <ArrowLeft className="w-5 h-5 text-[var(--color-ink)]" />
+          <span className="text-[10px] font-bold uppercase tracking-widest opacity-60 group-hover:opacity-100 transition-opacity">Back to Overview</span>
+        </button>
+        
+        <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center">
+           <h1 className="text-xs uppercase font-bold tracking-[0.2em]">{project.title}</h1>
+           <span className="text-[9px] uppercase tracking-widest opacity-40">Case Study</span>
+        </div>
+        
+        {project.liveUrl && (
+          <a href={project.liveUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-3 py-1.5 bg-[var(--color-ink)] text-white rounded-full shadow-lg hover:scale-[1.05] active:scale-95 transition-all">
+             <span className="text-[10px] font-bold uppercase tracking-widest pl-1">Prototype</span>
+             <ArrowUpRight className="w-3.5 h-3.5" />
+          </a>
+        )}
+      </header>
+
+      {/* Resizable Split Container */}
+      <div className={`flex-1 flex w-full relative ${isResizing ? 'cursor-col-resize' : ''}`}>
+        
+        {/* Left: Video Pane */}
+        <div className="h-full bg-black overflow-hidden relative flex items-center justify-center" style={{ width: `${splitRatio}%` }}>
+           <div className="relative w-full aspect-video max-w-4xl px-8 group">
                {project.videoUrl ? (
                   <>
                     <video 
                       ref={videoRef}
                       src={project.videoUrl} 
-                      className="w-full h-full object-contain" 
+                      className="w-full h-full object-contain shadow-2xl" 
                       playsInline
                       onTimeUpdate={handleTimeUpdate}
                       onEnded={() => setIsPlaying(false)}
@@ -86,15 +118,15 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, i
                       onPause={() => setIsPlaying(false)}
                     />
                     <div className="absolute inset-0 z-10 cursor-pointer" onClick={togglePlay} />
-                    <div className={`absolute inset-0 z-20 flex flex-col justify-end transition-opacity duration-300 pointer-events-none ${isPlaying ? 'opacity-0 lg:group-hover:opacity-100' : 'opacity-100'}`}>
+                    <div className={`absolute inset-0 z-20 flex flex-col justify-end transition-opacity duration-300 pointer-events-none ${isPlaying ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>
                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                          <button className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-lg">
                            {isPlaying ? <Pause className="w-6 h-6 fill-white stroke-none" /> : <Play className="w-6 h-6 fill-white stroke-none ml-1" />}
                          </button>
                        </div>
                     </div>
-                    {/* Progress Bar (Always visible on mobile) */}
-                    <div className="absolute bottom-0 left-0 right-0 z-30 pointer-events-auto h-12 bg-gradient-to-t from-black/80 to-transparent flex items-center gap-4 px-4 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
+                    {/* Controls Overlay */}
+                    <div className="absolute bottom-4 left-8 right-8 z-30 pointer-events-auto h-12 bg-gradient-to-t from-black/80 to-transparent flex items-center gap-4 px-4 opacity-0 group-hover:opacity-100 transition-opacity">
                        <button onClick={togglePlay} className="text-white">
                          {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}
                        </button>
@@ -107,86 +139,93 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, i
                ) : (
                   <img src={project.heroUrl} alt="Preview" className="w-full h-full object-cover" />
                )}
-            </div>
-         </div>
-         
-         {/* Desktop Action (Keep but hidden on mobile) */}
-         <div className="hidden lg:block w-full max-w-[280px] shrink-0 z-20 mb-12">
-            {project.liveUrl && (
-               <a href={project.liveUrl} target="_blank" rel="noreferrer" className="group flex items-center justify-center gap-3 w-full py-4 text-xs uppercase font-medium tracking-wider rounded-[var(--radius-sm)] bg-[var(--color-paper)] text-[var(--color-ink)] shadow-lg hover:scale-[1.02] transition-transform">
-                  <span>Launch Prototype</span>
-                  <ArrowUpRight className="w-3 h-3" />
-               </a>
-            )}
-         </div>
-    </div>
-  );
-
-  const WrittenSection = () => (
-    <div className={`h-full overflow-y-auto p-6 md:p-12 lg:p-24 no-scrollbar lg:pt-24 transition-colors duration-500 ${isMobile ? 'bg-[var(--color-paper-dim)]' : 'bg-[var(--color-paper)]'}`}>
-       <div className="max-w-2xl mx-auto space-y-16 lg:space-y-20 pb-24 animate-in slide-in-from-bottom-4 duration-500">
-          <div className="pb-8 border-b border-[var(--color-paper-dark)]">
-             <h1 className="text-3xl lg:text-6xl font-medium tracking-tight mb-2 leading-[1.1] text-[var(--color-ink)]">
-              {project.title} <span className="block md:inline md:text-[0.6em] text-[var(--color-ink-subtle)] font-light mt-2 md:mt-0 md:ml-2">— Case Study</span>
-             </h1>
-          </div>
-          <section>
-             <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--color-ink)] opacity-40 mb-4">System Context</h3>
-             <p className="text-lg leading-relaxed text-[var(--color-ink)]">{project.description}</p>
-          </section>
-          <section className="grid gap-8">
-             <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--color-ink)] opacity-40 mb-2">Architecture</h3>
-             <div className="grid md:grid-cols-2 gap-8 bg-[var(--color-paper-dim)]/50 lg:bg-[var(--color-paper-dim)]/20 p-6 rounded-[var(--radius-md)] border border-[var(--color-paper-dark)]/50">
-                <div className="space-y-2">
-                   <span className="font-mono text-[10px] uppercase tracking-wider text-[var(--color-ink)] opacity-50">Problem</span>
-                   <p className="text-base leading-relaxed text-[var(--color-ink-subtle)]">{project.challenge}</p>
-                </div>
-                <div className="space-y-2">
-                   <span className="font-mono text-[10px] uppercase tracking-wider text-[var(--color-ink)] opacity-50">Resolution</span>
-                   <p className="text-base leading-relaxed text-[var(--color-ink-subtle)]">{project.solution}</p>
-                </div>
-             </div>
-          </section>
-          <section>
-             <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--color-ink)] opacity-40 mb-6">Interaction Logic</h3>
-             <div className="pl-6 border-l-2 border-[var(--color-ink)]">
-                <p className="text-lg leading-relaxed text-[var(--color-ink)] italic">{project.interactionNotes}</p>
-             </div>
-          </section>
-          <div className="pt-8 lg:hidden">
-             <button className="opacity-60 hover:opacity-100 active:scale-95 transition-all cursor-pointer flex items-center gap-3 text-[10px] uppercase font-bold tracking-widest" onClick={onBack}>
-                <ArrowLeft className="w-3.5 h-3.5" /> Back to Overview
-             </button>
-          </div>
-       </div>
-    </div>
-  );
-
-  return (
-    <div className="h-[100dvh] w-screen bg-[var(--color-paper)] overflow-hidden flex flex-col lg:grid lg:grid-cols-12">
-        {/* MOBILE HEADER - Redesigned with Action & Clear Back Label */}
-        <div className="shrink-0 lg:hidden bg-inherit border-b border-[var(--color-paper-dark)]/20 sticky top-0 z-50 px-4 h-16 flex items-center justify-between">
-           <button onClick={onBack} className="flex items-center gap-2 p-2 -ml-2 rounded-full active:bg-[var(--color-paper-dark)]/20 transition-colors">
-             <ArrowLeft className="w-5 h-5 text-[var(--color-ink)]" />
-             <span className="text-[10px] font-bold uppercase tracking-widest opacity-60">Back to Overview</span>
-           </button>
+           </div>
            
-           {project.liveUrl && (
-             <a href={project.liveUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-3 py-1.5 bg-[var(--color-ink)] text-white rounded-full shadow-lg active:scale-95 transition-all">
-                <span className="text-[10px] font-bold uppercase tracking-widest pl-1">Prototype</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
-             </a>
-           )}
+           {/* Focus Controls */}
+           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+              <button 
+                onClick={() => setSplitRatio(80)}
+                className={`px-4 py-2 text-[10px] uppercase font-bold tracking-widest rounded-full transition-all ${splitRatio > 70 ? 'bg-white text-black' : 'bg-white/10 text-white/40 hover:text-white'}`}
+              >
+                Focus Media
+              </button>
+              <button 
+                onClick={() => setSplitRatio(50)}
+                className={`px-4 py-2 text-[10px] uppercase font-bold tracking-widest rounded-full transition-all ${splitRatio === 50 ? 'bg-white text-black' : 'bg-white/10 text-white/40 hover:text-white'}`}
+              >
+                Reset
+              </button>
+           </div>
         </div>
 
-        {/* Views */}
-        <div className={`lg:col-span-5 lg:block h-full overflow-hidden bg-black ${activeTab === 'VIDEO' ? 'block flex-1' : 'hidden'}`}>
-           <VideoSection />
+        {/* Resizer Handle */}
+        <div 
+          className="absolute top-0 bottom-0 z-40 w-1 group cursor-col-resize active:w-4 transition-[width]"
+          style={{ left: `calc(${splitRatio}% - 2px)` }}
+          onMouseDown={startResizing}
+        >
+           <div className="w-[1px] h-full bg-[var(--color-paper-dark)] mx-auto group-hover:bg-[var(--color-ink)] transition-colors" />
+           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-12 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="flex gap-1">
+                 <div className="w-1 h-1 bg-[var(--color-ink)] rounded-full" />
+                 <div className="w-1 h-1 bg-[var(--color-ink)] rounded-full" />
+              </div>
+           </div>
         </div>
 
-        <div className={`lg:col-span-7 lg:block h-full overflow-hidden bg-inherit border-l border-[var(--color-paper-dark)]/20 ${activeTab === 'WRITTEN' ? 'block flex-1' : 'hidden'}`}>
-           <WrittenSection />
+        {/* Right: Written Pane */}
+        <div className="h-full bg-[var(--color-paper)] overflow-y-auto no-scrollbar scroll-smooth" style={{ width: `${100 - splitRatio}%` }}>
+           <div className="p-12 lg:p-20 max-w-3xl mx-auto space-y-20 pb-32">
+              <div className="pb-8 border-b border-[var(--color-paper-dark)]">
+                 <h2 className="text-5xl font-medium tracking-tight mb-2 leading-[1.1] text-[var(--color-ink)]">
+                  {project.title}
+                 </h2>
+                 <p className="text-xl text-[var(--color-ink-subtle)] font-light leading-relaxed">{project.tagline}</p>
+              </div>
+
+              <section>
+                 <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--color-ink)] opacity-40 mb-6">System Context</h3>
+                 <p className="text-xl leading-relaxed text-[var(--color-ink)] font-light">{project.description}</p>
+              </section>
+
+              <section className="grid gap-10">
+                 <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--color-ink)] opacity-40">Architecture</h3>
+                 <div className="grid gap-8 p-8 bg-[var(--color-paper-dim)] rounded-[var(--radius-md)] border border-[var(--color-paper-dark)]/50">
+                    <div className="space-y-3">
+                       <span className="font-mono text-[10px] uppercase tracking-wider text-[var(--color-ink)] opacity-50">Problem</span>
+                       <p className="text-lg leading-relaxed text-[var(--color-ink-subtle)]">{project.challenge}</p>
+                    </div>
+                    <div className="space-y-3">
+                       <span className="font-mono text-[10px] uppercase tracking-wider text-[var(--color-ink)] opacity-50">Resolution</span>
+                       <p className="text-lg leading-relaxed text-[var(--color-ink-subtle)]">{project.solution}</p>
+                    </div>
+                 </div>
+              </section>
+
+              <section>
+                 <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--color-ink)] opacity-40 mb-8">Interaction Logic</h3>
+                 <div className="pl-8 border-l-2 border-[var(--color-ink)]">
+                    <p className="text-xl leading-relaxed text-[var(--color-ink)] italic font-light">{project.interactionNotes}</p>
+                 </div>
+              </section>
+
+              <section>
+                 <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--color-ink)] opacity-40 mb-6">Outcome</h3>
+                 <p className="text-lg leading-relaxed text-[var(--color-ink-subtle)]">{project.outcome}</p>
+              </section>
+
+              {/* Focus Controls for Text */}
+              <div className="pt-12 flex justify-start gap-2">
+                <button 
+                  onClick={() => setSplitRatio(20)}
+                  className={`px-4 py-2 text-[10px] uppercase font-bold tracking-widest rounded-full transition-all ${splitRatio < 30 ? 'bg-[var(--color-ink)] text-white' : 'bg-[var(--color-paper-dark)]/30 text-[var(--color-ink)]/40 hover:text-[var(--color-ink)]'}`}
+                >
+                  Focus Content
+                </button>
+             </div>
+           </div>
         </div>
+      </div>
     </div>
   );
 };
