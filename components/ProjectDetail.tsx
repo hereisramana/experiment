@@ -172,8 +172,9 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, i
            </button>
            
            {project.liveUrl && (
-             <a href={project.liveUrl} target="_blank" rel="noreferrer" className="p-2.5 bg-[var(--color-ink)] text-white rounded-full shadow-lg active:scale-90 transition-transform">
-               <ArrowUpRight className="w-4 h-4" />
+             <a href={project.liveUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-3 py-1.5 bg-[var(--color-ink)] text-white rounded-full shadow-lg active:scale-95 transition-all">
+                <span className="text-[10px] font-bold uppercase tracking-widest pl-1">Prototype</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
              </a>
            )}
         </div>
