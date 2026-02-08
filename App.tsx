@@ -3,7 +3,7 @@ import { PROJECTS, SKILLS, ABOUT_TEXT } from './constants';
 import { ViewState, HomeRightPaneMode } from './types';
 import { ProjectDetail } from './components/ProjectDetail';
 import { MobileHome } from './components/MobileHome';
-import { Github, Phone, X, ArrowUpRight, Play, FileText } from 'lucide-react';
+import { Github, Phone, X, ArrowUpRight, } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [view, setView] = useState<ViewState>('HOME');
