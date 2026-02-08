@@ -27,32 +27,63 @@ export const App: React.FC = () => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+
+    // Native Back Navigation Support
+    const handlePopState = (event: PopStateEvent) => {
+      const state = event.state;
+      if (!state) {
+        setView('HOME');
+        setSelectedProjectId(null);
+      } else if (state.view === 'PROJECT_DETAIL') {
+        setView('PROJECT_DETAIL');
+        setSelectedProjectId(state.projectId);
+        setDetailMode(state.mode);
+      } else if (state.view === 'OVERVIEW') {
+        setView('HOME'); // On mobile, Overview is a pane inside HOME
+        setSelectedProjectId(state.projectId);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      window.removeEventListener('popstate', handlePopState);
+    };
   }, []);
 
-  const handleProjectClick = (id: string, mode: DetailMode = 'VIDEO') => {
-    const newUrl = `?project=${id}&mode=${mode}`;
-    window.history.pushState({ projectId: id, mode }, '', newUrl);
-    setSelectedProjectId(id);
-    setDetailMode(mode);
-    setView('PROJECT_DETAIL');
+  const handleProjectClick = (id: string, mode?: DetailMode) => {
+    if (mode) {
+      // Navigate to deep dive
+      const newUrl = `?project=${id}&mode=${mode}`;
+      window.history.pushState({ view: 'PROJECT_DETAIL', projectId: id, mode }, '', newUrl);
+      setSelectedProjectId(id);
+      setDetailMode(mode);
+      setView('PROJECT_DETAIL');
+    } else {
+      // Navigate to Overview (Mobile Pane)
+      const newUrl = `?project=${id}`;
+      window.history.pushState({ view: 'OVERVIEW', projectId: id }, '', newUrl);
+      setSelectedProjectId(id);
+    }
   };
 
-  const handleBack = () => {
-    window.history.replaceState(null, '', '/');
-    setSelectedProjectId(null);
-    setView('HOME');
+  const handleBackToOverview = () => {
+    window.history.back();
   };
 
   const currentProject = PROJECTS.find(p => p.id === selectedProjectId);
   const hoveredProject = PROJECTS.find(p => p.id === hoveredProjectId);
 
   if (view === 'PROJECT_DETAIL' && currentProject) {
-    return <ProjectDetail project={currentProject} onBack={handleBack} initialMode={detailMode} />;
+    return <ProjectDetail project={currentProject} onBack={handleBackToOverview} initialMode={detailMode} />;
   }
 
   if (isMobile) {
-    return <MobileHome onNavigate={handleProjectClick} />;
+    return <MobileHome 
+      onNavigate={handleProjectClick} 
+      selectedProjectId={selectedProjectId} 
+      onCloseOverview={() => window.history.back()} 
+    />;
   }
 
   return (
@@ -95,7 +126,7 @@ export const App: React.FC = () => {
              <div className="flex-1 overflow-y-auto no-scrollbar py-2 relative" ref={scrollContainerRef} onScroll={handleListScroll}>
                 <div className="flex flex-col gap-4 md:gap-6 pb-24">
                    {PROJECTS.map((project, idx) => (
-                     <ProjectCard key={project.id} project={project} index={idx} onClick={(id) => handleProjectClick(id)} onHover={setHoveredProjectId} />
+                     <ProjectCard key={project.id} project={project} index={idx} onClick={(id) => handleProjectClick(id, 'VIDEO')} onHover={setHoveredProjectId} />
                    ))}
                 </div>
                 
