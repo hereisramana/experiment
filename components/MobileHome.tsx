@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState,} from 'react';
 import { PROJECTS, SKILLS } from '../constants';
 import { ProjectCard } from './ProjectCard';
 import { Globe, ArrowRight, Mail, Phone, Github, ChevronRight } from 'lucide-react';
