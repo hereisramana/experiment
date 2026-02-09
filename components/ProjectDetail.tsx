@@ -117,12 +117,15 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
         >
            {/* The "Frame" Container */}
            <div className={`relative w-full p-6 md:p-8 flex items-center justify-center`}>
-               <div className="relative w-full bg-black rounded-[var(--radius-lg)] shadow-2xl border border-[var(--color-paper-dark)] overflow-hidden">
-                  <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
+               {/* Restricted width for vertical phone layout */}
+               <div className="relative w-full max-w-[350px] bg-black rounded-[var(--radius-lg)] shadow-2xl border border-[var(--color-paper-dark)] overflow-hidden">
+                  {/* 177.78% padding-bottom = 16:9 aspect ratio inverted (9:16) */}
+                  <div style={{ position: 'relative', paddingBottom: '177.78%', height: 0 }}>
                     <iframe 
                       id="js_video_iframe" 
                       src={project.videoUrl} 
                       frameBorder="0" 
+                      allow="autoplay; fullscreen; picture-in-picture"
                       allowFullScreen 
                       style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
                       title={`${project.title} Video Demo`}
