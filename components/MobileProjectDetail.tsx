@@ -59,22 +59,26 @@ export const MobileProjectDetail: React.FC<MobileProjectDetailProps> = ({ projec
   return (
     <div className="h-[100dvh] w-full bg-[var(--color-paper)] flex flex-col font-sans">
       {/* Header */}
-      <header className="h-16 shrink-0 border-b border-[var(--color-paper-dark)]/20 px-4 flex items-center justify-between bg-[var(--color-paper)] z-50">
-        <button onClick={onBack} className="flex items-center gap-2 p-2 -ml-2 rounded-full active:bg-[var(--color-paper-dim)]">
+      <header className="relative h-16 shrink-0 border-b border-[var(--color-paper-dark)]/20 px-4 flex items-center justify-between bg-[var(--color-paper)] z-50">
+        
+        {/* Absolute Centered Title Group */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center pointer-events-none w-full max-w-[60%]">
+           <h1 className="text-xs uppercase font-bold tracking-[0.2em] line-clamp-1 text-center w-full">{project.title}</h1>
+           <span className="text-[9px] uppercase tracking-widest opacity-40">{mode === 'VIDEO' ? 'Video Demo' : 'Case Study'}</span>
+        </div>
+
+        {/* Left Action */}
+        <button onClick={onBack} className="relative z-10 flex items-center gap-2 p-2 -ml-2 rounded-full active:bg-[var(--color-paper-dim)]">
           <ArrowLeft className="w-5 h-5 text-[var(--color-ink)]" />
         </button>
         
-        <div className="flex flex-col items-center">
-           <h1 className="text-xs uppercase font-bold tracking-[0.2em] line-clamp-1 max-w-[150px]">{project.title}</h1>
-           <span className="text-[9px] uppercase tracking-widest opacity-40">{mode === 'VIDEO' ? 'Video Demo' : 'Case Study'}</span>
-        </div>
-        
+        {/* Right Action */}
         {project.liveUrl ? (
-          <a href={project.liveUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 px-3 py-1.5 bg-[var(--color-ink)] text-white rounded-full">
+          <a href={project.liveUrl} target="_blank" rel="noreferrer" className="relative z-10 flex items-center gap-1.5 px-3 py-1.5 bg-[var(--color-ink)] text-white rounded-full">
              <span className="text-[9px] font-bold uppercase tracking-widest">Prototype</span>
              <ArrowUpRight className="w-3 h-3" />
           </a>
-        ) : <div className="w-8" />}
+        ) : <div className="w-8 relative z-10" />}
       </header>
 
       {/* Content */}
