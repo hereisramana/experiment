@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 interface TooltipProps {
   content: string;
   children: React.ReactElement;
-  position?: 'top' | 'bottom' | 'left' | 'right';
+  position?: 'top' | 'bottom' | 'left' | 'right' | 'bottom-right';
   className?: string;
 }
 
@@ -21,6 +21,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
     bottom: 'top-full mt-2 left-1/2 -translate-x-1/2',
     left: 'right-full mr-2 top-1/2 -translate-y-1/2',
     right: 'left-full ml-2 top-1/2 -translate-y-1/2',
+    'bottom-right': 'top-full mt-2 right-0',
   };
 
   return (
