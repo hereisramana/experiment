@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PROJECTS, SKILLS, ABOUT_TEXT } from '../constants';
 import { Project, DetailMode } from '../types';
-import { Mail, ArrowLeft, Play, FileText, Github, Phone } from 'lucide-react';
+import { Mail, ArrowLeft, Play, FileText, Github, Phone, X } from 'lucide-react';
 
 interface MobileHomeProps {
   onNavigate: (projectId: string, mode?: DetailMode) => void;
@@ -15,7 +15,7 @@ export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate, selectedProj
   const [activeTab, setActiveTab] = useState<Tab>('WORKS');
   const selectedProject = PROJECTS.find(p => p.id === selectedProjectId) || null;
 
-  const baseIconBtnStyle = "p-2 rounded-[var(--radius-sm)] border border-[var(--color-paper-dark)]/30 text-[var(--color-ink)] transition-all active:scale-90 active:bg-[var(--color-paper-dim)] flex items-center justify-center w-9 h-9 group";
+  const baseIconBtnStyle = "p-2 rounded-[var(--radius-sm)] border border-[var(--color-paper-dark)]/30 text-[var(--color-ink)] transition-all active:scale-90 flex items-center justify-center w-9 h-9 group";
 
   const ProjectGridTile = ({ project }: { project: Project }) => (
     <button 
@@ -41,11 +41,10 @@ export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate, selectedProj
     <div className="fixed inset-0 z-50 bg-[var(--color-paper)] flex flex-col animate-in fade-in zoom-in-95 duration-300">
       {/* Header */}
       <div className="h-14 border-b border-[var(--color-paper-dark)]/20 px-4 flex items-center justify-between bg-[var(--color-paper)]">
-        <button onClick={onCloseOverview} className="p-2 -ml-2 rounded-full active:bg-[var(--color-paper-dim)]">
-          <ArrowLeft className="w-5 h-5" />
-        </button>
         <span className="font-mono text-[10px] uppercase tracking-[0.2em] opacity-40">Project Overview</span>
-        <div className="w-9" />
+        <button onClick={onCloseOverview} className="p-2 -mr-2 rounded-full active:bg-[var(--color-paper-dim)]">
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
       <div className="flex-1 overflow-y-auto no-scrollbar pb-32">
@@ -102,10 +101,36 @@ export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate, selectedProj
        <div className={`flex justify-between items-center px-6 py-6 border-b border-[var(--color-paper-dark)]/10 transition-colors ${activeTab === 'ABOUT' ? 'bg-[var(--color-paper-dim)]' : 'bg-[var(--color-paper)]'}`}>
           <h1 className="font-mono text-sm font-bold text-[var(--color-ink)] lowercase tracking-tight">ramanadesign.tech</h1>
            <div className="flex items-center gap-1.5">
-             <a href="tel:+1234567890" className={`${baseIconBtnStyle} hover:bg-[#2B6B7C] hover:border-[#2B6B7C] hover:text-white`} aria-label="Phone"><Phone className="w-4 h-4" /></a>
-             <a href="https://github.com" target="_blank" rel="noreferrer" className={`${baseIconBtnStyle} hover:bg-[#333333] hover:border-[#333333] hover:text-white`} aria-label="GitHub"><Github className="w-4 h-4" /></a>
-             <a href="mailto:hello@ramanadesign.tech" className={`${baseIconBtnStyle} hover:bg-[#2B6B7C] hover:border-[#2B6B7C] hover:text-white`} aria-label="Email"><Mail className="w-4 h-4" /></a>
-             <a href="https://linkedin.com" target="_blank" rel="noreferrer" className={`${baseIconBtnStyle} hover:bg-[#0077b5] hover:border-[#0077b5] hover:text-white`} aria-label="LinkedIn">
+             <a 
+               href="tel:+1234567890" 
+               className={`${baseIconBtnStyle} active:bg-[#2B6B7C] active:border-[#2B6B7C] active:text-white hover:bg-[#2B6B7C] hover:border-[#2B6B7C] hover:text-white`} 
+               aria-label="Phone"
+             >
+               <Phone className="w-4 h-4" />
+             </a>
+             <a 
+               href="https://github.com" 
+               target="_blank" 
+               rel="noreferrer" 
+               className={`${baseIconBtnStyle} active:bg-[#333333] active:border-[#333333] active:text-white hover:bg-[#333333] hover:border-[#333333] hover:text-white`} 
+               aria-label="GitHub"
+             >
+               <Github className="w-4 h-4" />
+             </a>
+             <a 
+               href="mailto:hello@ramanadesign.tech" 
+               className={`${baseIconBtnStyle} active:bg-[#2B6B7C] active:border-[#2B6B7C] active:text-white hover:bg-[#2B6B7C] hover:border-[#2B6B7C] hover:text-white`} 
+               aria-label="Email"
+             >
+               <Mail className="w-4 h-4" />
+             </a>
+             <a 
+               href="https://linkedin.com" 
+               target="_blank" 
+               rel="noreferrer" 
+               className={`${baseIconBtnStyle} active:bg-[#0077b5] active:border-[#0077b5] active:text-white hover:bg-[#0077b5] hover:border-[#0077b5] hover:text-white`} 
+               aria-label="LinkedIn"
+             >
                <span className="text-[15px] font-bold leading-none opacity-80 active:opacity-100 pb-0.5" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>in</span>
              </a>
            </div>
