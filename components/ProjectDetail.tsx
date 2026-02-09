@@ -9,6 +9,7 @@ interface ProjectDetailProps {
 
 export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [hasStarted, setHasStarted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [videoProgress, setVideoProgress] = useState(0);
   const [currentTimeStr, setCurrentTimeStr] = useState("00:00");
@@ -50,9 +51,24 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
 
   const togglePlay = () => {
     if (videoRef.current) {
-      if (videoRef.current.paused) videoRef.current.play();
-      else videoRef.current.pause();
+      if (videoRef.current.paused) {
+        videoRef.current.play();
+        setIsPlaying(true);
+      } else {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      }
     }
+  };
+
+  const startVideo = () => {
+    setHasStarted(true);
+    setTimeout(() => {
+        if (videoRef.current) {
+            videoRef.current.play();
+            setIsPlaying(true);
+        }
+    }, 10);
   };
 
   const handleTimelineClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -105,12 +121,12 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
            </div>
 
            <div className="px-12 lg:px-24 pt-12 pb-48 mx-auto space-y-24 max-w-3xl">
-              {/* Section Label */}
-              <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--color-ink)] opacity-40 block">Case Study</span>
+              
+              {/* REMOVED: Section Label (Case Study) */}
 
               <div className="pb-12 border-b border-[var(--color-paper-dark)]">
                  <h2 className="text-5xl lg:text-6xl font-medium tracking-tight mb-4 leading-[1.05] text-[var(--color-ink)]">
-                  {project.title}
+                  {project.title} <span className="text-[var(--color-ink-subtle)] text-4xl lg:text-5xl font-light block mt-2">— Case Study</span>
                  </h2>
                  <p className="text-xl lg:text-2xl text-[var(--color-ink-subtle)] font-light leading-relaxed max-w-xl">{project.tagline}</p>
               </div>
@@ -153,10 +169,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
           className="h-full bg-[var(--color-paper)] overflow-hidden relative flex items-center justify-center" 
           style={{ width: '40%' }}
         >
-           {/* Section Label */}
-           <div className="absolute top-6 left-6 z-40 pointer-events-none">
-              <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--color-ink)] opacity-40">Video Demo</span>
-           </div>
+           {/* REMOVED: Section Label (Video Demo) */}
 
            {/* The "Frame" Container */}
            <div className={`relative w-full h-full p-6 md:p-8 flex items-center justify-center`}>
@@ -173,25 +186,54 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                           onPlay={() => setIsPlaying(true)}
                           onPause={() => setIsPlaying(false)}
                         />
-                        <div className="absolute inset-0 z-10 cursor-pointer" onClick={togglePlay} />
-                        <div className={`absolute inset-0 z-20 flex flex-col justify-end transition-opacity duration-300 pointer-events-none ${isPlaying ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>
-                           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                             <button className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-lg transition-transform hover:scale-110 active:scale-90">
-                               {isPlaying ? <Pause className="w-6 h-6 fill-white stroke-none" /> : <Play className="w-6 h-6 fill-white stroke-none ml-1" />}
-                             </button>
+                        
+                        {/* Custom Thumbnail Overlay */}
+                        {!hasStarted && (
+                           <div 
+                             onClick={startVideo}
+                             className="absolute inset-0 z-50 flex items-center justify-center bg-black cursor-pointer group/thumb"
+                           >
+                              {/* Background Image */}
+                              <img 
+                                src={project.heroUrl} 
+                                alt="Video Thumbnail" 
+                                className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover/thumb:opacity-40 transition-opacity" 
+                              />
+                              
+                              {/* Central Call to Action */}
+                              <div className="relative z-10 flex flex-col items-center gap-4 animate-in fade-in zoom-in-95 duration-500">
+                                  <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center transition-transform duration-500 group-hover/thumb:scale-110 shadow-xl">
+                                      <Play className="w-8 h-8 fill-white text-white ml-1" />
+                                  </div>
+                                  <span className="font-mono text-xs uppercase tracking-[0.3em] text-white font-bold drop-shadow-md">Video</span>
+                              </div>
                            </div>
-                        </div>
-                        {/* Video Controls Overlay */}
-                        <div className="absolute bottom-0 left-0 right-0 z-30 pointer-events-auto h-16 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex items-center gap-4 px-6 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
-                           <button onClick={togglePlay} className="text-white hover:scale-110 transition-transform">
-                             {isPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current" />}
-                           </button>
-                           <div className="flex-1 h-1.5 bg-white/10 rounded-full relative overflow-hidden cursor-pointer group/timeline" onClick={handleTimelineClick}>
-                             <div className="absolute left-0 top-0 h-full bg-white transition-all" style={{ width: `${videoProgress}%` }} />
-                             <div className="absolute top-0 bottom-0 w-0.5 bg-white/40 opacity-0 group-hover/timeline:opacity-100" style={{ left: `${videoProgress}%` }} />
-                           </div>
-                           <span className="font-mono text-[10px] text-white opacity-60 tabular-nums">{currentTimeStr}</span>
-                        </div>
+                        )}
+
+                        {/* Standard Controls (Only visible after start) */}
+                        {hasStarted && (
+                          <>
+                             <div className="absolute inset-0 z-10 cursor-pointer" onClick={togglePlay} />
+                             <div className={`absolute inset-0 z-20 flex flex-col justify-end transition-opacity duration-300 pointer-events-none ${isPlaying ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>
+                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                  <button className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-lg transition-transform hover:scale-110 active:scale-90">
+                                    {isPlaying ? <Pause className="w-6 h-6 fill-white stroke-none" /> : <Play className="w-6 h-6 fill-white stroke-none ml-1" />}
+                                  </button>
+                                </div>
+                             </div>
+                             {/* Video Controls Overlay */}
+                             <div className="absolute bottom-0 left-0 right-0 z-30 pointer-events-auto h-16 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex items-center gap-4 px-6 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
+                                <button onClick={togglePlay} className="text-white hover:scale-110 transition-transform">
+                                  {isPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current" />}
+                                </button>
+                                <div className="flex-1 h-1.5 bg-white/10 rounded-full relative overflow-hidden cursor-pointer group/timeline" onClick={handleTimelineClick}>
+                                  <div className="absolute left-0 top-0 h-full bg-white transition-all" style={{ width: `${videoProgress}%` }} />
+                                  <div className="absolute top-0 bottom-0 w-0.5 bg-white/40 opacity-0 group-hover/timeline:opacity-100" style={{ left: `${videoProgress}%` }} />
+                                </div>
+                                <span className="font-mono text-[10px] text-white opacity-60 tabular-nums">{currentTimeStr}</span>
+                             </div>
+                          </>
+                        )}
                       </>
                    ) : (
                       <img src={project.heroUrl} alt="Preview" className="w-full h-full object-cover" />
