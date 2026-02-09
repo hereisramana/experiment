@@ -53,15 +53,15 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
       {/* Split Container */}
       <div className="flex-1 flex w-full relative overflow-hidden">
         
-        {/* Left: Written Pane */}
+        {/* Left: Written Pane - Darker Background */}
         <div 
-          className="h-full bg-[var(--color-paper)] overflow-y-auto no-scrollbar scroll-smooth relative border-r border-[var(--color-paper-dark)]/20" 
+          className="h-full bg-[var(--color-paper-dim)] overflow-y-auto no-scrollbar scroll-smooth relative border-r border-[var(--color-paper-dark)]/20" 
           style={{ width: '60%' }}
           ref={scrollRef}
           onScroll={handleScroll}
         >
            {/* Reading Progress Bar (Sticky) */}
-           <div className="sticky top-0 left-0 right-0 h-[2px] z-[60] bg-[var(--color-paper-dim)]/30 w-full">
+           <div className="sticky top-0 left-0 right-0 h-[2px] z-[60] bg-[var(--color-paper-dark)]/30 w-full">
               <div 
                 className="h-full bg-[var(--color-ink)] transition-all duration-75 ease-linear" 
                 style={{ width: `${readingProgress}%` }} 
@@ -70,7 +70,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
 
            <div className="px-12 lg:px-24 pt-12 pb-48 mx-auto space-y-24 max-w-3xl">
               
-              <div className="pb-12 border-b border-[var(--color-paper-dark)]">
+              <div className="pb-12 border-b border-[var(--color-paper-dark)]/50">
                  <h2 className="text-5xl lg:text-6xl font-medium tracking-tight mb-4 leading-[1.05] text-[var(--color-ink)]">
                   {project.title} <span className="text-[var(--color-ink-subtle)] text-4xl lg:text-5xl font-light block mt-2">— Case Study</span>
                  </h2>
@@ -84,7 +84,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
 
               <section className="grid gap-12 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
                  <h3 className="font-mono text-[10px] uppercase tracking-widest text-[var(--color-ink)] opacity-40 mb-2">Architecture</h3>
-                 <div className="grid gap-12 p-10 bg-[var(--color-paper-dim)]/30 rounded-[var(--radius-lg)] border border-[var(--color-paper-dark)]/50">
+                 {/* Increased contrast for card on darker background */}
+                 <div className="grid gap-12 p-10 bg-[var(--color-paper-dark)]/30 rounded-[var(--radius-lg)] border border-[var(--color-paper-dark)]/50">
                     <div className="space-y-4">
                        <span className="font-mono text-[9px] uppercase tracking-wider text-[var(--color-ink)] opacity-40">The Challenge</span>
                        <p className="text-lg leading-relaxed text-[var(--color-ink-subtle)]">{project.challenge}</p>
@@ -105,7 +106,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
 
               <section className="animate-in fade-in slide-in-from-bottom-8 duration-700 delay-400">
                  <h3 className="font-mono text-[10px] uppercase tracking-widest text-[var(--color-ink)] opacity-40 mb-8 border-b border-[var(--color-paper-dark)]/30 pb-2">Outcome</h3>
-                 <p className="text-lg leading-relaxed text-[var(--color-ink-subtle)] font-medium bg-[var(--color-ink)] text-white p-8 rounded-[var(--radius-md)]">{project.outcome}</p>
+                 <p className="text-lg leading-relaxed text-[var(--color-paper)] font-medium bg-[var(--color-ink)] p-8 rounded-[var(--radius-md)]">{project.outcome}</p>
               </section>
            </div>
         </div>
