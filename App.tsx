@@ -3,6 +3,7 @@ import { PROJECTS, SKILLS, ABOUT_TEXT } from './constants';
 import { ViewState, HomeRightPaneMode } from './types';
 import { ProjectDetail } from './components/ProjectDetail';
 import { MobileHome } from './components/MobileHome';
+import { Tooltip } from './components/Tooltip';
 import { Github, X, ArrowUpRight, Copy, Check } from 'lucide-react';
 
 /* --- Contact Card Component --- */
@@ -40,12 +41,14 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
          
          <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--color-paper-dark)]/20 bg-[var(--color-paper)]">
             <span className="font-mono text-xs uppercase tracking-widest opacity-50">Contact Card</span>
-            <button 
-              onClick={onClose}
-              className="p-2 -mr-2 text-[var(--color-ink)] hover:bg-[var(--color-paper-dim)] rounded-full transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
+            <Tooltip content="Close" position="bottom">
+              <button 
+                onClick={onClose}
+                className="p-2 -mr-2 text-[var(--color-ink)] hover:bg-[var(--color-paper-dim)] rounded-full transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </Tooltip>
          </div>
 
          <div className="p-2">
@@ -59,17 +62,19 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
                      <span className="text-[var(--color-ink)] font-medium text-lg tracking-tight selection:bg-[var(--color-accent-light)] select-text">{item.value}</span>
                   </div>
                   
-                  <button 
-                    onClick={() => handleCopy(item.value, item.label)}
-                    className="p-2 text-[var(--color-ink)] opacity-0 group-hover:opacity-100 focus:opacity-100 transition-all hover:bg-[var(--color-paper-dark)]/20 rounded-[var(--radius-sm)]"
-                    title="Copy to clipboard"
-                  >
-                     {copiedField === item.label ? (
-                        <Check className="w-4 h-4 text-[#2B6B7C]" />
-                     ) : (
-                        <Copy className="w-4 h-4 opacity-50" />
-                     )}
-                  </button>
+                  <Tooltip content="Copy to Clipboard" position="left">
+                    <button 
+                      onClick={() => handleCopy(item.value, item.label)}
+                      className="p-2 text-[var(--color-ink)] opacity-0 group-hover:opacity-100 focus:opacity-100 transition-all hover:bg-[var(--color-paper-dark)]/20 rounded-[var(--radius-sm)]"
+                      aria-label="Copy to clipboard"
+                    >
+                      {copiedField === item.label ? (
+                          <Check className="w-4 h-4 text-[#2B6B7C]" />
+                      ) : (
+                          <Copy className="w-4 h-4 opacity-50" />
+                      )}
+                    </button>
+                  </Tooltip>
                </div>
             ))}
          </div>
@@ -243,12 +248,16 @@ export const App: React.FC = () => {
             </button>
             <div className="flex gap-1">
               {/* Phone Icon Removed as requested */}
-              <a href="https://github.com" target="_blank" rel="noreferrer" className="p-2 hover:bg-[#333333] hover:text-white rounded-[var(--radius-sm)] transition-all flex items-center justify-center w-8 h-8" aria-label="GitHub">
-                <Github className="w-4 h-4" />
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="p-2 hover:bg-[#333333] hover:text-white rounded-[var(--radius-sm)] transition-all group flex items-center justify-center w-8 h-8" aria-label="LinkedIn">
-                <span className="text-[15px] font-bold leading-none opacity-80 group-hover:opacity-100 pb-0.5" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>in</span>
-              </a>
+              <Tooltip content="View GitHub Profile" position="bottom">
+                <a href="https://github.com" target="_blank" rel="noreferrer" className="p-2 hover:bg-[#333333] hover:text-white rounded-[var(--radius-sm)] transition-all flex items-center justify-center w-8 h-8" aria-label="GitHub">
+                  <Github className="w-4 h-4" />
+                </a>
+              </Tooltip>
+              <Tooltip content="View LinkedIn Profile" position="bottom">
+                <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="p-2 hover:bg-[#333333] hover:text-white rounded-[var(--radius-sm)] transition-all group flex items-center justify-center w-8 h-8" aria-label="LinkedIn">
+                  <span className="text-[15px] font-bold leading-none opacity-80 group-hover:opacity-100 pb-0.5" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>in</span>
+                </a>
+              </Tooltip>
             </div>
         </div>
       </header>
@@ -334,9 +343,11 @@ export const App: React.FC = () => {
                  <div className="absolute inset-0 bg-[var(--color-ink)] flex flex-col animate-in fade-in slide-in-from-right-8 duration-500 z-50">
                     <div className="h-16 border-b border-white/10 px-8 flex items-center justify-between sticky top-0 bg-[var(--color-ink)] z-10">
                        <span className="font-mono text-[10px] uppercase tracking-[0.2em] opacity-40">Project Overview</span>
-                       <button onClick={handleCloseOverview} className="p-2 -mr-2 rounded-full hover:bg-white/10 transition-colors">
-                          <X className="w-5 h-5" />
-                       </button>
+                       <Tooltip content="Close Overview" position="bottom">
+                         <button onClick={handleCloseOverview} className="p-2 -mr-2 rounded-full hover:bg-white/10 transition-colors">
+                            <X className="w-5 h-5" />
+                         </button>
+                       </Tooltip>
                     </div>
                     <div className="flex-1 overflow-y-auto no-scrollbar">
                        <div className="aspect-video w-full overflow-hidden">
