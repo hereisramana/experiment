@@ -253,7 +253,7 @@ export const App: React.FC = () => {
                   <Github className="w-4 h-4" />
                 </a>
               </Tooltip>
-              <Tooltip content="View LinkedIn Profile" position="bottom">
+              <Tooltip content="View LinkedIn Profile" position="bottom-right">
                 <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="p-2 hover:bg-[#333333] hover:text-white rounded-[var(--radius-sm)] transition-all group flex items-center justify-center w-8 h-8" aria-label="LinkedIn">
                   <span className="text-[15px] font-bold leading-none opacity-80 group-hover:opacity-100 pb-0.5" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>in</span>
                 </a>
@@ -343,7 +343,7 @@ export const App: React.FC = () => {
                  <div className="absolute inset-0 bg-[var(--color-ink)] flex flex-col animate-in fade-in slide-in-from-right-8 duration-500 z-50">
                     <div className="h-16 border-b border-white/10 px-8 flex items-center justify-between sticky top-0 bg-[var(--color-ink)] z-10">
                        <span className="font-mono text-[10px] uppercase tracking-[0.2em] opacity-40">Project Overview</span>
-                       <Tooltip content="Close Overview" position="bottom">
+                       <Tooltip content="Close Overview" position="bottom-right">
                          <button onClick={handleCloseOverview} className="p-2 -mr-2 rounded-full hover:bg-white/10 transition-colors">
                             <X className="w-5 h-5" />
                          </button>
