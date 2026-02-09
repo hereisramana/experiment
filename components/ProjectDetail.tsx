@@ -14,12 +14,28 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
   const [viewMode, setViewMode] = useState<SplitView>('BALANCED');
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [videoProgress, setVideoProgress] = useState(0);
   const [currentTimeStr, setCurrentTimeStr] = useState("00:00");
+  
+  // Reading Progress State
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [readingProgress, setReadingProgress] = useState(0);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [project.id]);
+
+  const handleScroll = () => {
+    if (scrollRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+        if (scrollHeight === clientHeight) {
+            setReadingProgress(100);
+        } else {
+            const progress = scrollTop / (scrollHeight - clientHeight);
+            setReadingProgress(progress * 100);
+        }
+    }
+  };
 
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
@@ -31,7 +47,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
     if (videoRef.current) {
       const current = videoRef.current.currentTime;
       const duration = videoRef.current.duration;
-      setProgress((current / duration) * 100);
+      setVideoProgress((current / duration) * 100);
       setCurrentTimeStr(formatTime(current));
     }
   };
@@ -148,8 +164,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                              {isPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current" />}
                            </button>
                            <div className="flex-1 h-1.5 bg-white/10 rounded-full relative overflow-hidden cursor-pointer group/timeline" onClick={handleTimelineClick}>
-                             <div className="absolute left-0 top-0 h-full bg-white transition-all" style={{ width: `${progress}%` }} />
-                             <div className="absolute top-0 bottom-0 w-0.5 bg-white/40 opacity-0 group-hover/timeline:opacity-100" style={{ left: `${progress}%` }} />
+                             <div className="absolute left-0 top-0 h-full bg-white transition-all" style={{ width: `${videoProgress}%` }} />
+                             <div className="absolute top-0 bottom-0 w-0.5 bg-white/40 opacity-0 group-hover/timeline:opacity-100" style={{ left: `${videoProgress}%` }} />
                            </div>
                            <span className="font-mono text-[10px] text-white opacity-60 tabular-nums">{currentTimeStr}</span>
                         </div>
@@ -165,7 +181,17 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
         <div 
           className="h-full bg-[var(--color-paper)] overflow-y-auto no-scrollbar scroll-smooth transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] relative" 
           style={{ width: widths.right }}
+          ref={scrollRef}
+          onScroll={handleScroll}
         >
+           {/* Reading Progress Bar (Sticky) */}
+           <div className="sticky top-0 left-0 right-0 h-[2px] z-[60] bg-[var(--color-paper-dim)]/30 w-full">
+              <div 
+                className="h-full bg-[var(--color-ink)] transition-all duration-75 ease-linear" 
+                style={{ width: `${readingProgress}%` }} 
+              />
+           </div>
+
            {/* Expand Button: Top-Left Corner */}
            <div className="sticky top-4 left-4 z-50 ml-4 mt-4 float-left">
              <Tooltip content={viewMode === 'TEXT_FOCUS' ? "Restore View" : "Maximize Text"} position="right">
