@@ -273,7 +273,7 @@ export const App: React.FC = () => {
                 </a>
               </Tooltip>
               <Tooltip content="View LinkedIn Profile" position="bottom-right">
-                <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="p-2 hover:bg-[#333333] hover:text-white rounded-[var(--radius-sm)] transition-all group flex items-center justify-center w-8 h-8" aria-label="LinkedIn">
+                <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="p-2 hover:bg-[#0077b5] hover:text-white rounded-[var(--radius-sm)] transition-all group flex items-center justify-center w-8 h-8" aria-label="LinkedIn">
                   <span className="text-[15px] font-bold leading-none opacity-80 group-hover:opacity-100 pb-0.5" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>in</span>
                 </a>
               </Tooltip>
