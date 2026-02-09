@@ -299,7 +299,7 @@ export const App: React.FC = () => {
               </div>
            )}
 
-           <div className="flex-1 overflow-y-auto no-scrollbar relative">
+           <div className="flex-1 overflow-y-auto relative">
               {rightPaneMode === 'PROJECTS' && (
                  <div className="p-8 grid grid-cols-2 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                     {PROJECTS.map((project) => (
@@ -349,7 +349,7 @@ export const App: React.FC = () => {
                          </button>
                        </Tooltip>
                     </div>
-                    <div className="flex-1 overflow-y-auto no-scrollbar">
+                    <div className="flex-1 overflow-y-auto">
                        <div className="aspect-video w-full overflow-hidden">
                           <img src={currentProject.heroUrl} alt={currentProject.title} className="w-full h-full object-cover" />
                        </div>
