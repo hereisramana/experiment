@@ -192,7 +192,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
              </div>
            </div>
 
-           <div className="px-12 lg:px-24 pt-12 pb-48 max-w-3xl mx-auto space-y-24">
+           <div className={`px-12 lg:px-24 pt-12 pb-48 mx-auto space-y-24 ${viewMode === 'TEXT_FOCUS' ? 'max-w-[75ch]' : 'max-w-3xl'}`}>
               {/* Section Label */}
               <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--color-ink)] opacity-40 block">Case Study</span>
 
