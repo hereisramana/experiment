@@ -72,7 +72,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                  }}
                  className="flex items-center gap-2 text-xs uppercase font-bold tracking-widest text-[var(--color-ink)] bg-white/20 hover:bg-white/30 px-4 py-3 rounded-[var(--radius-sm)] w-full md:w-auto"
                >
-                 <span>View Case Study</span>
+                 <span>Video Demo & Case Study</span>
                  <ArrowRight className="w-4 h-4" />
                </button>
             </div>
@@ -82,7 +82,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         {/* Desktop Hover Guidance (Hidden on Mobile) */}
         <div className="absolute right-6 opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ease-soft hidden md:block">
            <span className="text-[10px] uppercase font-medium tracking-widest text-[var(--color-ink)] flex items-center gap-2">
-             View Case Study →
+             Video Demo & Case Study →
            </span>
         </div>
       </div>
