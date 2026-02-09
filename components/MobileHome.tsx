@@ -15,7 +15,7 @@ export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate, selectedProj
   const [activeTab, setActiveTab] = useState<Tab>('WORKS');
   const selectedProject = PROJECTS.find(p => p.id === selectedProjectId) || null;
 
-  const baseIconBtnStyle = "p-2 rounded-[var(--radius-sm)] border border-[var(--color-paper-dark)]/30 text-[var(--color-ink)] transition-all active:scale-90 active:bg-[var(--color-paper-dim)] flex items-center justify-center w-9 h-9";
+  const baseIconBtnStyle = "p-2 rounded-[var(--radius-sm)] border border-[var(--color-paper-dark)]/30 text-[var(--color-ink)] transition-all active:scale-90 active:bg-[var(--color-paper-dim)] flex items-center justify-center w-9 h-9 group";
 
   const ProjectGridTile = ({ project }: { project: Project }) => (
     <button 
@@ -102,10 +102,10 @@ export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate, selectedProj
        <div className={`flex justify-between items-center px-6 py-6 border-b border-[var(--color-paper-dark)]/10 transition-colors ${activeTab === 'ABOUT' ? 'bg-[var(--color-paper-dim)]' : 'bg-[var(--color-paper)]'}`}>
           <h1 className="font-mono text-sm font-bold text-[var(--color-ink)] lowercase tracking-tight">ramanadesign.tech</h1>
            <div className="flex items-center gap-1.5">
-             <a href="tel:+1234567890" className={baseIconBtnStyle} aria-label="Phone"><Phone className="w-4 h-4" /></a>
-             <a href="https://github.com" target="_blank" rel="noreferrer" className={baseIconBtnStyle} aria-label="GitHub"><Github className="w-4 h-4" /></a>
-             <a href="mailto:hello@ramanadesign.tech" className={baseIconBtnStyle} aria-label="Email"><Mail className="w-4 h-4" /></a>
-             <a href="https://linkedin.com" target="_blank" rel="noreferrer" className={baseIconBtnStyle} aria-label="LinkedIn">
+             <a href="tel:+1234567890" className={`${baseIconBtnStyle} hover:bg-[#2B6B7C] hover:border-[#2B6B7C] hover:text-white`} aria-label="Phone"><Phone className="w-4 h-4" /></a>
+             <a href="https://github.com" target="_blank" rel="noreferrer" className={`${baseIconBtnStyle} hover:bg-[#333333] hover:border-[#333333] hover:text-white`} aria-label="GitHub"><Github className="w-4 h-4" /></a>
+             <a href="mailto:hello@ramanadesign.tech" className={`${baseIconBtnStyle} hover:bg-[#2B6B7C] hover:border-[#2B6B7C] hover:text-white`} aria-label="Email"><Mail className="w-4 h-4" /></a>
+             <a href="https://linkedin.com" target="_blank" rel="noreferrer" className={`${baseIconBtnStyle} hover:bg-[#0077b5] hover:border-[#0077b5] hover:text-white`} aria-label="LinkedIn">
                <span className="text-[15px] font-bold leading-none opacity-80 active:opacity-100 pb-0.5" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>in</span>
              </a>
            </div>
