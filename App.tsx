@@ -394,7 +394,7 @@ export const App: React.FC = () => {
                          onClick={() => handleLaunchDeepDive(currentProject.id)}
                          className="w-full py-5 bg-[var(--color-paper)] text-[var(--color-ink)] rounded-[var(--radius-sm)] flex items-center justify-center gap-3 group hover:scale-[1.01] transition-transform"
                        >
-                          <span className="text-xs uppercase font-bold tracking-[0.2em]">View Case Study</span>
+                          <span className="text-xs uppercase font-bold tracking-[0.2em]">Video Demo & Case Study</span>
                           <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                        </button>
                     </div>
