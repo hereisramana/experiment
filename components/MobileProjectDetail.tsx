@@ -56,10 +56,10 @@ export const MobileProjectDetail: React.FC<MobileProjectDetailProps> = ({ projec
       {/* Content */}
       <div className="flex-1 overflow-hidden relative bg-[var(--color-paper)]">
         {mode === 'VIDEO' && (
-           <div className="h-full w-full flex items-center justify-center bg-black p-4">
+           <div className="h-full w-full flex items-center justify-center bg-[var(--color-paper)] p-4">
               {/* Vertical Phone Constraint - using aspect-ratio 9/16 and height 100% to fill space */}
               <div 
-                  className="relative rounded-[var(--radius-md)] overflow-hidden border border-[var(--color-paper-dark)]/30 bg-black"
+                  className="relative rounded-[var(--radius-md)] overflow-hidden border border-[var(--color-paper-dark)]/30 bg-black shadow-lg"
                   style={{ 
                      height: '100%', 
                      aspectRatio: '9/16', 
