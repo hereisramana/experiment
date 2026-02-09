@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Project, DetailMode } from '../types';
-import { ArrowLeft, Play, Pause, ArrowUpRight } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 
 interface MobileProjectDetailProps {
   project: Project;
@@ -12,12 +12,6 @@ export const MobileProjectDetail: React.FC<MobileProjectDetailProps> = ({ projec
   const scrollRef = useRef<HTMLDivElement>(null);
   const [readingProgress, setReadingProgress] = useState(0);
   
-  // Video State
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [videoProgress, setVideoProgress] = useState(0);
-  const [currentTimeStr, setCurrentTimeStr] = useState("00:00");
-
   const handleScroll = () => {
     if (scrollRef.current) {
         const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
@@ -33,28 +27,6 @@ export const MobileProjectDetail: React.FC<MobileProjectDetailProps> = ({ projec
   useEffect(() => {
      window.scrollTo(0,0);
   }, [mode]);
-
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  };
-
-  const handleTimeUpdate = () => {
-    if (videoRef.current) {
-      const current = videoRef.current.currentTime;
-      const duration = videoRef.current.duration;
-      setVideoProgress((current / duration) * 100);
-      setCurrentTimeStr(formatTime(current));
-    }
-  };
-
-  const togglePlay = () => {
-    if (videoRef.current) {
-      if (videoRef.current.paused) videoRef.current.play();
-      else videoRef.current.pause();
-    }
-  };
 
   return (
     <div className="h-[100dvh] w-full bg-[var(--color-paper)] flex flex-col font-sans">
@@ -84,42 +56,18 @@ export const MobileProjectDetail: React.FC<MobileProjectDetailProps> = ({ projec
       {/* Content */}
       <div className="flex-1 overflow-hidden relative bg-[var(--color-paper)]">
         {mode === 'VIDEO' && (
-           <div className="h-full w-full flex items-center justify-center bg-black">
-              {project.videoUrl ? (
-                <div className="relative w-full h-full max-h-[80vh] aspect-[9/16] md:aspect-video group">
-                    <video 
-                        ref={videoRef}
-                        src={project.videoUrl} 
-                        className="w-full h-full object-contain" 
-                        playsInline
-                        onTimeUpdate={handleTimeUpdate}
-                        onEnded={() => setIsPlaying(false)}
-                        onPlay={() => setIsPlaying(true)}
-                        onPause={() => setIsPlaying(false)}
+           <div className="h-full w-full flex items-center justify-center bg-black p-4">
+              <div className="relative w-full rounded-[var(--radius-md)] overflow-hidden border border-[var(--color-paper-dark)]/30 bg-black">
+                  <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
+                    <iframe 
+                      src={project.videoUrl} 
+                      frameBorder="0" 
+                      allowFullScreen 
+                      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                      title={`${project.title} Video Demo`}
                     />
-                    <div className="absolute inset-0 z-10 cursor-pointer flex items-center justify-center" onClick={togglePlay}>
-                        {!isPlaying && (
-                             <button className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white">
-                                <Play className="w-6 h-6 fill-white stroke-none ml-1" />
-                             </button>
-                        )}
-                    </div>
-                    {/* Controls */}
-                    <div className="absolute bottom-0 left-0 right-0 z-20 p-6 bg-gradient-to-t from-black/80 to-transparent">
-                        <div className="flex items-center gap-4 text-white">
-                           <button onClick={togglePlay}>
-                             {isPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current" />}
-                           </button>
-                           <div className="flex-1 h-1 bg-white/20 rounded-full relative overflow-hidden">
-                             <div className="absolute left-0 top-0 h-full bg-white" style={{ width: `${videoProgress}%` }} />
-                           </div>
-                           <span className="font-mono text-[10px] opacity-80">{currentTimeStr}</span>
-                        </div>
-                    </div>
-                </div>
-              ) : (
-                <img src={project.heroUrl} alt="Preview" className="w-full h-full object-contain" />
-              )}
+                  </div>
+              </div>
            </div>
         )}
 
