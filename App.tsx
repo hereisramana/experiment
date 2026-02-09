@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { PROJECTS, SKILLS, ABOUT_TEXT } from './constants';
-import { ViewState, HomeRightPaneMode } from './types';
+import { ViewState, HomeRightPaneMode, DetailMode } from './types';
 import { ProjectDetail } from './components/ProjectDetail';
 import { MobileHome } from './components/MobileHome';
+import { MobileProjectDetail } from './components/MobileProjectDetail';
 import { Tooltip } from './components/Tooltip';
 import { Github, X, ArrowUpRight, Copy, Check } from 'lucide-react';
 
@@ -91,6 +92,7 @@ export const App: React.FC = () => {
   const [view, setView] = useState<ViewState>('HOME');
   const [rightPaneMode, setRightPaneMode] = useState<HomeRightPaneMode>('PROJECTS');
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const [mobileDetailMode, setMobileDetailMode] = useState<DetailMode>('WRITTEN');
   const [isMobile, setIsMobile] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
 
@@ -109,6 +111,9 @@ export const App: React.FC = () => {
         setView(state.view || 'HOME');
         setRightPaneMode(state.rightPaneMode || 'PROJECTS');
         setSelectedProjectId(state.projectId || null);
+        if (state.mobileMode) {
+            setMobileDetailMode(state.mobileMode);
+        }
       }
     };
 
@@ -126,11 +131,11 @@ export const App: React.FC = () => {
          setView(state.view || 'HOME');
          setRightPaneMode(state.rightPaneMode || 'PROJECTS');
          setSelectedProjectId(state.projectId || null);
+         if (state.mobileMode) setMobileDetailMode(state.mobileMode);
       } else if (pId) {
          // Deep Link Handling
          if (v === 'detail') {
             // Reconstruct History: Home -> Overview -> Detail
-            // 1. Replace current entry with Overview (so Back lands here)
             const overviewUrl = `?project=${pId}&view=overview`;
             window.history.replaceState(
                { view: 'HOME', rightPaneMode: 'OVERVIEW', projectId: pId }, 
@@ -181,7 +186,7 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleLaunchDeepDive = (id: string) => {
+  const handleLaunchDeepDive = (id: string, mobileMode?: DetailMode) => {
     // Inject "Overview" state into history before pushing Detail
     // This ensures "Back" returns to the Overview pane.
     const overviewUrl = `?project=${id}&view=overview`;
@@ -193,12 +198,13 @@ export const App: React.FC = () => {
 
     const detailUrl = `?project=${id}&view=detail`;
     window.history.pushState(
-       { view: 'PROJECT_DETAIL', projectId: id }, 
+       { view: 'PROJECT_DETAIL', projectId: id, mobileMode }, 
        '', 
        detailUrl
     );
     
     setSelectedProjectId(id);
+    if (mobileMode) setMobileDetailMode(mobileMode);
     setView('PROJECT_DETAIL');
   };
 
@@ -211,21 +217,35 @@ export const App: React.FC = () => {
 
   const currentProject = PROJECTS.find(p => p.id === selectedProjectId);
 
-  if (view === 'PROJECT_DETAIL' && currentProject) {
-    return <ProjectDetail project={currentProject} onBack={() => window.history.back()} />;
-  }
+  // --- RENDERING ---
 
   if (isMobile) {
+    if (view === 'PROJECT_DETAIL' && currentProject) {
+        return <MobileProjectDetail 
+                  project={currentProject} 
+                  mode={mobileDetailMode} 
+                  onBack={() => {
+                      // We go back in history, which should pop state to overview
+                      window.history.back();
+                  }} 
+               />
+    }
+
     return (
       <MobileHome 
         onNavigate={(id, mode) => {
-          if (mode) handleLaunchDeepDive(id);
+          if (mode) handleLaunchDeepDive(id, mode);
           else setSelectedProjectId(id);
         }} 
         selectedProjectId={selectedProjectId} 
         onCloseOverview={() => setSelectedProjectId(null)} 
       />
     );
+  }
+
+  // Desktop View
+  if (view === 'PROJECT_DETAIL' && currentProject) {
+    return <ProjectDetail project={currentProject} onBack={() => window.history.back()} />;
   }
 
   return (
@@ -247,7 +267,6 @@ export const App: React.FC = () => {
               Contact Me
             </button>
             <div className="flex gap-1">
-              {/* Phone Icon Removed as requested */}
               <Tooltip content="View GitHub Profile" position="bottom">
                 <a href="https://github.com" target="_blank" rel="noreferrer" className="p-2 hover:bg-[#333333] hover:text-white rounded-[var(--radius-sm)] transition-all flex items-center justify-center w-8 h-8" aria-label="GitHub">
                   <Github className="w-4 h-4" />
