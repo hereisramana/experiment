@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Project } from '../types';
 import { ArrowLeft, ArrowUpRight, Play, Pause, Maximize2, Minimize2 } from 'lucide-react';
+import { Tooltip } from './Tooltip';
 
 interface ProjectDetailProps {
   project: Project;
@@ -103,17 +104,20 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
           style={{ width: widths.left }}
         >
            {/* Expand Button: Top-Right Corner */}
-           <button 
-             onClick={toggleVideoFocus}
-             className="absolute top-4 right-4 z-50 p-2 text-[var(--color-ink)] bg-[var(--color-paper)]/80 backdrop-blur-md border border-[var(--color-paper-dark)]/50 rounded-[var(--radius-sm)] hover:bg-[var(--color-paper-dim)] hover:border-[var(--color-paper-dark)] transition-all shadow-sm group"
-             title={viewMode === 'VIDEO_FOCUS' ? "Restore View" : "Maximize Video"}
-           >
-             {viewMode === 'VIDEO_FOCUS' ? (
-                <Minimize2 className="w-4 h-4 opacity-60 group-hover:opacity-100" />
-             ) : (
-                <Maximize2 className="w-4 h-4 opacity-60 group-hover:opacity-100" />
-             )}
-           </button>
+           <div className="absolute top-4 right-4 z-50">
+             <Tooltip content={viewMode === 'VIDEO_FOCUS' ? "Restore View" : "Maximize Video"} position="left">
+                <button 
+                  onClick={toggleVideoFocus}
+                  className="p-2 text-[var(--color-ink)] bg-[var(--color-paper)]/80 backdrop-blur-md border border-[var(--color-paper-dark)]/50 rounded-[var(--radius-sm)] hover:bg-[var(--color-paper-dim)] hover:border-[var(--color-paper-dark)] transition-all shadow-sm group"
+                >
+                  {viewMode === 'VIDEO_FOCUS' ? (
+                      <Minimize2 className="w-4 h-4 opacity-60 group-hover:opacity-100" />
+                  ) : (
+                      <Maximize2 className="w-4 h-4 opacity-60 group-hover:opacity-100" />
+                  )}
+                </button>
+             </Tooltip>
+           </div>
 
            {/* The "Frame" Container - Acts as the whitespace border */}
            <div className={`relative w-full h-full p-6 md:p-8 flex items-center justify-center transition-all duration-500 ${viewMode === 'TEXT_FOCUS' ? 'opacity-40 blur-sm scale-95' : 'opacity-100 scale-100'}`}>
@@ -163,17 +167,20 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
           style={{ width: widths.right }}
         >
            {/* Expand Button: Top-Left Corner */}
-           <button 
-             onClick={toggleTextFocus}
-             className="sticky top-4 left-4 z-50 ml-4 mt-4 float-left p-2 text-[var(--color-ink)] bg-[var(--color-paper)]/80 backdrop-blur-md border border-[var(--color-paper-dark)]/50 rounded-[var(--radius-sm)] hover:bg-[var(--color-paper-dim)] hover:border-[var(--color-paper-dark)] transition-all shadow-sm group"
-             title={viewMode === 'TEXT_FOCUS' ? "Restore View" : "Maximize Text"}
-           >
-             {viewMode === 'TEXT_FOCUS' ? (
-                <Minimize2 className="w-4 h-4 opacity-60 group-hover:opacity-100" />
-             ) : (
-                <Maximize2 className="w-4 h-4 opacity-60 group-hover:opacity-100" />
-             )}
-           </button>
+           <div className="sticky top-4 left-4 z-50 ml-4 mt-4 float-left">
+             <Tooltip content={viewMode === 'TEXT_FOCUS' ? "Restore View" : "Maximize Text"} position="right">
+                <button 
+                  onClick={toggleTextFocus}
+                  className="p-2 text-[var(--color-ink)] bg-[var(--color-paper)]/80 backdrop-blur-md border border-[var(--color-paper-dark)]/50 rounded-[var(--radius-sm)] hover:bg-[var(--color-paper-dim)] hover:border-[var(--color-paper-dark)] transition-all shadow-sm group"
+                >
+                  {viewMode === 'TEXT_FOCUS' ? (
+                      <Minimize2 className="w-4 h-4 opacity-60 group-hover:opacity-100" />
+                  ) : (
+                      <Maximize2 className="w-4 h-4 opacity-60 group-hover:opacity-100" />
+                  )}
+                </button>
+             </Tooltip>
+           </div>
 
            <div className={`p-12 lg:p-24 max-w-3xl mx-auto space-y-24 pb-48 transition-opacity duration-500 ${viewMode === 'VIDEO_FOCUS' ? 'opacity-20 pointer-events-none' : 'opacity-100'}`}>
               <div className="pb-12 border-b border-[var(--color-paper-dark)]">
