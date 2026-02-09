@@ -80,9 +80,9 @@ export const MobileProjectDetail: React.FC<MobileProjectDetailProps> = ({ projec
         )}
 
         {mode === 'WRITTEN' && (
-           <div className="h-full overflow-y-auto" ref={scrollRef} onScroll={handleScroll}>
+           <div className="h-full overflow-y-auto bg-[var(--color-paper-dim)]" ref={scrollRef} onScroll={handleScroll}>
               {/* Progress Bar */}
-              <div className="sticky top-0 left-0 right-0 h-[3px] z-[60] bg-[var(--color-paper-dim)]/30 w-full">
+              <div className="sticky top-0 left-0 right-0 h-[3px] z-[60] bg-[var(--color-paper-dark)]/30 w-full">
                  <div 
                    className="h-full bg-[#2B6B7C] transition-all duration-75 ease-linear" 
                    style={{ width: `${readingProgress}%` }} 
@@ -104,7 +104,8 @@ export const MobileProjectDetail: React.FC<MobileProjectDetailProps> = ({ projec
 
                   <section className="space-y-6">
                      <h3 className="font-mono text-[10px] uppercase tracking-widest text-[var(--color-ink)] opacity-40">Architecture</h3>
-                     <div className="p-6 bg-[var(--color-paper-dim)]/50 rounded-[var(--radius-md)] border border-[var(--color-paper-dark)]/30 space-y-6">
+                     {/* Darker inner card for contrast against paper-dim background */}
+                     <div className="p-6 bg-[var(--color-paper-dark)]/30 rounded-[var(--radius-md)] border border-[var(--color-paper-dark)]/30 space-y-6">
                         <div className="space-y-2">
                            <span className="font-mono text-[9px] uppercase tracking-wider text-[var(--color-ink)] opacity-50">The Challenge</span>
                            <p className="text-sm leading-relaxed text-[var(--color-ink-subtle)]">{project.challenge}</p>
@@ -125,7 +126,8 @@ export const MobileProjectDetail: React.FC<MobileProjectDetailProps> = ({ projec
 
                   <section>
                      <h3 className="font-mono text-[10px] uppercase tracking-widest text-[var(--color-ink)] opacity-40 mb-4 border-b border-[var(--color-paper-dark)]/30 pb-2">Outcome</h3>
-                     <p className="text-sm leading-relaxed text-[var(--color-ink-subtle)] font-medium bg-[var(--color-paper-dim)] p-6 rounded-[var(--radius-md)]">{project.outcome}</p>
+                     {/* Matching Desktop Outcome Style: High Contrast */}
+                     <p className="text-sm leading-relaxed text-[var(--color-paper)] font-medium bg-[var(--color-ink)] p-6 rounded-[var(--radius-md)]">{project.outcome}</p>
                   </section>
               </div>
            </div>
