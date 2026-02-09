@@ -57,18 +57,24 @@ export const MobileProjectDetail: React.FC<MobileProjectDetailProps> = ({ projec
       <div className="flex-1 overflow-hidden relative bg-[var(--color-paper)]">
         {mode === 'VIDEO' && (
            <div className="h-full w-full flex items-center justify-center bg-black p-4">
-              {/* Vertical Phone Constraint */}
-              <div className="relative w-full max-w-[350px] rounded-[var(--radius-md)] overflow-hidden border border-[var(--color-paper-dark)]/30 bg-black">
-                  <div style={{ position: 'relative', paddingBottom: '177.78%', height: 0 }}>
-                    <iframe 
-                      src={project.videoUrl} 
-                      frameBorder="0" 
-                      allow="autoplay; fullscreen; picture-in-picture"
-                      allowFullScreen 
-                      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-                      title={`${project.title} Video Demo`}
-                    />
-                  </div>
+              {/* Vertical Phone Constraint - using aspect-ratio 9/16 and height 100% to fill space */}
+              <div 
+                  className="relative rounded-[var(--radius-md)] overflow-hidden border border-[var(--color-paper-dark)]/30 bg-black"
+                  style={{ 
+                     height: '100%', 
+                     aspectRatio: '9/16', 
+                     width: 'auto',
+                     maxWidth: '100%' 
+                  }}
+              >
+                  <iframe 
+                    src={project.videoUrl} 
+                    className="w-full h-full"
+                    frameBorder="0" 
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowFullScreen 
+                    title={`${project.title} Video Demo`}
+                  />
               </div>
            </div>
         )}
