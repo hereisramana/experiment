@@ -9,7 +9,7 @@ export const PROJECTS: Project[] = [
     thumbnailUrl: 'https://picsum.photos/800/600?random=1',
     heroUrl: 'https://picsum.photos/1200/600?random=10',
     videoUrl: 'https://jumpshare.com/embed/PXJXQXFMcSuTmbrddZQC',
-    liveUrl: 'https://smriti-new.vercel.app/',
+    liveUrl: 'https://smriti-ten.vercel.app/',
     description: 'Smriti is a digital sanctuary designed for the anonymous sharing of memories. Unlike traditional social media that prioritizes metrics and engagement, Smriti focuses on catharsis and emotional connection through ephemeral, text-first storytelling.',
     role: 'Lead Product Designer',
     duration: '3 Months',
