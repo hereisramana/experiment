@@ -69,10 +69,11 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
   };
 
   // Map viewMode to percentage widths
+  // Left is now Text/Written Pane, Right is Video Pane
   const getWidths = () => {
     switch (viewMode) {
-      case 'TEXT_FOCUS': return { left: '0%', right: '100%' };
-      default: return { left: '40%', right: '60%' }; // Widened text pane
+      case 'TEXT_FOCUS': return { left: '100%', right: '0%' }; // Text takes full width
+      default: return { left: '60%', right: '40%' }; // Text 60%, Video 40%
     }
   };
 
@@ -107,62 +108,10 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
       {/* Split Container */}
       <div className="flex-1 flex w-full relative overflow-hidden">
         
-        {/* Left: Video Pane (Framed) */}
+        {/* Left: Written Pane (Moved here) */}
         <div 
-          className="h-full bg-[var(--color-paper)] overflow-hidden relative flex items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] border-r border-[var(--color-paper-dark)]/20" 
-          style={{ width: widths.left, opacity: viewMode === 'TEXT_FOCUS' ? 0 : 1 }}
-        >
-           {/* Section Label */}
-           <div className="absolute top-6 left-6 z-40 pointer-events-none">
-              <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--color-ink)] opacity-40">Video Demo</span>
-           </div>
-
-           {/* The "Frame" Container */}
-           <div className={`relative w-full h-full p-6 md:p-8 flex items-center justify-center transition-all duration-500`}>
-               <div className="relative w-full h-full bg-black rounded-[var(--radius-lg)] shadow-2xl border border-[var(--color-paper-dark)] overflow-hidden group">
-                   {project.videoUrl ? (
-                      <>
-                        <video 
-                          ref={videoRef}
-                          src={project.videoUrl} 
-                          className="w-full h-full object-contain" 
-                          playsInline
-                          onTimeUpdate={handleTimeUpdate}
-                          onEnded={() => setIsPlaying(false)}
-                          onPlay={() => setIsPlaying(true)}
-                          onPause={() => setIsPlaying(false)}
-                        />
-                        <div className="absolute inset-0 z-10 cursor-pointer" onClick={togglePlay} />
-                        <div className={`absolute inset-0 z-20 flex flex-col justify-end transition-opacity duration-300 pointer-events-none ${isPlaying ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>
-                           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                             <button className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-lg transition-transform hover:scale-110 active:scale-90">
-                               {isPlaying ? <Pause className="w-6 h-6 fill-white stroke-none" /> : <Play className="w-6 h-6 fill-white stroke-none ml-1" />}
-                             </button>
-                           </div>
-                        </div>
-                        {/* Video Controls Overlay */}
-                        <div className="absolute bottom-0 left-0 right-0 z-30 pointer-events-auto h-16 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex items-center gap-4 px-6 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
-                           <button onClick={togglePlay} className="text-white hover:scale-110 transition-transform">
-                             {isPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current" />}
-                           </button>
-                           <div className="flex-1 h-1.5 bg-white/10 rounded-full relative overflow-hidden cursor-pointer group/timeline" onClick={handleTimelineClick}>
-                             <div className="absolute left-0 top-0 h-full bg-white transition-all" style={{ width: `${videoProgress}%` }} />
-                             <div className="absolute top-0 bottom-0 w-0.5 bg-white/40 opacity-0 group-hover/timeline:opacity-100" style={{ left: `${videoProgress}%` }} />
-                           </div>
-                           <span className="font-mono text-[10px] text-white opacity-60 tabular-nums">{currentTimeStr}</span>
-                        </div>
-                      </>
-                   ) : (
-                      <img src={project.heroUrl} alt="Preview" className="w-full h-full object-cover" />
-                   )}
-               </div>
-           </div>
-        </div>
-
-        {/* Right: Written Pane */}
-        <div 
-          className="h-full bg-[var(--color-paper)] overflow-y-auto no-scrollbar scroll-smooth transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] relative" 
-          style={{ width: widths.right }}
+          className="h-full bg-[var(--color-paper)] overflow-y-auto no-scrollbar scroll-smooth transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] relative border-r border-[var(--color-paper-dark)]/20" 
+          style={{ width: widths.left }}
           ref={scrollRef}
           onScroll={handleScroll}
         >
@@ -235,6 +184,59 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
               </section>
            </div>
         </div>
+        
+        {/* Right: Video Pane (Moved here) */}
+        <div 
+          className="h-full bg-[var(--color-paper)] overflow-hidden relative flex items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]" 
+          style={{ width: widths.right, opacity: viewMode === 'TEXT_FOCUS' ? 0 : 1 }}
+        >
+           {/* Section Label */}
+           <div className="absolute top-6 left-6 z-40 pointer-events-none">
+              <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--color-ink)] opacity-40">Video Demo</span>
+           </div>
+
+           {/* The "Frame" Container */}
+           <div className={`relative w-full h-full p-6 md:p-8 flex items-center justify-center transition-all duration-500`}>
+               <div className="relative w-full h-full bg-black rounded-[var(--radius-lg)] shadow-2xl border border-[var(--color-paper-dark)] overflow-hidden group">
+                   {project.videoUrl ? (
+                      <>
+                        <video 
+                          ref={videoRef}
+                          src={project.videoUrl} 
+                          className="w-full h-full object-contain" 
+                          playsInline
+                          onTimeUpdate={handleTimeUpdate}
+                          onEnded={() => setIsPlaying(false)}
+                          onPlay={() => setIsPlaying(true)}
+                          onPause={() => setIsPlaying(false)}
+                        />
+                        <div className="absolute inset-0 z-10 cursor-pointer" onClick={togglePlay} />
+                        <div className={`absolute inset-0 z-20 flex flex-col justify-end transition-opacity duration-300 pointer-events-none ${isPlaying ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>
+                           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                             <button className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-lg transition-transform hover:scale-110 active:scale-90">
+                               {isPlaying ? <Pause className="w-6 h-6 fill-white stroke-none" /> : <Play className="w-6 h-6 fill-white stroke-none ml-1" />}
+                             </button>
+                           </div>
+                        </div>
+                        {/* Video Controls Overlay */}
+                        <div className="absolute bottom-0 left-0 right-0 z-30 pointer-events-auto h-16 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex items-center gap-4 px-6 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
+                           <button onClick={togglePlay} className="text-white hover:scale-110 transition-transform">
+                             {isPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current" />}
+                           </button>
+                           <div className="flex-1 h-1.5 bg-white/10 rounded-full relative overflow-hidden cursor-pointer group/timeline" onClick={handleTimelineClick}>
+                             <div className="absolute left-0 top-0 h-full bg-white transition-all" style={{ width: `${videoProgress}%` }} />
+                             <div className="absolute top-0 bottom-0 w-0.5 bg-white/40 opacity-0 group-hover/timeline:opacity-100" style={{ left: `${videoProgress}%` }} />
+                           </div>
+                           <span className="font-mono text-[10px] text-white opacity-60 tabular-nums">{currentTimeStr}</span>
+                        </div>
+                      </>
+                   ) : (
+                      <img src={project.heroUrl} alt="Preview" className="w-full h-full object-cover" />
+                   )}
+               </div>
+           </div>
+        </div>
+
       </div>
     </div>
   );
