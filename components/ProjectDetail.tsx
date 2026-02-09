@@ -8,7 +8,7 @@ interface ProjectDetailProps {
   onBack: () => void;
 }
 
-type SplitView = 'BALANCED' | 'VIDEO_FOCUS' | 'TEXT_FOCUS';
+type SplitView = 'BALANCED' | 'TEXT_FOCUS';
 
 export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
   const [viewMode, setViewMode] = useState<SplitView>('BALANCED');
@@ -71,18 +71,12 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
   // Map viewMode to percentage widths
   const getWidths = () => {
     switch (viewMode) {
-      case 'VIDEO_FOCUS': return { left: '85%', right: '15%' };
-      case 'TEXT_FOCUS': return { left: '15%', right: '85%' };
-      default: return { left: '50%', right: '50%' };
+      case 'TEXT_FOCUS': return { left: '0%', right: '100%' };
+      default: return { left: '40%', right: '60%' }; // Widened text pane
     }
   };
 
   const widths = getWidths();
-
-  // Button handlers
-  const toggleVideoFocus = () => {
-    setViewMode(prev => prev === 'VIDEO_FOCUS' ? 'BALANCED' : 'VIDEO_FOCUS');
-  };
 
   const toggleTextFocus = () => {
     setViewMode(prev => prev === 'TEXT_FOCUS' ? 'BALANCED' : 'TEXT_FOCUS');
@@ -100,7 +94,6 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
         
         <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center">
            <h1 className="text-xs uppercase font-bold tracking-[0.2em]">{project.title}</h1>
-           <span className="text-[9px] uppercase tracking-widest opacity-40">Case Study</span>
         </div>
         
         {project.liveUrl && (
@@ -117,26 +110,15 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
         {/* Left: Video Pane (Framed) */}
         <div 
           className="h-full bg-[var(--color-paper)] overflow-hidden relative flex items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] border-r border-[var(--color-paper-dark)]/20" 
-          style={{ width: widths.left }}
+          style={{ width: widths.left, opacity: viewMode === 'TEXT_FOCUS' ? 0 : 1 }}
         >
-           {/* Expand Button: Top-Right Corner */}
-           <div className="absolute top-4 right-4 z-50">
-             <Tooltip content={viewMode === 'VIDEO_FOCUS' ? "Restore View" : "Maximize Video"} position="left">
-                <button 
-                  onClick={toggleVideoFocus}
-                  className="p-2 text-[var(--color-ink)] bg-[var(--color-paper)]/80 backdrop-blur-md border border-[var(--color-paper-dark)]/50 rounded-[var(--radius-sm)] hover:bg-[var(--color-paper-dim)] hover:border-[var(--color-paper-dark)] transition-all shadow-sm group"
-                >
-                  {viewMode === 'VIDEO_FOCUS' ? (
-                      <Minimize2 className="w-4 h-4 opacity-60 group-hover:opacity-100" />
-                  ) : (
-                      <Maximize2 className="w-4 h-4 opacity-60 group-hover:opacity-100" />
-                  )}
-                </button>
-             </Tooltip>
+           {/* Section Label */}
+           <div className="absolute top-6 left-6 z-40 pointer-events-none">
+              <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--color-ink)] opacity-40">Video Demo</span>
            </div>
 
-           {/* The "Frame" Container - Acts as the whitespace border */}
-           <div className={`relative w-full h-full p-6 md:p-8 flex items-center justify-center transition-all duration-500 ${viewMode === 'TEXT_FOCUS' ? 'opacity-40 blur-sm scale-95' : 'opacity-100 scale-100'}`}>
+           {/* The "Frame" Container */}
+           <div className={`relative w-full h-full p-6 md:p-8 flex items-center justify-center transition-all duration-500`}>
                <div className="relative w-full h-full bg-black rounded-[var(--radius-lg)] shadow-2xl border border-[var(--color-paper-dark)] overflow-hidden group">
                    {project.videoUrl ? (
                       <>
@@ -192,23 +174,28 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
               />
            </div>
 
-           {/* Expand Button: Top-Left Corner */}
-           <div className="sticky top-4 left-4 z-50 ml-4 mt-4 float-left">
-             <Tooltip content={viewMode === 'TEXT_FOCUS' ? "Restore View" : "Maximize Text"} position="right">
-                <button 
-                  onClick={toggleTextFocus}
-                  className="p-2 text-[var(--color-ink)] bg-[var(--color-paper)]/80 backdrop-blur-md border border-[var(--color-paper-dark)]/50 rounded-[var(--radius-sm)] hover:bg-[var(--color-paper-dim)] hover:border-[var(--color-paper-dark)] transition-all shadow-sm group"
-                >
-                  {viewMode === 'TEXT_FOCUS' ? (
-                      <Minimize2 className="w-4 h-4 opacity-60 group-hover:opacity-100" />
-                  ) : (
-                      <Maximize2 className="w-4 h-4 opacity-60 group-hover:opacity-100" />
-                  )}
-                </button>
-             </Tooltip>
+           {/* Expand Button: Top-Right Corner */}
+           <div className="sticky top-6 right-6 z-50 flex justify-end px-6 pointer-events-none float-right">
+             <div className="pointer-events-auto">
+                <Tooltip content={viewMode === 'TEXT_FOCUS' ? "Restore View" : "Maximize Text"} position="left">
+                    <button 
+                    onClick={toggleTextFocus}
+                    className="p-2 text-[var(--color-ink)] bg-[var(--color-paper)]/80 backdrop-blur-md border border-[var(--color-paper-dark)]/50 rounded-[var(--radius-sm)] hover:bg-[var(--color-paper-dim)] hover:border-[var(--color-paper-dark)] transition-all shadow-sm group"
+                    >
+                    {viewMode === 'TEXT_FOCUS' ? (
+                        <Minimize2 className="w-4 h-4 opacity-60 group-hover:opacity-100" />
+                    ) : (
+                        <Maximize2 className="w-4 h-4 opacity-60 group-hover:opacity-100" />
+                    )}
+                    </button>
+                </Tooltip>
+             </div>
            </div>
 
-           <div className={`p-12 lg:p-24 max-w-3xl mx-auto space-y-24 pb-48 transition-opacity duration-500 ${viewMode === 'VIDEO_FOCUS' ? 'opacity-20 pointer-events-none' : 'opacity-100'}`}>
+           <div className="px-12 lg:px-24 pt-12 pb-48 max-w-3xl mx-auto space-y-24">
+              {/* Section Label */}
+              <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--color-ink)] opacity-40 block">Case Study</span>
+
               <div className="pb-12 border-b border-[var(--color-paper-dark)]">
                  <h2 className="text-5xl lg:text-6xl font-medium tracking-tight mb-4 leading-[1.05] text-[var(--color-ink)]">
                   {project.title}
