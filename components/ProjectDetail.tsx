@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Project } from '../types';
-import { ArrowLeft, ArrowUpRight, Play } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 
 interface ProjectDetailProps {
   project: Project;
@@ -8,8 +8,6 @@ interface ProjectDetailProps {
 }
 
 export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
-  const [hasStarted, setHasStarted] = useState(false);
-  
   // Reading Progress State
   const scrollRef = useRef<HTMLDivElement>(null);
   const [readingProgress, setReadingProgress] = useState(0);
@@ -28,10 +26,6 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
             setReadingProgress(progress * 100);
         }
     }
-  };
-
-  const startVideo = () => {
-    setHasStarted(true);
   };
 
   return (
@@ -122,42 +116,18 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
           style={{ width: '40%' }}
         >
            {/* The "Frame" Container */}
-           <div className={`relative w-full h-full p-6 md:p-8 flex items-center justify-center`}>
-               <div className="relative w-full h-full bg-black rounded-[var(--radius-lg)] shadow-2xl border border-[var(--color-paper-dark)] overflow-hidden group flex items-center justify-center">
-                   
-                   {/* Custom Thumbnail Overlay */}
-                   {!hasStarted ? (
-                      <div 
-                        onClick={startVideo}
-                        className="absolute inset-0 z-50 flex items-center justify-center bg-black cursor-pointer group/thumb"
-                      >
-                         {/* Background Image */}
-                         <img 
-                           src={project.heroUrl} 
-                           alt="Video Thumbnail" 
-                           className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover/thumb:opacity-40 transition-opacity" 
-                         />
-                         
-                         {/* Central Call to Action */}
-                         <div className="relative z-10 flex flex-col items-center gap-4 animate-in fade-in zoom-in-95 duration-500">
-                             <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center transition-transform duration-500 group-hover/thumb:scale-110 shadow-xl">
-                                 <Play className="w-8 h-8 fill-white text-white ml-1" />
-                             </div>
-                             <span className="font-mono text-xs uppercase tracking-[0.3em] text-white font-bold drop-shadow-md">Video</span>
-                         </div>
-                      </div>
-                   ) : (
-                      <div className="w-full" style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
-                        <iframe 
-                            id="js_video_iframe" 
-                            src="https://jumpshare.com/embed/PXJXQXFMcSuTmbrddZQC?autoplay=true" 
-                            frameBorder="0" 
-                            allow="autoplay; fullscreen"
-                            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-                            title="Video Demo"
-                        ></iframe>
-                      </div>
-                   )}
+           <div className={`relative w-full p-6 md:p-8 flex items-center justify-center`}>
+               <div className="relative w-full bg-black rounded-[var(--radius-lg)] shadow-2xl border border-[var(--color-paper-dark)] overflow-hidden">
+                  <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
+                    <iframe 
+                      id="js_video_iframe" 
+                      src={project.videoUrl} 
+                      frameBorder="0" 
+                      allowFullScreen 
+                      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                      title={`${project.title} Video Demo`}
+                    />
+                  </div>
                </div>
            </div>
         </div>
