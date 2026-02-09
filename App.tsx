@@ -3,13 +3,91 @@ import { PROJECTS, SKILLS, ABOUT_TEXT } from './constants';
 import { ViewState, HomeRightPaneMode } from './types';
 import { ProjectDetail } from './components/ProjectDetail';
 import { MobileHome } from './components/MobileHome';
-import { Github, Phone, X, ArrowUpRight } from 'lucide-react';
+import { Github, X, ArrowUpRight, Copy, Check } from 'lucide-react';
+
+/* --- Contact Card Component --- */
+interface ContactModalProps {
+  onClose: () => void;
+}
+
+const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+
+  // Hardcoded contact details
+  const contactDetails = [
+    { label: "Name", value: "Ramana Design" },
+    { label: "Email", value: "hello@ramanadesign.tech" },
+    { label: "Phone", value: "+1 (415) 555-0123" },
+    { label: "Studio", value: "San Francisco, CA" },
+  ];
+
+  const handleCopy = (text: string, label: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(label);
+    setTimeout(() => setCopiedField(null), 2000);
+  };
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-[var(--color-ink)]/20 backdrop-blur-sm transition-opacity duration-300" 
+        onClick={onClose} 
+      />
+      
+      {/* Card */}
+      <div className="bg-[var(--color-paper)] border border-[var(--color-paper-dark)] shadow-2xl rounded-[var(--radius-lg)] w-full max-w-md relative overflow-hidden animate-in fade-in zoom-in-95 duration-200 flex flex-col">
+         
+         <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--color-paper-dark)]/20 bg-[var(--color-paper)]">
+            <span className="font-mono text-xs uppercase tracking-widest opacity-50">Contact Card</span>
+            <button 
+              onClick={onClose}
+              className="p-2 -mr-2 text-[var(--color-ink)] hover:bg-[var(--color-paper-dim)] rounded-full transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+         </div>
+
+         <div className="p-2">
+            {contactDetails.map((item) => (
+               <div 
+                 key={item.label} 
+                 className="group flex items-center justify-between p-4 hover:bg-[var(--color-paper-dim)]/50 rounded-[var(--radius-md)] transition-colors select-none"
+               >
+                  <div className="flex flex-col gap-1">
+                     <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--color-ink-subtle)] opacity-60">{item.label}</span>
+                     <span className="text-[var(--color-ink)] font-medium text-lg tracking-tight selection:bg-[var(--color-accent-light)] select-text">{item.value}</span>
+                  </div>
+                  
+                  <button 
+                    onClick={() => handleCopy(item.value, item.label)}
+                    className="p-2 text-[var(--color-ink)] opacity-0 group-hover:opacity-100 focus:opacity-100 transition-all hover:bg-[var(--color-paper-dark)]/20 rounded-[var(--radius-sm)]"
+                    title="Copy to clipboard"
+                  >
+                     {copiedField === item.label ? (
+                        <Check className="w-4 h-4 text-[#2B6B7C]" />
+                     ) : (
+                        <Copy className="w-4 h-4 opacity-50" />
+                     )}
+                  </button>
+               </div>
+            ))}
+         </div>
+         
+         <div className="px-6 py-4 bg-[var(--color-paper-dim)]/30 border-t border-[var(--color-paper-dark)]/10 text-center">
+            <p className="text-xs text-[var(--color-ink-subtle)] opacity-60">Available for new opportunities in Q4.</p>
+         </div>
+      </div>
+    </div>
+  );
+};
 
 export const App: React.FC = () => {
   const [view, setView] = useState<ViewState>('HOME');
   const [rightPaneMode, setRightPaneMode] = useState<HomeRightPaneMode>('PROJECTS');
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [isContactOpen, setIsContactOpen] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
@@ -149,16 +227,22 @@ export const App: React.FC = () => {
     <div className="h-screen bg-[var(--color-paper)] text-[var(--color-ink)] selection:bg-[var(--color-accent-light)] flex flex-col relative overflow-hidden">
       <div className="bg-noise"></div>
 
+      {/* Contact Modal Layer */}
+      {isContactOpen && <ContactModal onClose={() => setIsContactOpen(false)} />}
+
       <header className="px-12 py-8 flex items-center justify-between relative z-20 shrink-0">
         <div className="flex-1">
           <h1 className="font-mono text-sm font-bold text-[var(--color-ink)] lowercase tracking-tight">ramanadesign.tech</h1>
         </div>
         <div className="flex-1 flex justify-end items-center gap-4">
-            <button className="group text-[10px] uppercase font-semibold tracking-widest text-[var(--color-ink)] hover:text-white transition-colors border border-[var(--color-paper-dark)]/30 px-4 py-2 rounded-[var(--radius-sm)] flex items-center gap-2 hover:bg-[#2B6B7C] hover:border-[#2B6B7C]">Contact Me</button>
+            <button 
+              onClick={() => setIsContactOpen(true)}
+              className="group text-[10px] uppercase font-semibold tracking-widest text-[var(--color-ink)] hover:text-white transition-colors border border-[var(--color-paper-dark)]/30 px-4 py-2 rounded-[var(--radius-sm)] flex items-center gap-2 hover:bg-[#2B6B7C] hover:border-[#2B6B7C]"
+            >
+              Contact Me
+            </button>
             <div className="flex gap-1">
-              <a href="tel:+1234567890" className="p-2 hover:bg-[#333333] hover:text-white rounded-[var(--radius-sm)] transition-all flex items-center justify-center w-8 h-8" aria-label="Phone">
-                <Phone className="w-4 h-4" />
-              </a>
+              {/* Phone Icon Removed as requested */}
               <a href="https://github.com" target="_blank" rel="noreferrer" className="p-2 hover:bg-[#333333] hover:text-white rounded-[var(--radius-sm)] transition-all flex items-center justify-center w-8 h-8" aria-label="GitHub">
                 <Github className="w-4 h-4" />
               </a>
