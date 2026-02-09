@@ -1,17 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Project } from '../types';
-import { ArrowLeft, ArrowUpRight, Play, Pause, Maximize2, Minimize2 } from 'lucide-react';
-import { Tooltip } from './Tooltip';
+import { ArrowLeft, ArrowUpRight, Play, Pause } from 'lucide-react';
 
 interface ProjectDetailProps {
   project: Project;
   onBack: () => void;
 }
 
-type SplitView = 'BALANCED' | 'TEXT_FOCUS';
-
 export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
-  const [viewMode, setViewMode] = useState<SplitView>('BALANCED');
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [videoProgress, setVideoProgress] = useState(0);
@@ -68,21 +64,6 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
     }
   };
 
-  // Map viewMode to percentage widths
-  // Left is now Text/Written Pane, Right is Video Pane
-  const getWidths = () => {
-    switch (viewMode) {
-      case 'TEXT_FOCUS': return { left: '100%', right: '0%' }; // Text takes full width
-      default: return { left: '60%', right: '40%' }; // Text 60%, Video 40%
-    }
-  };
-
-  const widths = getWidths();
-
-  const toggleTextFocus = () => {
-    setViewMode(prev => prev === 'TEXT_FOCUS' ? 'BALANCED' : 'TEXT_FOCUS');
-  };
-
   return (
     <div className="h-[100dvh] w-screen bg-[var(--color-paper)] overflow-hidden flex flex-col select-none font-sans">
       
@@ -108,10 +89,10 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
       {/* Split Container */}
       <div className="flex-1 flex w-full relative overflow-hidden">
         
-        {/* Left: Written Pane (Moved here) */}
+        {/* Left: Written Pane */}
         <div 
-          className="h-full bg-[var(--color-paper)] overflow-y-auto no-scrollbar scroll-smooth transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] relative border-r border-[var(--color-paper-dark)]/20" 
-          style={{ width: widths.left }}
+          className="h-full bg-[var(--color-paper)] overflow-y-auto no-scrollbar scroll-smooth relative border-r border-[var(--color-paper-dark)]/20" 
+          style={{ width: '60%' }}
           ref={scrollRef}
           onScroll={handleScroll}
         >
@@ -123,25 +104,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
               />
            </div>
 
-           {/* Expand Button: Top-Right Corner */}
-           <div className="sticky top-6 right-6 z-50 flex justify-end px-6 pointer-events-none float-right">
-             <div className="pointer-events-auto">
-                <Tooltip content={viewMode === 'TEXT_FOCUS' ? "Restore View" : "Maximize Text"} position="left">
-                    <button 
-                    onClick={toggleTextFocus}
-                    className="p-2 text-[var(--color-ink)] bg-[var(--color-paper)]/80 backdrop-blur-md border border-[var(--color-paper-dark)]/50 rounded-[var(--radius-sm)] hover:bg-[var(--color-paper-dim)] hover:border-[var(--color-paper-dark)] transition-all shadow-sm group"
-                    >
-                    {viewMode === 'TEXT_FOCUS' ? (
-                        <Minimize2 className="w-4 h-4 opacity-60 group-hover:opacity-100" />
-                    ) : (
-                        <Maximize2 className="w-4 h-4 opacity-60 group-hover:opacity-100" />
-                    )}
-                    </button>
-                </Tooltip>
-             </div>
-           </div>
-
-           <div className={`px-12 lg:px-24 pt-12 pb-48 mx-auto space-y-24 ${viewMode === 'TEXT_FOCUS' ? 'max-w-[75ch]' : 'max-w-3xl'}`}>
+           <div className="px-12 lg:px-24 pt-12 pb-48 mx-auto space-y-24 max-w-3xl">
               {/* Section Label */}
               <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--color-ink)] opacity-40 block">Case Study</span>
 
@@ -185,10 +148,10 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
            </div>
         </div>
         
-        {/* Right: Video Pane (Moved here) */}
+        {/* Right: Video Pane */}
         <div 
-          className="h-full bg-[var(--color-paper)] overflow-hidden relative flex items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]" 
-          style={{ width: widths.right, opacity: viewMode === 'TEXT_FOCUS' ? 0 : 1 }}
+          className="h-full bg-[var(--color-paper)] overflow-hidden relative flex items-center justify-center" 
+          style={{ width: '40%' }}
         >
            {/* Section Label */}
            <div className="absolute top-6 left-6 z-40 pointer-events-none">
@@ -196,7 +159,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
            </div>
 
            {/* The "Frame" Container */}
-           <div className={`relative w-full h-full p-6 md:p-8 flex items-center justify-center transition-all duration-500`}>
+           <div className={`relative w-full h-full p-6 md:p-8 flex items-center justify-center`}>
                <div className="relative w-full h-full bg-black rounded-[var(--radius-lg)] shadow-2xl border border-[var(--color-paper-dark)] overflow-hidden group">
                    {project.videoUrl ? (
                       <>
