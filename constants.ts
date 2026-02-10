@@ -8,7 +8,7 @@ export const PROJECTS: Project[] = [
     tags: ['UX Research', 'Mobile App', 'Social Impact'],
     thumbnailUrl: 'https://picsum.photos/800/600?random=1',
     heroUrl: 'https://picsum.photos/1200/600?random=10',
-    videoUrl: 'https://player.vimeo.com/video/1163216808?badge=0&autopause=0&player_id=0&app_id=58479',
+    videoUrl: 'https://player.vimeo.com/video/1163618105?badge=0&autopause=0&player_id=0&app_id=58479',
     liveUrl: 'https://smriti-new.vercel.app/',
     description: 'Smriti is a digital sanctuary designed for the anonymous sharing of memories. Unlike traditional social media that prioritizes metrics and engagement, Smriti focuses on catharsis and emotional connection through ephemeral, text-first storytelling.',
     role: 'Lead Product Designer',
