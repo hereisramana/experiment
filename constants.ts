@@ -8,8 +8,8 @@ export const PROJECTS: Project[] = [
     tags: ['UX Research', 'Mobile App', 'Social Impact'],
     thumbnailUrl: 'https://picsum.photos/800/600?random=1',
     heroUrl: 'https://picsum.photos/1200/600?random=10',
-    videoUrl: 'https://player.vimeo.com/video/1163618105?badge=0&autopause=0&player_id=0&app_id=58479',
-    liveUrl: 'https://smriti-ten.vercel.app/',
+    videoUrl: 'https://player.vimeo.com/video/1163216808?badge=0&autopause=0&player_id=0&app_id=58479',
+    liveUrl: 'https://smriti-new.vercel.app/',
     description: 'Smriti is a digital sanctuary designed for the anonymous sharing of memories. Unlike traditional social media that prioritizes metrics and engagement, Smriti focuses on catharsis and emotional connection through ephemeral, text-first storytelling.',
     role: 'Lead Product Designer',
     duration: '3 Months',
@@ -36,6 +36,24 @@ export const PROJECTS: Project[] = [
     interactionNotes: 'I designed a "Sticky Filter Chip" pattern that remains accessible at the bottom of the screen (thumb zone) on mobile. Tapping it expands a modal with large, toggleable allergen icons. The transition uses a spring animation to feel responsive and lightweight.',
     outcome: 'The design system was adopted by a mid-sized delivery startup, resulting in a 15% decrease in support tickets related to allergen inquiries.',
     accentColor: '#F2A188' // Pastel Salmon
+  },
+  {
+    id: 'portfolio-system',
+    title: 'ramanadesign.tech',
+    tagline: 'Recursive case study: Designing for the high-volume recruitment context.',
+    tags: ['Design Systems', 'React', 'Frontend Architecture'],
+    thumbnailUrl: 'https://picsum.photos/800/600?random=99',
+    heroUrl: 'https://picsum.photos/1200/600?random=99',
+    videoUrl: 'https://player.vimeo.com/video/1163216808?badge=0&autopause=0&player_id=0&app_id=58479',
+    liveUrl: 'https://ramanadesign.tech',
+    description: 'This portfolio is not just a container for work; it is a product in itself. Built from scratch using React and Tailwind, it rejects the "drag-and-drop" simplicity of Framer/Webflow to demonstrate technical literacy. It treats the hiring manager as a primary user with specific constraints: limited time, high cognitive load, and decision fatigue.',
+    role: 'Design Engineer',
+    duration: 'Ongoing',
+    challenge: 'The "Portfolio Paradox": Designers spend weeks building complex sites that recruiters view for mere seconds. Traditional navigation patterns (Home → Project → Back → Home) introduce interaction cost ("pogo-sticking") that breaks flow and increases bounce rates.',
+    solution: 'I hypothesized that a "Split-Pane" architecture would eliminate navigation friction entirely. By keeping the index visible while viewing details, the user retains context. I prioritized production-grade code (Semantic HTML, WCAG compliance, Git-based workflow) over "sandbox" prototypes to prove systemic thinking. The visual language—"Industrial Clay"—uses matte, low-saturation tokens to reduce eye strain during long review sessions.',
+    interactionNotes: 'The entire site operates on a "Headless" philosophy. All content is abstracted into a rigid data schema (constants.ts), separate from the view layer. This ensures that the design system dictates the layout, not the content, forcing consistency. State restoration is handled via the History API, allowing deep-linking without full page reloads.',
+    outcome: 'A 100/100 Lighthouse performance score and a modular system that allows for rapid iteration. It serves as a living proof-of-concept for my ability to bridge the gap between design intent and engineering reality.',
+    accentColor: '#7D7D7D' // Neutral Industrial Grey
   }
 ];
 
