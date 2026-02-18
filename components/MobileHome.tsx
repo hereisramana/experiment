@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PROJECTS, SKILLS, ABOUT_TEXT } from '../constants';
 import { Project, DetailMode } from '../types';
-import { Mail, ArrowLeft, Play, FileText, Github, Phone, X } from 'lucide-react';
+import { Mail, Play, FileText, Github, Phone, X } from 'lucide-react';
 
 interface MobileHomeProps {
   onNavigate: (projectId: string, mode?: DetailMode) => void;
