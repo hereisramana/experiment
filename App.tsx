@@ -303,7 +303,10 @@ export const App: React.FC = () => {
         </div>
 
         {/* Right Side: Modular Interactive Pane */}
-        <div className="w-7/12 bg-[var(--color-ink)] text-[var(--color-paper)] rounded-[var(--radius-lg)] relative overflow-hidden flex flex-col shadow-2xl">
+        <div 
+          className="w-7/12 bg-[var(--color-ink)] text-[var(--color-paper)] rounded-[var(--radius-lg)] relative overflow-hidden flex flex-col shadow-2xl"
+          data-cursor-zone="dark"
+        >
            
            {/* Header Navigation (Visible unless in Overview) */}
            {rightPaneMode !== 'OVERVIEW' && (
