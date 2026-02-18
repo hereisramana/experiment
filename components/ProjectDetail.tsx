@@ -120,6 +120,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
            <div className="w-full h-full p-6 md:p-8 flex items-center justify-center">
                <div 
                   className="relative bg-black rounded-[var(--radius-lg)] shadow-2xl border border-[var(--color-paper-dark)] overflow-hidden"
+                  data-cursor-zone="dark"
                   style={{ 
                      height: '100%', 
                      aspectRatio: '9/16', 
