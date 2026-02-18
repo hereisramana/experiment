@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PROJECTS, SKILLS, ABOUT_TEXT } from '../constants';
 import { Project, DetailMode } from '../types';
-import { Mail, Play, FileText, Github, Phone, X } from 'lucide-react';
+import { Mail, ArrowLeft, Play, FileText, Github, Phone, X } from 'lucide-react';
 
 interface MobileHomeProps {
   onNavigate: (projectId: string, mode?: DetailMode) => void;
@@ -17,7 +17,7 @@ export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate, selectedProj
 
   const baseIconBtnStyle = "p-2 rounded-[var(--radius-sm)] border border-[var(--color-paper-dark)]/30 text-[var(--color-ink)] transition-all active:scale-90 flex items-center justify-center w-9 h-9 group";
 
-  const ProjectGridTile = ({ project }: { project: Project }) => (
+  const ProjectGridTile: React.FC<{ project: Project }> = ({ project }) => (
     <button 
       onClick={() => onNavigate(project.id)}
       className="group relative flex flex-col text-left active:scale-[0.98] transition-all duration-300"
@@ -103,7 +103,7 @@ export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate, selectedProj
            <div className="flex items-center gap-1.5">
              <a 
                href="tel:+1234567890" 
-               className={`${baseIconBtnStyle} active:bg-[#2B6B7C] active:border-[#2B6B7C] active:text-white hover:bg-[#2B6B7C] hover:border-[#2B6B7C] hover:text-white`} 
+               className={`${baseIconBtnStyle} active:bg-[#007AFF] active:border-[#007AFF] active:text-white hover:bg-[#007AFF] hover:border-[#007AFF] hover:text-white`} 
                aria-label="Phone"
              >
                <Phone className="w-4 h-4" />
@@ -119,7 +119,7 @@ export const MobileHome: React.FC<MobileHomeProps> = ({ onNavigate, selectedProj
              </a>
              <a 
                href="mailto:hello@ramanadesign.tech" 
-               className={`${baseIconBtnStyle} active:bg-[#2B6B7C] active:border-[#2B6B7C] active:text-white hover:bg-[#2B6B7C] hover:border-[#2B6B7C] hover:text-white`} 
+               className={`${baseIconBtnStyle} active:bg-[#007AFF] active:border-[#007AFF] active:text-white hover:bg-[#007AFF] hover:border-[#007AFF] hover:text-white`} 
                aria-label="Email"
              >
                <Mail className="w-4 h-4" />
