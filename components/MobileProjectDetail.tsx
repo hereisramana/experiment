@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Project, DetailMode } from '../types';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 
@@ -9,27 +9,12 @@ interface MobileProjectDetailProps {
 }
 
 export const MobileProjectDetail: React.FC<MobileProjectDetailProps> = ({ project, mode, onBack }) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [readingProgress, setReadingProgress] = useState(0);
-  
-  const handleScroll = () => {
-    if (scrollRef.current) {
-        const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
-        if (scrollHeight === clientHeight) {
-            setReadingProgress(100);
-        } else {
-            const progress = scrollTop / (scrollHeight - clientHeight);
-            setReadingProgress(progress * 100);
-        }
-    }
-  };
-
   useEffect(() => {
      window.scrollTo(0,0);
   }, [mode]);
 
   return (
-    <div className="h-[100dvh] w-full bg-[var(--color-paper)] flex flex-col font-sans">
+    <div className="h-[100dvh] w-full bg-[var(--color-paper)] flex flex-col font-sans overflow-x-hidden">
       {/* Header */}
       <header className="relative h-16 shrink-0 border-b border-[var(--color-paper-dark)]/20 px-4 flex items-center justify-between bg-[var(--color-paper)] z-50">
         
@@ -46,7 +31,12 @@ export const MobileProjectDetail: React.FC<MobileProjectDetailProps> = ({ projec
         
         {/* Right Action */}
         {project.liveUrl ? (
-          <a href={project.liveUrl} target="_blank" rel="noreferrer" className="relative z-10 flex items-center gap-1.5 px-3 py-1.5 bg-[var(--color-ink)] text-white rounded-full">
+          <a 
+            href={project.liveUrl} 
+            target="_blank" 
+            rel="noreferrer" 
+            className="relative z-10 flex items-center gap-1.5 px-3 py-1.5 bg-[var(--color-ink)] text-white rounded-full transition-colors active:bg-[#D4FF00] active:text-black hover:bg-[#D4FF00] hover:text-black"
+          >
              <span className="text-[9px] font-bold uppercase tracking-widest">Prototype</span>
              <ArrowUpRight className="w-3 h-3" />
           </a>
@@ -80,16 +70,8 @@ export const MobileProjectDetail: React.FC<MobileProjectDetailProps> = ({ projec
         )}
 
         {mode === 'WRITTEN' && (
-           <div className="h-full overflow-y-auto bg-[var(--color-paper-dim)]" ref={scrollRef} onScroll={handleScroll}>
-              {/* Progress Bar */}
-              <div className="sticky top-0 left-0 right-0 h-[3px] z-[60] bg-[var(--color-paper-dark)]/30 w-full">
-                 <div 
-                   className="h-full bg-[#2B6B7C] transition-all duration-75 ease-linear" 
-                   style={{ width: `${readingProgress}%` }} 
-                 />
-              </div>
-
-              <div className="p-6 pb-24 space-y-12">
+           <div className="h-full overflow-y-auto bg-[var(--color-paper-dim)] overflow-x-hidden">
+              <div className="p-6 pb-24 space-y-12 max-w-full">
                   <div className="pb-8 border-b border-[var(--color-paper-dark)]/50">
                      <h2 className="text-3xl font-medium tracking-tight mb-4 leading-tight text-[var(--color-ink)]">
                       {project.title}
