@@ -73,20 +73,23 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-ink);
 }
 
-/* Custom Scrollbar - Technical/Industrial */
+/* Custom Scrollbar - Technical/Industrial with Micro Gap */
 ::-webkit-scrollbar {
-  width: 4px; /* Thin, precision look */
-  height: 4px;
+  width: 10px; /* Increased width to allow padding/gap */
+  height: 10px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
+  margin-block: 4px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #B0B0B0; 
-  border-radius: 1px; /* Square/Technical edges */
+  background-color: #666; /* Slightly darker to sit better on dark bg, but visible */
+  border-radius: 99px; /* Pill shape for smoother floating look */
+  border: 3px solid transparent; /* Creates the gap: 10px width - 3px left - 3px right = 4px visible thumb */
+  background-clip: content-box; /* Clips background to content, leaving border transparent */
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-ink-subtle); /* High contrast on interact */
+  background-color: #999; /* Lighter on hover */
 }
 
 /* Selection */
