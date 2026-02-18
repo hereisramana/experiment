@@ -5,6 +5,7 @@ import { ProjectDetail } from './components/ProjectDetail';
 import { MobileHome } from './components/MobileHome';
 import { MobileProjectDetail } from './components/MobileProjectDetail';
 import { Tooltip } from './components/Tooltip';
+import { CustomCursor } from './components/CustomCursor';
 import { Github, X, ArrowUpRight, Copy, Check } from 'lucide-react';
 
 /* --- Contact Card Component --- */
@@ -245,11 +246,17 @@ export const App: React.FC = () => {
 
   // Desktop View
   if (view === 'PROJECT_DETAIL' && currentProject) {
-    return <ProjectDetail project={currentProject} onBack={() => window.history.back()} />;
+    return (
+      <>
+        <CustomCursor />
+        <ProjectDetail project={currentProject} onBack={() => window.history.back()} />
+      </>
+    );
   }
 
   return (
     <div className="h-screen bg-[var(--color-paper)] text-[var(--color-ink)] selection:bg-[var(--color-accent-light)] flex flex-col relative overflow-hidden">
+      <CustomCursor />
       <div className="bg-noise"></div>
 
       {/* Contact Modal Layer */}
