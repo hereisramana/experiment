@@ -2,12 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 
 export const CustomCursor: React.FC = () => {
   const cursorRef = useRef<HTMLDivElement>(null);
-  const [isHovering, setIsHovering] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light'); // 'light' means cursor is black (for light bg), 'dark' means cursor is white
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     // Only activate on devices with a fine pointer (mouse)
-    // This prevents the cursor from appearing on touch devices
     const mediaQuery = window.matchMedia('(pointer: fine)');
     if (!mediaQuery.matches) return;
 
@@ -15,25 +14,24 @@ export const CustomCursor: React.FC = () => {
 
     const onMouseMove = (e: MouseEvent) => {
       if (cursorRef.current) {
-        // Use translate3d for hardware acceleration
-        // Combine with translate(-50%, -50%) to center the cursor on the pointer
-        cursorRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
+        // Direct transform for performance
+        // We do not center the cursor; the top-left of the SVG should be at the pointer coordinate
+        cursorRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
       }
     };
 
     const onMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      // Detect if we are hovering over an interactive element
-      const interactive = target.closest('button, a, input, textarea, [role="button"], .cursor-pointer');
-      setIsHovering(!!interactive);
+      // Check if we are inside a dark zone
+      const darkZone = target.closest('[data-cursor-zone="dark"]');
+      setTheme(darkZone ? 'dark' : 'light');
     };
 
-    // Handle cursor visibility when leaving/entering the window
     const onMouseLeave = () => setIsVisible(false);
     const onMouseEnter = () => setIsVisible(true);
 
     window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseover', onMouseOver);
+    window.addEventListener('mouseover', onMouseOver); // Use mouseover bubble to detect zone changes
     document.addEventListener('mouseleave', onMouseLeave);
     document.addEventListener('mouseenter', onMouseEnter);
 
@@ -50,18 +48,27 @@ export const CustomCursor: React.FC = () => {
   return (
     <div 
       ref={cursorRef}
-      className={`
-        fixed top-0 left-0 z-[9999] pointer-events-none 
-        bg-white rounded-full mix-blend-difference
-        transition-[width,height,opacity] duration-200 ease-soft
-        ${isHovering ? 'w-8 h-8' : 'w-3 h-3'}
-      `}
+      className="fixed top-0 left-0 z-[9999] pointer-events-none transition-none"
       style={{ 
         willChange: 'transform',
-        // Ensure the cursor is visually centered
-        marginTop: 0,
-        marginLeft: 0
       }}
-    />
+    >
+      {/* Standard Pointer SVG */}
+      <svg 
+        width="24" 
+        height="24" 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        xmlns="http://www.w3.org/2000/svg"
+        className="transition-colors duration-200 ease-soft"
+      >
+        <path 
+          d="M5.5 2L18.5 14H10.5L14.5 22L11.5 23.5L7.5 15.5L2.5 20.5V2Z" 
+          fill={theme === 'dark' ? '#FFFFFF' : '#1F1F1F'} 
+          stroke={theme === 'dark' ? '#1F1F1F' : '#FFFFFF'} 
+          strokeWidth="1.5"
+        />
+      </svg>
+    </div>
   );
 };
