@@ -262,7 +262,7 @@ export const App: React.FC = () => {
         <div className="flex-1 flex justify-end items-center gap-4">
             <button 
               onClick={() => setIsContactOpen(true)}
-              className="group text-[10px] uppercase font-semibold tracking-widest text-[var(--color-ink)] hover:text-white transition-colors border border-[var(--color-paper-dark)]/30 px-4 py-2 rounded-[var(--radius-sm)] flex items-center gap-2 hover:bg-[#2B6B7C] hover:border-[#2B6B7C]"
+              className="group text-[10px] uppercase font-semibold tracking-widest text-[var(--color-ink)] hover:text-white transition-colors border border-[var(--color-paper-dark)]/30 px-4 py-2 rounded-[var(--radius-sm)] flex items-center gap-2 hover:bg-[#007AFF] hover:border-[#007AFF]"
             >
               Contact Me
             </button>
