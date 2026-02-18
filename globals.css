@@ -135,8 +135,25 @@ h1, h2, h3, h4, h5, h6 {
 
 /* 4. Custom Cursor Logic */
 @media (pointer: fine) {
-  /* Only hide standard cursor on desktop/fine-pointer devices */
+  /* Default: Hide system cursor everywhere */
   html, body, a, button, input, select, textarea, [role="button"] {
-    cursor: none !important;
+    cursor: none;
+  }
+
+  /* Exception: Native System Cursor in Dark Zones (Iframe trap solution) */
+  [data-cursor-zone="dark"],
+  [data-cursor-zone="dark"] * {
+    cursor: auto !important;
+  }
+
+  /* Restore semantic cursors within Dark Zones */
+  [data-cursor-zone="dark"] a,
+  [data-cursor-zone="dark"] button,
+  [data-cursor-zone="dark"] [role="button"] {
+    cursor: pointer !important;
+  }
+  [data-cursor-zone="dark"] input,
+  [data-cursor-zone="dark"] textarea {
+    cursor: text !important;
   }
 }
